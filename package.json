@@ -18,7 +18,10 @@
   },
   "homepage": "https://github.com/dojimanetwork/dojima-wallet-scripts#readme",
   "dependencies": {
+    "@polkadot/api": "^7.6.1",
     "@solana/web3.js": "^1.32.0",
+    "arweave": "^1.10.23",
+    "arweave-mnemonic-keys": "^0.0.9",
     "bip32": "^3.0.1",
     "bip39": "^3.0.4",
     "bitcoinjs-lib": "^6.0.1",

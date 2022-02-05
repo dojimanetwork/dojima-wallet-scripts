@@ -18,7 +18,7 @@ export default function getBitcoin() {
 
     var account = root.derivePath(path)
     var node = account.derive(0).derive(0)
-
+    
     var btcAddress = payments.p2pkh({
         pubkey: node.publicKey,
         network: network,
