@@ -1,5 +1,6 @@
 import {Keyring} from '@polkadot/api';
-import {mnemonicGenerate, mnemonicValidate} from '@polkadot/util-crypto';
+import {mnemonicGenerate, mnemonicValidate, mnemonicToMiniSecret, naclBoxPairFromSecret} from '@polkadot/util-crypto';
+import * as bip39 from 'bip39'
 
 export default function getPolkadot() {
     const keyring = new Keyring() // default type "ed25519"
@@ -21,4 +22,14 @@ export default function getPolkadot() {
     const jsonWallet = JSON.stringify(keyring.toJson(address), null, 2)
 
     return jsonWallet
+
+    // // Create valid Substrate-compatible seed from mnemonic
+    // const seedAlice = mnemonicToMiniSecret(mnemonic);
+    // console.log("Seed Alice : "+seedAlice);
+    
+
+    // // Generate new public/secret keypair for Alice from the supplied seed
+    // const { publicKey, secretKey } = naclBoxPairFromSecret(seedAlice);
+    // console.log("Public Key : " + publicKey + " and Private Key : " + secretKey);
+    
 }
