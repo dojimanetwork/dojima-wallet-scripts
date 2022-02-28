@@ -16,13 +16,11 @@
 
 import CreateAccount from "./create_account";
 import * as bip39 from 'bip39';
-import createAccount from './xchainjs_account';
 
 let mnemonic = bip39.generateMnemonic()
 
 const accounts = { 
-    CreateAccount,
-    createAccount
+    CreateAccount
 };
 
 export const acc = new CreateAccount(mnemonic, 'testnet');

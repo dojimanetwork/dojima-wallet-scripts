@@ -197,9 +197,9 @@ export default class CreateAccount {
 
   async getArweave(): Promise<string> {
     const keyPair = await getKeyFromMnemonic(this._mnemonic);
-    for (const key in keyPair) {
-      console.log(`${key} : ${keyPair[key]}`);
-    }
+    // for (const key in keyPair) {
+    //   console.log(`${key} : ${keyPair[key]}`);
+    // }
     const address = await this.arweave.wallets.jwkToAddress(keyPair);
     return address;
   }
