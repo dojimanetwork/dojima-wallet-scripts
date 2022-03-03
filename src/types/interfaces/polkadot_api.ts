@@ -4,6 +4,8 @@ import { NetworkType } from "./network";
 export class PolkadotApi {
     _rpcUrl: string;
     constructor(network: NetworkType){
+        // default mainnet initialisation
+        this._rpcUrl = 'wss://rpc.polkadot.io';
         if(network === 'testnet'){
             this._rpcUrl = 'wss://westend-rpc.polkadot.io';
         } else if(network === 'mainnet') {
