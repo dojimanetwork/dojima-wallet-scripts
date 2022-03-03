@@ -1,7 +1,7 @@
 import { chains } from "../src/balance";
 import fs from 'fs';
 import { fromAddress, fromMnemonic, toAddress, toMnemonic } from '../src/types/variables/wallet';
-import { ArweaveInit } from "../src/types/interfaces/init";
+import { ArweaveInitialise } from "../src/types/interfaces/arweave_initialise";
 // import { getKeyFromMnemonic } from "arweave-mnemonic-keys"
 // import * as bip39 from 'bip39';
 
@@ -24,7 +24,7 @@ import { ArweaveInit } from "../src/types/interfaces/init";
 const pvtKey = JSON.parse(fs.readFileSync("src/types/variables/from.json") as unknown as string);
 
 async function getInit() {
-    const arweaveData = await new ArweaveInit(fromMnemonic).init();
+    const arweaveData = await new ArweaveInitialise(fromMnemonic).init();
     const arweaveResult = new chains.ArweaveChain(arweaveData.arweave, arweaveData.privateKeyJson, arweaveData.publicAddress);
     const balance = arweaveResult.getBalance();
     // console.log(balance);

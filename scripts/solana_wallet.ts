@@ -1,7 +1,7 @@
 import { chains } from "../src/balance";
 import * as web3 from '@solana/web3.js'
 import * as bip39 from 'bip39'
-import { SolanaConnection } from "../src/types/interfaces/connection";
+import { SolanaConnection } from "../src/types/interfaces/solana_connection";
 import { SolanaChain } from "../src/balance/solana";
 
 // console.log(chains.solana());
