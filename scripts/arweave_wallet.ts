@@ -21,14 +21,15 @@ import { ArweaveInitialise } from "../src/types/interfaces/arweave_initialise";
 
 // const address = await arweave.wallets.jwkToAddress(keyPair)
 // console.log(address);
-const pvtKey = JSON.parse(fs.readFileSync("src/types/variables/from.json") as unknown as string);
+// const pvtKey = JSON.parse(fs.readFileSync("src/types/variables/from.json") as unknown as string);
 
 async function getInit() {
-    const arweaveData = await new ArweaveInitialise(fromMnemonic).init();
-    const arweaveResult = new chains.ArweaveChain(arweaveData.arweave, arweaveData.privateKeyJson, arweaveData.publicAddress);
-    const balance = arweaveResult.getBalance();
-    // console.log(balance);
-    const transfer = arweaveResult.createTransactionAndSend(toAddress, 0.05)
+
+    const arweaveInstance = new chains.ArweaveChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn','testnet');
+    const arweave = await arweaveInstance.init();
+    const balance = arweaveInstance.getBalance(arweave);
+
+    const transfer = arweaveInstance.createTransactionAndSend(toAddress, 0.05, arweave)
     // console.log(transfer);
 }
 
