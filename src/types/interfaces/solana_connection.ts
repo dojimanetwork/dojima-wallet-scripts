@@ -1,20 +1,24 @@
 import * as web3 from "@solana/web3.js";
+import { NetworkType } from "./network";
 
 export class SolanaConnection {
-    _wallet: web3.Keypair;
-    constructor(wallet: web3.Keypair) {
-        this._wallet = wallet;
+  _network: NetworkType;
+  _cluster: web3.Cluster;
+  constructor(network: NetworkType) {
+    this._network = network;
+    this._cluster = "mainnet-beta";
+    if (this._network === "devnet") {
+      this._cluster = "devnet";
+    } else if (this._network === "testnet") {
+      this._cluster = "testnet";
     }
+  }
 
-    async init() {
-        const connection = new web3.Connection(web3.clusterApiUrl('devnet'), 'confirmed')
-        const airdropSignature = await connection.requestAirdrop(
-            this._wallet.publicKey,
-            web3.LAMPORTS_PER_SOL // Initial one dummy sol token
-        );
-        return {
-            connection,
-            airdropSignature
-        };
-    }
+  init() {
+    const connection = new web3.Connection(
+      web3.clusterApiUrl(this._cluster),
+      "confirmed"
+    );
+    return connection;
+  }
 }
