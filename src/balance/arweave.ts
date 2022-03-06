@@ -1,7 +1,7 @@
 import Arweave from 'arweave';
 import { getKeyFromMnemonic } from "arweave-mnemonic-keys";
 import { NetworkType } from '../types/interfaces/network';
-import { ArweaveInitialise } from '../types/interfaces/arweave_initialise';
+import ArweaveInitialise from '../types/interfaces/arweave_initialise';
 
 export class ArweaveChain extends ArweaveInitialise {
     _mnemonic: string;

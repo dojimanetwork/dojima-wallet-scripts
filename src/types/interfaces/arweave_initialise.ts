@@ -2,7 +2,7 @@ import Arweave from 'arweave';
 import { getKeyFromMnemonic } from "arweave-mnemonic-keys";
 import { NetworkType } from './network';
 
-export class ArweaveInitialise {
+export default class ArweaveInitialise {
     _mnemonic: string;
     _arweave: Arweave;
     _network: NetworkType;
@@ -41,7 +41,7 @@ export class ArweaveInitialise {
         await arweave.api.get("/mine");
     }
 
-    async init() {
+    init() {
         const arweave = this._arweave;
         return arweave;
     }

@@ -1,7 +1,7 @@
 import { chains } from "../src/balance";
 import fs from 'fs';
 import { fromAddress, fromMnemonic, toAddress, toMnemonic } from '../src/types/variables/wallet';
-import { ArweaveInitialise } from "../src/types/interfaces/arweave_initialise";
+import ArweaveInitialise from "../src/types/interfaces/arweave_initialise";
 // import { getKeyFromMnemonic } from "arweave-mnemonic-keys"
 // import * as bip39 from 'bip39';
 
@@ -26,7 +26,7 @@ import { ArweaveInitialise } from "../src/types/interfaces/arweave_initialise";
 async function getInit() {
 
     const arweaveInstance = new chains.ArweaveChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn','testnet');
-    const arweave = await arweaveInstance.init();
+    const arweave = arweaveInstance.init();
     const balance = arweaveInstance.getBalance(arweave);
 
     const transfer = arweaveInstance.createTransactionAndSend(toAddress, 0.05, arweave)
