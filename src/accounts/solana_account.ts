@@ -40,7 +40,7 @@ const DerivationPathMenuItem = {
     Bip44Root: 3, // Ledger only.
 };
 
-export class SolanaAccount {
+export default class SolanaAccount {
     _mnemonic: string;
     constructor(mnemonic: string) {
         this._mnemonic = mnemonic;
@@ -62,7 +62,6 @@ export class SolanaAccount {
     }
 
     deriveSeed(seed: Buffer, walletIndex: number, derivationPath: (string), accountIndex: number) {
-        console.log('Derive Seed : ', seed.toString('hex'));
         switch (derivationPath) {
           case DERIVATION_PATH.deprecated:
             const path = `m/501'/${walletIndex}'/0/${accountIndex}`;
@@ -84,18 +83,12 @@ export class SolanaAccount {
         dPath: string,
         accountIndex = 0
       ) {
-        console.log('Get Account from Seed : ', seed);
-        console.log('Wallet Index : ', walletIndex);
-        console.log('Derivation Path : ', dPath);
         const derivedSeed = this.deriveSeed(seed, walletIndex, dPath, accountIndex);
-        console.log('Derived Seed : ', derivedSeed);
         return new Account(nacl.sign.keyPair.fromSeed(derivedSeed as Buffer).secretKey);
     }
 
     async solAcc() {
         const seed = await bip39.mnemonicToSeed(this._mnemonic);
-        console.log('Sol Acc Seed : ', seed);
-        // const seedBuffer = Buffer.from(seed).toString("hex");
         const accounts = [...Array(10)].map((_, idx) => {
             return this.getAccountFromSeed(
             seed,
@@ -103,9 +96,15 @@ export class SolanaAccount {
             this.toDerivationPath(DerivationPathMenuItem.Bip44Change)
             );
         });
-        for(let i = 0; i< accounts.length; i++) {
-          console.log('Accounts : ', accounts[i].publicKey.toString());
-        }
+        // for(let i = 0; i< accounts.length; i++) {
+        //   console.log('Accounts : ', accounts[i].publicKey.toString());
+        // }
         return accounts;
+    }
+
+    async create(): Promise<string> {
+      const account = await this.solAcc();
+      const address = account[0].publicKey.toString();
+      return address;
     }
 }

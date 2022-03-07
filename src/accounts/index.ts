@@ -1,28 +1,30 @@
-// import getEth from './eth_account'
-// import getBitcoin from './bitcoin_account';
-// import getSolana from './solana_account';
-// import getPolkadot from './polkadot_account';
-// import getArweave from './arweave_account';
-
-// const accounts = { 
-//     getEth,
-//     getBitcoin,
-//     getSolana,
-//     getPolkadot,
-//     getArweave
-// };
-
-// export { accounts };
-
+import ArweaveAccount from "./arweave_account";
+import BitcoinAccount from "./bitcoin_account";
+import EthereumAccount from "./eth_account";
+import PolkadotAccount from "./polkadot_account";
+import SolanaAccount from "./solana_account";
 import CreateAccount from "./create_account";
-import * as bip39 from 'bip39';
-
-let mnemonic = bip39.generateMnemonic()
 
 const accounts = { 
+    ArweaveAccount,
+    BitcoinAccount,
+    EthereumAccount,
+    PolkadotAccount,
+    SolanaAccount,
     CreateAccount
 };
 
-export const acc = new CreateAccount(mnemonic, 'testnet');
-
 export { accounts };
+
+// import CreateAccount from "./create_account";
+// import * as bip39 from 'bip39';
+
+// let mnemonic = bip39.generateMnemonic()
+
+// const accounts = { 
+//     CreateAccount
+// };
+
+// export const acc = new CreateAccount(mnemonic, 'testnet');
+
+// export { accounts };

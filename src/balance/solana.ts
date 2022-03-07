@@ -1,7 +1,7 @@
 import * as web3 from "@solana/web3.js";
 import { NetworkType } from "../types/interfaces/network";
 import { SolanaConnection } from "../types/interfaces/solana_connection";
-import { SolanaAccount } from "../accounts/solana_account";
+import SolanaAccount from "../accounts/solana_account";
 
 export class SolanaChain extends SolanaConnection {
   _mnemonic: string;
