@@ -26,8 +26,15 @@ import { SolanaChain } from "../src/balance/solana";
 async function Sol() {
     const solanaInstance = new SolanaChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn', 'devnet');
     const solConnection = solanaInstance.init();
-    console.log(await solanaInstance.getBalance(solConnection));
-    console.log(await solanaInstance.createTransactionAndSend('G9GtD3uJDdpURr9eKogWUQmYqYfYSoqEpESMtzBPVQ1n', 0.001, solConnection)); // Send SOL tokens for example
+    let bal = await solanaInstance.getBalance(solConnection)
+    // console.log('Balance is : ', bal);
+    // console.log(await solanaInstance.createTransactionAndSend('G9GtD3uJDdpURr9eKogWUQmYqYfYSoqEpESMtzBPVQ1n', 0.001, solConnection)); // Send SOL tokens for example
+    const gasFee = await solanaInstance.getFees(solConnection);
+    // console.log('Gas Fee : ', gasFee);
+    const rawTx = await solanaInstance.createTransaction('G9GtD3uJDdpURr9eKogWUQmYqYfYSoqEpESMtzBPVQ1n', 0.001);
+    // console.log('Raw Transaction : ', rawTx);
+    const transactionHash = await solanaInstance.signAndSend(rawTx, solConnection);
+    // console.log('Transaction Hash : ', transactionHash);
 }
 
 console.log(Sol());

@@ -5,7 +5,7 @@ import SolanaAccount from "../accounts/solana_account";
 
 export class SolanaChain extends SolanaConnection {
   _mnemonic: string;
-  
+
   constructor(mnemonic: string, network: NetworkType) {
     super(network);
     this._mnemonic = mnemonic;
@@ -20,11 +20,34 @@ export class SolanaChain extends SolanaConnection {
     let balance = await connection.getBalance(pubKey);
     balance = balance / Math.pow(10, 9);
     // console.log('Balance is : ', balance);
-    
     return balance;
   }
 
-  async createTransactionAndSend(toAddress: string, amount: number, connection: web3.Connection) {
+  // Get recent block hash for calculating gas fee
+  async getRecentBlockHash(connection: web3.Connection) {
+    const blockHash = await connection.getRecentBlockhash();
+    // console.log("Block Hash is : ", blockHash);
+    return blockHash;
+  }
+
+  // Calculate Gas fee based in recent block hash
+  async getFees(connection: web3.Connection) {
+    const { feeCalculator } = await this.getRecentBlockHash(connection);
+    return {
+      slow: {
+        fee: feeCalculator.lamportsPerSignature,
+      },
+      average: {
+        fee: feeCalculator.lamportsPerSignature,
+      },
+      fast: {
+        fee: feeCalculator.lamportsPerSignature,
+      },
+    };
+  }
+
+  // Create transaction details based on user input
+  async createTransaction(toAddress: string, amount: number) {
     // Get account details
     const account = await new SolanaAccount(this._mnemonic).solAcc();
     const pubKey = new web3.PublicKey(account[0].publicKey.toString());
@@ -34,28 +57,68 @@ export class SolanaChain extends SolanaConnection {
 
     const toAmount = amount * Math.pow(10, 9);
     // console.log('To Amount : ' , toAmount);
-    
+
     // Add transaction for the required amount
-    let transaction = new web3.Transaction().add(
+    let rawTx = new web3.Transaction().add(
       web3.SystemProgram.transfer({
         fromPubkey: pubKey,
         toPubkey: to,
         lamports: toAmount,
       })
     );
-    
+
+    return rawTx;
+  }
+
+  async signAndSend(rawTx: web3.Transaction, connection: web3.Connection) {
+    // Get account details
+    const account = await new SolanaAccount(this._mnemonic).solAcc();
+
     // Sign the transaction
-    let signature = await web3.sendAndConfirmTransaction(
-      connection,
-      transaction,
-      [account[0]]
-    );
+    let signature = await web3.sendAndConfirmTransaction(connection, rawTx, [
+      account[0],
+    ]);
     // console.log('Transaction details: ', JSON.stringify(transaction));
     // console.log('Transaction hash : ', signature);
-    
+
     return {
-      signature,
-      transaction
+      signature
     };
   }
+
+  // async createTransactionAndSend(toAddress: string, amount: number, connection: web3.Connection) {
+  //   // Get account details
+  //   const account = await new SolanaAccount(this._mnemonic).solAcc();
+  //   const pubKey = new web3.PublicKey(account[0].publicKey.toString());
+
+  //   // Convert toAddress string to PublicKey
+  //   const to = new web3.PublicKey(toAddress);
+
+  //   const toAmount = amount * Math.pow(10, 9);
+  //   // console.log('To Amount : ' , toAmount);
+
+  //   // Add transaction for the required amount
+  //   let transaction = new web3.Transaction().add(
+  //     web3.SystemProgram.transfer({
+  //       fromPubkey: pubKey,
+  //       toPubkey: to,
+  //       lamports: toAmount,
+
+  //     })
+  //   );
+
+  //   // Sign the transaction
+  //   let signature = await web3.sendAndConfirmTransaction(
+  //     connection,
+  //     transaction,
+  //     [account[0]]
+  //   );
+  //   // console.log('Transaction details: ', JSON.stringify(transaction));
+  //   // console.log('Transaction hash : ', signature);
+
+  //   return {
+  //     signature,
+  //     transaction
+  //   };
+  // }
 }
