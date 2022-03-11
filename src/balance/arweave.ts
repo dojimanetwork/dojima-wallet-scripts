@@ -81,10 +81,7 @@ export class ArweaveChain extends ArweaveInitialise {
 
       // console.log(JSON.stringify(statusData));
 
-      return {
-        rawTx,
-        statusData,
-      };
+      return rawTx.id;
     } else {
       console.log(
         "Error in status: Posting the transaction into arweave transactions"

@@ -27,8 +27,8 @@ async function apiVal() {
     // console.log('Raw Tx is : ', rawTx);
     const gasFee = await polka.getGasFee(rawTx);
     // console.log('Gas Fee is : ', gasFee);
-    const transfer = await polka.signAndSend(rawTx, api);
-    // console.log('Transaction details : ', transfer);
+    const transactionHash = await polka.signAndSend(rawTx, api);
+    // console.log('Transaction hash : ', transactionHash);
 }
 
 console.log(apiVal());

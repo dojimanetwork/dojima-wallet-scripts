@@ -124,10 +124,7 @@ export class EthereumChain extends EthereumWeb3 {
       transaction.rawTransaction as string
     );
     // console.log('Transaction details : ', transactionResult);
-    return {
-      transaction,
-      transactionResult,
-    };
+    return transactionResult.transactionHash;
   }
 
   // async createTransactionAndSend(toAddress: string, amount: number, web3: Web3) {

@@ -47,8 +47,8 @@ async function getInit() {
     // console.log('Raw Transaction : ', rawTx);
     const gasFee = arweaveInstance.getGasFee(rawTx);
     // console.log('Gas Fee : ', gasFee);
-    const transfer = await arweaveInstance.signAndSend(rawTx, arweave);
-    // console.log('Transaction Details : ', transfer);
+    const transactionHash = await arweaveInstance.signAndSend(rawTx, arweave);
+    // console.log('Transaction Hash : ', transactionHash);
     balance = await arweaveInstance.getBalance(arweave);
 }
 
