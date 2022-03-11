@@ -10,7 +10,8 @@
     "solana_wallet": "ts-node ./scripts/solana_wallet",
     "polkadot_wallet": "ts-node ./scripts/polkadot_wallet",
     "arweave_wallet": "ts-node ./scripts/arweave_wallet",
-    "ethereum_wallet": "ts-node ./scripts/ethereum_wallet"
+    "ethereum_wallet": "ts-node ./scripts/ethereum_wallet",
+    "erc20_balance": "ts-node ./scripts/erc20_balance"
   },
   "repository": {
     "type": "git",
