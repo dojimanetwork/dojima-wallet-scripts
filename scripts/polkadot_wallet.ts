@@ -21,8 +21,14 @@ async function apiVal() {
     const polka = new chains.PolkadotChain('blade night lawn zone clown cannon wheat day found head enable fury', 'testnet');
     const api = await polka.init();
     const bal = await polka.getBalance(api);
-    console.log('Balance is : ', bal);
-    console.log(polka.createTransactionAndSend('5CXG1XVXjbVuNG1JxbRhxupMqym8sQkG6uMZB3KmKFP2C5fo', 0.0001, api));
+    // console.log('Balance is : ', bal);
+    // console.log(polka.createTransactionAndSend('5CXG1XVXjbVuNG1JxbRhxupMqym8sQkG6uMZB3KmKFP2C5fo', 0.001, api));
+    const rawTx = await polka.createTransaction('5CXG1XVXjbVuNG1JxbRhxupMqym8sQkG6uMZB3KmKFP2C5fo', 0.001, api);
+    // console.log('Raw Tx is : ', rawTx);
+    const gasFee = await polka.getGasFee(rawTx);
+    // console.log('Gas Fee is : ', gasFee);
+    const transfer = await polka.signAndSend(rawTx, api);
+    // console.log('Transaction details : ', transfer);
 }
 
 console.log(apiVal());
