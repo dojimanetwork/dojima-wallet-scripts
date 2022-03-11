@@ -1,8 +1,11 @@
-import Wallet from 'ethereumjs-wallet';
-import Web3 from 'web3';
-import * as ethers from 'ethers';
-import { EthereumWeb3 } from '../types/interfaces/ethereum_web3';
-import { NetworkType } from '../types/interfaces/network';
+import Wallet from "ethereumjs-wallet";
+import Web3 from "web3";
+import * as ethers from "ethers";
+import { EthereumWeb3 } from "../types/interfaces/ethereum_web3";
+import { NetworkType } from "../types/interfaces/network";
+import BigNumber from "bignumber.js";
+import { SignedTransaction } from "web3-eth-accounts";
+import { TransactionConfig } from "web3-eth";
 
 // export default async function EthereumChain() {
 //     // // Ganache local enviroment
@@ -13,7 +16,7 @@ import { NetworkType } from '../types/interfaces/network';
 //     // const balance = await web3.eth.getBalance(accounts[0]);
 //     // console.log('Balance in gwei is : ', balance);     // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
 //     // console.log('Balance in Eth is : ', web3.utils.fromWei(balance));     // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
-    
+
 //     // const transaction = await web3.eth.accounts.signTransaction({
 //     //     from: accounts[0],
 //     //     to: accounts[1],
@@ -32,7 +35,7 @@ import { NetworkType } from '../types/interfaces/network';
 //     const balance = await web3.eth.getBalance(pubKey);
 //     console.log('Balance in gwei is : ', balance);     // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
 //     console.log('Balance in Eth is : ', web3.utils.fromWei(balance));     // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
-    
+
 //     const transaction = await web3.eth.accounts.signTransaction({
 //         from: pubKey,
 //         to: '0x46Bd84009D313c34f94bC883C353f72D3453A5B9',
@@ -43,46 +46,109 @@ import { NetworkType } from '../types/interfaces/network';
 
 //     const transactionResult = await web3.eth.sendSignedTransaction(transaction.rawTransaction as string);
 //     console.log('Transaction details : ', transactionResult);
-    
+
 // }
 
 export class EthereumChain extends EthereumWeb3 {
-    _pubKey: string;
-    _pvtKey: string;
-    constructor(mnemonic: string, network: NetworkType) {
-        super(network);
-        const wallet = ethers.Wallet.fromMnemonic(mnemonic);
-        this._pubKey = wallet.address;
-        this._pvtKey = wallet.privateKey;
-        // console.log('Key details : ', this._pvtKey);
-        // console.log('Address details : ', this._pubKey);
-    }
+  _pubKey: string;
+  _pvtKey: string;
+  constructor(mnemonic: string, network: NetworkType) {
+    super(network);
+    const wallet = ethers.Wallet.fromMnemonic(mnemonic);
+    this._pubKey = wallet.address;
+    this._pvtKey = wallet.privateKey;
+    // console.log('Key details : ', this._pvtKey);
+    // console.log('Address details : ', this._pubKey);
+  }
 
-    async getBalance(web3: Web3) {
-        const gweiBalance = await web3.eth.getBalance(this._pubKey);
-        // console.log('Balance in gwei is : ', gweiBalance);     // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
+  async getBalance(web3: Web3) {
+    const gweiBalance = await web3.eth.getBalance(this._pubKey);
+    // console.log('Balance in gwei is : ', gweiBalance);     // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
 
-        const ethBalance = web3.utils.fromWei(gweiBalance);
-        // console.log('Balance in Eth is : ', ethBalance);     // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
-        
-        return ethBalance;
-    }
+    const ethBalance = web3.utils.fromWei(gweiBalance);
+    // console.log('Balance in Eth is : ', ethBalance);     // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
 
-    async createTransactionAndSend(toAddress: string, amount: number, web3: Web3) {
-        const transaction = await web3.eth.accounts.signTransaction({
-            from: this._pubKey,
-            to: toAddress,
-            value: web3.utils.toWei(amount.toString(), 'ether'),         // Amount in Eth, 1 eth = 10^9 gwei(1,000,000,000)
-            gas: 21000              // Minimum / base gas fee is 21,000
-        }, this._pvtKey);
-        // console.log('Transaction : ', transaction);
+    return ethBalance;
+  }
 
-        const transactionResult = await web3.eth.sendSignedTransaction(transaction.rawTransaction as string);
-        // console.log('Transaction details : ', transactionResult);
+  // Calculate 'gasFee' based on multiplier
+  calculateFee(baseGasFee: number, multiplier: number) {
+    const fee = new BigNumber(baseGasFee)
+      .times(new BigNumber(multiplier))
+      .toNumber();
+    return fee;
+  }
 
-        return {
-            transaction,
-            transactionResult
-        };
-    }
+  // Calculate gasFee required for transaction
+  async getGasFee(web3: Web3) {
+    const baseGasFee = await web3.eth.getGasPrice();
+    return {
+      slow: {
+        fee: this.calculateFee(parseFloat(baseGasFee), 1),
+      },
+      average: {
+        fee: this.calculateFee(parseFloat(baseGasFee), 1.5),
+      },
+      fast: {
+        fee: this.calculateFee(parseFloat(baseGasFee), 2),
+      },
+    };
+  }
+
+  // Create transaction details based on user input
+  createTransaction(
+    toAddress: string,
+    amount: number,
+    web3: Web3,
+    feeRate: number
+  ) {
+    let rawTxDetails = {
+      from: this._pubKey,
+      to: toAddress,
+      value: web3.utils.toWei(amount.toString(), "ether"), // Amount in Eth, 1 eth = 10^9 gwei(1,000,000,000)
+      gas: 21000, // Minimum / base gas fee is 21,000
+      gasPrice: feeRate,
+    };
+    // console.log('Raw Transaction : ', rawTxDetails);
+    return rawTxDetails;
+  }
+
+  async signAndSend(rawTxDetails: TransactionConfig, web3: Web3) {
+    const transaction = await web3.eth.accounts.signTransaction(
+      rawTxDetails,
+      this._pvtKey
+    );
+    // console.log('Transaction : ', transaction);
+
+    const transactionResult = await web3.eth.sendSignedTransaction(
+      transaction.rawTransaction as string
+    );
+    // console.log('Transaction details : ', transactionResult);
+    return {
+      transaction,
+      transactionResult,
+    };
+  }
+
+  // async createTransactionAndSend(toAddress: string, amount: number, web3: Web3) {
+  //     // const gasFee = await web3.eth.estimateGas({to: toAddress, value: web3.utils.toWei(amount.toString(), 'ether')});
+  //     // console.log('Gas fee : ', gasFee);
+  //     // const gasPrice = await web3.eth.getGasPrice();
+  //     // console.log('Gas Price : ', gasPrice);
+  //     // console.log('Gas price values : ', await this.getGasFee(web3));
+  //     const transaction = await web3.eth.accounts.signTransaction({
+  //         from: this._pubKey,
+  //         to: toAddress,
+  //         value: web3.utils.toWei(amount.toString(), 'ether'),         // Amount in Eth, 1 eth = 10^9 gwei(1,000,000,000)
+  //         gas: 21000              // Minimum / base gas fee is 21,000
+  //     }, this._pvtKey);
+  //     console.log('Transaction : ', transaction);
+
+  //     const transactionResult = await web3.eth.sendSignedTransaction(transaction.rawTransaction as string);
+  //     console.log('Transaction details : ', transactionResult);
+  //     return {
+  //         transaction,
+  //         transactionResult
+  //     };
+  // }
 }
