@@ -23,14 +23,33 @@ import ArweaveInitialise from "../src/types/interfaces/arweave_initialise";
 // console.log(address);
 // const pvtKey = JSON.parse(fs.readFileSync("src/types/variables/from.json") as unknown as string);
 
+// async function getInit() {
+
+//     const arweaveInstance = new chains.ArweaveChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn','testnet');
+//     const arweave = arweaveInstance.init();
+//     await arweaveInstance.mintArTokens(arweave);
+//     let balance = await arweaveInstance.getBalance(arweave);
+
+//     const transfer = await arweaveInstance.createTransactionAndSend('UV6NJyujIFMIaL-oD9TK9P3QQlpmov3UFTdMtvY5xbI', 0.05, arweave)
+//     console.log(transfer);
+//     balance = await arweaveInstance.getBalance(arweave);
+// }
+
+// console.log(getInit());
+
 async function getInit() {
 
     const arweaveInstance = new chains.ArweaveChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn','testnet');
     const arweave = arweaveInstance.init();
-    const balance = arweaveInstance.getBalance(arweave);
-
-    const transfer = arweaveInstance.createTransactionAndSend(toAddress, 0.05, arweave)
-    // console.log(transfer);
+    await arweaveInstance.mintArTokens(arweave);
+    let balance = await arweaveInstance.getBalance(arweave);
+    const rawTx = await arweaveInstance.createTransaction('UV6NJyujIFMIaL-oD9TK9P3QQlpmov3UFTdMtvY5xbI', 0.5, arweave);
+    // console.log('Raw Transaction : ', rawTx);
+    const gasFee = arweaveInstance.getGasFee(rawTx);
+    // console.log('Gas Fee : ', gasFee);
+    const transfer = await arweaveInstance.signAndSend(rawTx, arweave);
+    // console.log('Transaction Details : ', transfer);
+    balance = await arweaveInstance.getBalance(arweave);
 }
 
 console.log(getInit());
