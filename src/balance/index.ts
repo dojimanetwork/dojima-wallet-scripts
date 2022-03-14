@@ -3,7 +3,7 @@ import { PolkadotChain } from "./polkadot"
 import { ArweaveChain } from "./arweave"
 import { EthereumChain } from "./ethereum"
 import BitcoinChain from "./bitcoin"
-import Erc20TokenBalance from "./nonNativeTokens/getBalance"
+import Erc20TokenBalance from "./nonNativeTokens/ethereum/getBalance"
 const chains = {
     SolanaChain,
     PolkadotChain,

@@ -12,7 +12,7 @@ export const contractAddress = {
   CRONOS_COIN: "0xA0b73E1Ff0B80914AB6fe0444E65848C4C34450b",
 };
 
-export type tokensNames =
+export type tokens =
   | "TETHER"
   | "BNB"
   | "USDC"
@@ -25,17 +25,16 @@ export type tokensNames =
   | "WRAPPED_UST"
   | "CRONOS_COIN";
 
- export const minABI = [
-    //  balanceOf
-    {
-      constant: true,
-  
-      inputs: [{ name: "_owner", type: "address" }],
-  
-      name: "balanceOf",
-  
-      outputs: [{ name: "balance", type: "uint256" }],
-  
-      type: "function",
-    },
-  ];
+export const minABI = [
+  {
+    constant: true,
+
+    inputs: [{ name: "_owner", type: "address" }],
+
+    name: "balanceOf",
+
+    outputs: [{ name: "balance", type: "uint256" }],
+
+    type: "function",
+  },
+];
