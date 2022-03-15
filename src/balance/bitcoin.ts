@@ -1,11 +1,15 @@
-import { generatePhrase, getSeed, validatePhrase } from '@xchainjs/xchain-crypto';
-import * as bip39 from 'bip39';
-import { Client } from '@xchainjs/xchain-bitcoin';
-import { Balance } from '@xchainjs/xchain-client';
-import { AssetBTC, assetAmount, baseAmount } from '@xchainjs/xchain-util';
-import { BigNumber } from 'bignumber.js';
-import BitcoinClient from '../types/interfaces/bitcoin_client';
-import { NetworkType } from '../types/interfaces/network';
+import {
+  generatePhrase,
+  getSeed,
+  validatePhrase,
+} from "@xchainjs/xchain-crypto";
+import * as bip39 from "bip39";
+import { Client } from "@xchainjs/xchain-bitcoin";
+import { Balance, FeeRates, FeesWithRates } from "@xchainjs/xchain-client";
+import { AssetBTC, assetAmount, baseAmount } from "@xchainjs/xchain-util";
+import { BigNumber } from "bignumber.js";
+import BitcoinClient from "../types/interfaces/bitcoin_client";
+import { NetworkType } from "../types/interfaces/network";
 
 // export default async function BitcoinChain1(mnemonic: string) {
 
@@ -22,7 +26,7 @@ import { NetworkType } from '../types/interfaces/network';
 
 //     const client = new Client({phrase: mnemonic});
 //     console.log('Client details : ', client);
-    
+
 //     // const address = client.getAddress();
 //     // console.log('Address is : ', address);
 //     // console.log('Explorer Url is : ', client.getExplorerUrl());
@@ -64,50 +68,119 @@ import { NetworkType } from '../types/interfaces/network';
 // }
 
 export default class BitcoinChain extends BitcoinClient {
-    constructor(mnemonic: string, network: NetworkType) {
-        super(mnemonic, network);
-    }
+  constructor(mnemonic: string, network: NetworkType) {
+    super(mnemonic, network);
+  }
 
-    // Retrieve balance of the user
-    async getBalance(client: Client){
-        const balanceObject = await client.getBalance(client.getAddress());
-        const balance = balanceObject[0].amount.amount().toNumber() / Math.pow(10, balanceObject[0].amount.decimal);
-        return balance;
-    }
+  // Retrieve balance of the user
+  async getBalance(client: Client) {
+    const balanceObject = await client.getBalance(client.getAddress());
+    const balance =
+      balanceObject[0].amount.amount().toNumber() /
+      Math.pow(10, balanceObject[0].amount.decimal);
+    return balance;
+  }
 
-    // Transfer tokens to the receiver
-    async createTransactionAndSend(toAddress: string, amount: number, client: Client) {
-        // Convert amount to BigNumber
-        const toAmount = new BigNumber(amount * Math.pow(10, 8));
-        // console.log('To amount : ', toAmount.toNumber().toFixed(2));
+  // Calculate 'gasFee' based on decimal
+  // calculateFee(gasFeeRate: number, decimal: number) {
+  //   const fee = gasFeeRate / Math.pow(10, decimal);
+  //   return fee;
+  // }
 
-        // BaseAmount value
-        const bsAmount = baseAmount(toAmount, 8);
-        // console.log('Base amount : ', bsAmount.amount());
+  // Calculate gasFee required for transaction
+  // async getGasFee(client: Client) {
+  //   // Gas fee generated based on type of transaction. We are using BTC->BTC.
+  //   const feeWithRates = await client.getFeesWithRates("SWAP:BTC.BTC");
+  //   console.log('Fees : ', feeWithRates.fees);
+  //   console.log('Rates : ', feeWithRates.rates);
 
-        // Transfer amount to recipient
-        const transactionHash = await client.transfer({
-            walletIndex: 0,
-            asset: AssetBTC ,
-            recipient: toAddress,
-            amount: bsAmount,
-            memo: 'SWAP:BTC.BTC',
-            feeRate: 1
-        });
-        // console.log('Transaction id : ', transactionHash);
-        return transactionHash;
+  //   // Note: 'getFeeWithRates' is combination of both 'getFees' and 'getFeeRates'
 
-        // Get transaction details using transaction hash.
-        // Display details only for confirmed transactions else status error
-        // try {
-        //     const transactionDetails = await client.getTransactionData(transactionHash);
-        //     console.log('Transaction Details : ', transactionDetails);
-        //     return {
-        //         transactionDetails,
-        //         transactionHash
-        //     }
-        // } catch (error) {
-        //     console.log('Error is : ', error);
-        // }
-    }
+  //   // const fees = await client.getFees('SWAP:BTC.BTC');
+  //   // console.log('Fees : ', fees);
+  //   // const feeRates = await client.getFeeRates();
+  //   // console.log('Rates : ', feeRates);
+  //   return {
+  //     slow: {
+  //       fee: this.calculateFee(
+  //         feeWithRates.fees.average.amount().toNumber(),
+  //         feeWithRates.fees.average.decimal
+  //       ),
+  //     },
+  //     average: {
+  //       fee: this.calculateFee(
+  //         feeWithRates.fees.fast.amount().toNumber(),
+  //         feeWithRates.fees.fast.decimal
+  //       ),
+  //     },
+  //     fast: {
+  //       fee: this.calculateFee(
+  //         feeWithRates.fees.fastest.amount().toNumber(),
+  //         feeWithRates.fees.fastest.decimal
+  //       ),
+  //     },
+  //   };
+  // }
+
+  // Get gasFeeRate for transaction
+  // getFeeRates() returns gas fee generated by 
+  // 'thorchain' (https://github.com/xchainjs/xchainjs-lib/blob/bf13c939d87a624788cc4a60daf5a940c950c1e0/packages/xchain-client/src/BaseXChainClient.ts#L81)
+  // else 'sochain'(https://github.com/xchainjs/xchainjs-lib/blob/bf13c939d87a624788cc4a60daf5a940c950c1e0/packages/xchain-bitcoin/src/sochain-api.ts)
+  // Note: For 'fast' transaction we are making use of gasFee same as 'average'
+  async getGasFee(client: Client) {
+    const feeRates = await client.getFeeRates();
+    // console.log('Rates : ', feeRates);
+    return {
+      slow: {
+        fee: feeRates.average
+      },
+      average: {
+        fee: feeRates.fast
+      },
+      fast: {
+        fee: feeRates.fast
+      },
+    };
+  }
+
+  // Transfer tokens to the receiver
+  async createTransactionAndSend(
+    toAddress: string,
+    amount: number,
+    client: Client,
+    feeRate?: number
+  ) {
+    // Convert amount to BigNumber
+    const toAmount = new BigNumber(amount * Math.pow(10, 8));
+    // console.log('To amount : ', toAmount.toNumber().toFixed(2));
+
+    // BaseAmount value
+    const bsAmount = baseAmount(toAmount, 8);
+    // console.log('Base amount : ', bsAmount.amount());
+
+    // Transfer amount to recipient
+    const transactionHash = await client.transfer({
+      walletIndex: 0,
+      asset: AssetBTC,
+      recipient: toAddress,
+      amount: bsAmount,
+      memo: "SWAP:BTC.BTC",
+      feeRate: feeRate ? feeRate : 1,                   // '1' is for testing
+    });
+    // console.log('Transaction id : ', transactionHash);
+    return transactionHash;
+
+    // Get transaction details using transaction hash.
+    // Display details only for confirmed transactions else status error
+    // try {
+    //     const transactionDetails = await client.getTransactionData(transactionHash);
+    //     console.log('Transaction Details : ', transactionDetails);
+    //     return {
+    //         transactionDetails,
+    //         transactionHash
+    //     }
+    // } catch (error) {
+    //     console.log('Error is : ', error);
+    // }
+  }
 }
