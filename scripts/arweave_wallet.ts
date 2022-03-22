@@ -1,7 +1,7 @@
-import { chains } from "../src/balance";
-import fs from 'fs';
-import { fromAddress, fromMnemonic, toAddress, toMnemonic } from '../src/types/variables/wallet';
-import ArweaveInitialise from "../src/types/interfaces/arweave_initialise";
+import chains from "../src/balance";
+// import fs from 'fs';
+// import { fromAddress, fromMnemonic, toAddress, toMnemonic } from '../src/types/variables/wallet';
+// import ArweaveInitialise from "../src/types/interfaces/arweave_initialise";
 // import { getKeyFromMnemonic } from "arweave-mnemonic-keys"
 // import * as bip39 from 'bip39';
 
@@ -38,20 +38,20 @@ import ArweaveInitialise from "../src/types/interfaces/arweave_initialise";
 // console.log(getInit());
 
 async function getInit() {
-
-    const arweaveInstance = new chains.ArweaveChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn','testnet');
-    const arweave = arweaveInstance.init();
-    await arweaveInstance.mintArTokens(arweave);
-    let balance = await arweaveInstance.getBalance(arweave);
-    const rawTx = await arweaveInstance.createTransaction('UV6NJyujIFMIaL-oD9TK9P3QQlpmov3UFTdMtvY5xbI', 0.5, arweave);
-    // console.log('Raw Transaction : ', rawTx);
+    const {ArweaveChain} = chains
+    const arweaveInstance = new ArweaveChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn',"testnet");
+    const arwAddress = await arweaveInstance.getAddress();
+    console.log('Address : ', arwAddress);
+    await arweaveInstance.mintArTokens();
+    let balance = await arweaveInstance.getBalance();
+    console.log('Balance : ', balance);
+    const rawTx = await arweaveInstance.createTransaction('UV6NJyujIFMIaL-oD9TK9P3QQlpmov3UFTdMtvY5xbI', 0.5);
+    console.log('Raw Transaction : ', rawTx);
     const gasFee = arweaveInstance.getGasFee(rawTx);
-    // console.log('Gas Fee : ', gasFee);
-    const transactionHash = await arweaveInstance.signAndSend(rawTx, arweave);
-    // console.log('Transaction Hash : ', transactionHash);
-    balance = await arweaveInstance.getBalance(arweave);
+    console.log('Gas Fee : ', gasFee);
+    const transactionHash = await arweaveInstance.signAndSend(rawTx);
+    console.log('Transaction Hash : ', transactionHash);
+    balance = await arweaveInstance.getBalance();
 }
 
 console.log(getInit());
-
-

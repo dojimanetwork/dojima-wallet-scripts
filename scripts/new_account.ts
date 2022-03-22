@@ -31,23 +31,31 @@ const mnemonic = 'letter ethics correct bus asset pipe tourist vapor envelope ka
 
 async function arweaveAddress() {
     const arwAcc = new accounts.ArweaveAccount(mnemonic,'testnet');
-    const arwAddress = await arwAcc.create()
+    const arwAddress = await arwAcc.getAddress()
     console.log('Arweave account address', arwAddress);
 }
 
 console.log(arweaveAddress());
 
+// async function binanceAddress() {
+//     const bncAcc = new accounts.BinanceAccount(mnemonic,'testnet');
+//     const bncAddress = bncAcc.getAddress()
+//     console.log('Binance account address', bncAddress);
+// }
+
+// console.log(binanceAddress());
+
 async function bitcoinAddress() {
     const btcAcc = new accounts.BitcoinAccount(mnemonic,'testnet');
-    const btcAddress = btcAcc.create()
+    const btcAddress = btcAcc.getAddress()
     console.log('Bitcoin account address', btcAddress);
 }
 
 console.log(bitcoinAddress());
 
 async function ethereumAddress() {
-    const ethAcc = new accounts.EthereumAccount(mnemonic);
-    const ethAddress = ethAcc.create()
+    const ethAcc = new accounts.EthereumAccount(mnemonic, 'testnet');
+    const ethAddress = ethAcc.getAddress()
     console.log('Ethereum account address', ethAddress);
 }
 
@@ -62,8 +70,8 @@ async function polkadotAddress() {
 console.log(polkadotAddress());
 
 async function solanaAddress() {
-    const solAcc = new accounts.SolanaAccount(mnemonic);
-    const solAddress = await solAcc.create()
+    const solAcc = new accounts.SolanaAccount(mnemonic, 'devnet');
+    const solAddress = await solAcc.getAddress()
     console.log('Solana account address', solAddress);
 }
 

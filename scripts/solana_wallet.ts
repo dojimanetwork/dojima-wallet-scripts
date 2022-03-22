@@ -1,8 +1,8 @@
-import { chains } from "../src/balance";
-import * as web3 from '@solana/web3.js'
-import * as bip39 from 'bip39'
-import { SolanaConnection } from "../src/types/interfaces/solana_connection";
-import { SolanaChain } from "../src/balance/solana";
+// import { chains } from "../src/balance";
+// import * as web3 from '@solana/web3.js'
+// import * as bip39 from 'bip39'
+// import { SolanaConnection } from "../src/types/interfaces/solana_connection";
+import SolanaChain from "../src/balance/solana";
 
 // console.log(chains.solana());
 
@@ -25,15 +25,16 @@ import { SolanaChain } from "../src/balance/solana";
 
 async function Sol() {
     const solanaInstance = new SolanaChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn', 'devnet');
-    const solConnection = solanaInstance.init();
-    let bal = await solanaInstance.getBalance(solConnection)
-    // console.log('Balance is : ', bal);
+    const address = await solanaInstance.getAddress();
+    console.log(address);
+    let bal = await solanaInstance.getBalance()
+    console.log('Balance is : ', bal);
     // console.log(await solanaInstance.createTransactionAndSend('G9GtD3uJDdpURr9eKogWUQmYqYfYSoqEpESMtzBPVQ1n', 0.001, solConnection)); // Send SOL tokens for example
-    const gasFee = await solanaInstance.getFees(solConnection);
+    const gasFee = await solanaInstance.getFees();
     // console.log('Gas Fee : ', gasFee);
     const rawTx = await solanaInstance.createTransaction('G9GtD3uJDdpURr9eKogWUQmYqYfYSoqEpESMtzBPVQ1n', 0.001);
     // console.log('Raw Transaction : ', rawTx);
-    const transactionHash = await solanaInstance.signAndSend(rawTx, solConnection);
+    const transactionHash = await solanaInstance.signAndSend(rawTx);
     // console.log('Transaction Hash : ', transactionHash);
 }
 

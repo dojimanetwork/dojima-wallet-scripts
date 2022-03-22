@@ -1,5 +1,5 @@
-import { chains } from "../src/balance"
-import { PolkadotApi } from "../src/types/interfaces/polkadot_api";
+import chains from "../src/balance"
+// import { PolkadotApi } from "../src/types/interfaces/polkadot_api";
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 
 // console.log(
