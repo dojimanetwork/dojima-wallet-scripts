@@ -25,6 +25,8 @@ import * as bip39 from 'bip39';
 import * as bip32 from 'bip32';
 import { Account } from "@solana/web3.js";
 import { derivePath } from "ed25519-hd-key";
+import SolanaConnection from "../types/interfaces/solana_connection";
+import { NetworkType } from "../types/interfaces/network";
 
 const DERIVATION_PATH = {
     deprecated: '',
@@ -40,10 +42,9 @@ const DerivationPathMenuItem = {
     Bip44Root: 3, // Ledger only.
 };
 
-export default class SolanaAccount {
-    _mnemonic: string;
-    constructor(mnemonic: string) {
-        this._mnemonic = mnemonic;
+export default class SolanaAccount extends SolanaConnection {
+    constructor(mnemonic: string, network: NetworkType) {
+        super(mnemonic, network)
     }
 
     toDerivationPath(dPathMenuItem: number) {
@@ -102,7 +103,7 @@ export default class SolanaAccount {
         return accounts;
     }
 
-    async create(): Promise<string> {
+    async getAddress(): Promise<string> {
       const account = await this.solAcc();
       const address = account[0].publicKey.toString();
       return address;
