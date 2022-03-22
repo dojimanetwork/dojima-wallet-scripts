@@ -7,7 +7,7 @@ import { NetworkType } from "../types/interfaces/network";
 import { SubmittableExtrinsic } from "@polkadot/api/types";
 import { ISubmittableResult } from "@polkadot/types/types";
 
-export class PolkadotChain extends PolkadotApi {
+export default class PolkadotChain extends PolkadotApi {
   _mnemonic: string;
   _account: KeyringPair;
 
@@ -16,8 +16,8 @@ export class PolkadotChain extends PolkadotApi {
 
     this._mnemonic = mnemonic;
     // Constuct the keyring after the API
-    const keyring = new Keyring({ type: "sr25519" });
-    // const keyring = new Keyring();  // default { type: 'ed25519' }
+    // const keyring = new Keyring({ type: "sr25519" });
+    const keyring = new Keyring();  // default { type: 'ed25519' }
 
     // User Account
     this._account = keyring.addFromMnemonic(this._mnemonic);
@@ -29,7 +29,7 @@ export class PolkadotChain extends PolkadotApi {
       await api.derive.balances.all(this._account.address)
     ).availableBalance.toNumber();
     balance = balance / Math.pow(10, 12);
-    // console.log(balance);
+    console.log(balance);
     return balance;
   }
 
@@ -109,6 +109,10 @@ export class PolkadotChain extends PolkadotApi {
     } catch (error) {
       console.log("Error : " + error);
     }
+  }
+
+  getTransactionDetails(txId: string, api: ApiPromise) {
+    
   }
 
   // async createTransactionAndSend(toAddress: string, amount: number, api: ApiPromise) {

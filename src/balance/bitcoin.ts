@@ -1,14 +1,15 @@
-import {
-  generatePhrase,
-  getSeed,
-  validatePhrase,
-} from "@xchainjs/xchain-crypto";
-import * as bip39 from "bip39";
-import { Client } from "@xchainjs/xchain-bitcoin";
-import { Balance, FeeRates, FeesWithRates } from "@xchainjs/xchain-client";
-import { AssetBTC, assetAmount, baseAmount } from "@xchainjs/xchain-util";
+// import {
+//   generatePhrase,
+//   getSeed,
+//   validatePhrase,
+// } from "@xchainjs/xchain-crypto";
+// import * as bip39 from "bip39";
+// import { Client } from "@xchainjs/xchain-bitcoin";
+// import { Balance, FeeRates, FeesWithRates } from "@xchainjs/xchain-client";
+import { AssetBTC, baseAmount } from "@xchainjs/xchain-util";
 import { BigNumber } from "bignumber.js";
-import BitcoinClient from "../types/interfaces/bitcoin_client";
+// import BitcoinClient from "../types/interfaces/bitcoin_client";
+import BitcoinAccount from "../accounts/bitcoin_account";
 import { NetworkType } from "../types/interfaces/network";
 
 // export default async function BitcoinChain1(mnemonic: string) {
@@ -67,14 +68,14 @@ import { NetworkType } from "../types/interfaces/network";
 //     // }
 // }
 
-export default class BitcoinChain extends BitcoinClient {
+export default class BitcoinChain extends BitcoinAccount {
   constructor(mnemonic: string, network: NetworkType) {
     super(mnemonic, network);
   }
 
   // Retrieve balance of the user
-  async getBalance(client: Client) {
-    const balanceObject = await client.getBalance(client.getAddress());
+  async getBalance(): Promise<number> {
+    const balanceObject = await this._client.getBalance(this._client.getAddress());
     const balance =
       balanceObject[0].amount.amount().toNumber() /
       Math.pow(10, balanceObject[0].amount.decimal);
@@ -127,8 +128,8 @@ export default class BitcoinChain extends BitcoinClient {
   // 'thorchain' (https://github.com/xchainjs/xchainjs-lib/blob/bf13c939d87a624788cc4a60daf5a940c950c1e0/packages/xchain-client/src/BaseXChainClient.ts#L81)
   // else 'sochain'(https://github.com/xchainjs/xchainjs-lib/blob/bf13c939d87a624788cc4a60daf5a940c950c1e0/packages/xchain-bitcoin/src/sochain-api.ts)
   // Note: For 'fast' transaction we are making use of gasFee same as 'average'
-  async getGasFee(client: Client) {
-    const feeRates = await client.getFeeRates();
+  async getGasFee() {
+    const feeRates = await this._client.getFeeRates();
     // console.log('Rates : ', feeRates);
     return {
       slow: {
@@ -147,9 +148,8 @@ export default class BitcoinChain extends BitcoinClient {
   async createTransactionAndSend(
     toAddress: string,
     amount: number,
-    client: Client,
     feeRate?: number
-  ) {
+  ): Promise<string> {
     // Convert amount to BigNumber
     const toAmount = new BigNumber(amount * Math.pow(10, 8));
     // console.log('To amount : ', toAmount.toNumber().toFixed(2));
@@ -159,7 +159,7 @@ export default class BitcoinChain extends BitcoinClient {
     // console.log('Base amount : ', bsAmount.amount());
 
     // Transfer amount to recipient
-    const transactionHash = await client.transfer({
+    const transactionHash = await this._client.transfer({
       walletIndex: 0,
       asset: AssetBTC,
       recipient: toAddress,
