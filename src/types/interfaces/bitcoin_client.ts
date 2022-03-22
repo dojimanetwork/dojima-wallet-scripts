@@ -5,20 +5,18 @@ import { NetworkType } from './network';
 export default class BitcoinClient {
     _network: string;
     _mnemonic: string;
+    _client: Client;
     constructor(mnemonic: string, network: NetworkType) {
         this._mnemonic = mnemonic;
         this._network = network;
-    }
-
-    init() {
-        const client = new Client({phrase: this._mnemonic});
+        this._client = new Client({phrase: this._mnemonic});
         // Default 'network' is 'testnet' in Xchainjs Client
         if(this._network === 'mainnet'){
-            client.setNetwork(Network.Mainnet);
+            this._client.setNetwork(Network.Mainnet);
         } else if(this._network === 'devnet'){
-            client.setNetwork(Network.Stagenet);
+            this._client.setNetwork(Network.Stagenet);
+        } else{
+            this._client.setNetwork(Network.Testnet);
         }
-
-        return client;
     }
 }

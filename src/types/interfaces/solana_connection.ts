@@ -1,24 +1,22 @@
 import * as web3 from "@solana/web3.js";
 import { NetworkType } from "./network";
 
-export class SolanaConnection {
+export default class SolanaConnection {
+  _mnemonic: string;
   _network: NetworkType;
   _cluster: web3.Cluster;
-  constructor(network: NetworkType) {
+  _connection: web3.Connection;
+  constructor(mnemonic: string, network: NetworkType) {
+    this._mnemonic = mnemonic;
     this._network = network;
-    this._cluster = "mainnet-beta";
-    if (this._network === "devnet") {
+    if (this._network === "devnet" || this._network === "testnet") {
       this._cluster = "devnet";
-    } else if (this._network === "testnet") {
-      this._cluster = "testnet";
+    } else{
+      this._cluster = "mainnet-beta";
     }
-  }
-
-  init() {
-    const connection = new web3.Connection(
+    this._connection = new web3.Connection(
       web3.clusterApiUrl(this._cluster),
       "confirmed"
     );
-    return connection;
   }
 }
