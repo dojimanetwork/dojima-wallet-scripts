@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "new_account": "ts-node ./scripts/new_account.ts",
@@ -10,7 +11,12 @@
     "solana_wallet": "ts-node ./scripts/solana_wallet",
     "polkadot_wallet": "ts-node ./scripts/polkadot_wallet",
     "arweave_wallet": "ts-node ./scripts/arweave_wallet",
-    "ethereum_wallet": "ts-node ./scripts/ethereum_wallet"
+    "ethereum_wallet": "ts-node ./scripts/ethereum_wallet",
+    "btc_transactions": "ts-node ./scripts/btc_transactions",
+    "eth_transactions": "ts-node ./scripts/eth_transactions",
+    "polka_transactions": "ts-node ./scripts/polka_transactions",
+    "eth_test": "ts-node ./scripts/eth_test",
+    "erc20_wallet": "ts-node ./scripts/erc20_wallet"
   },
   "repository": {
     "type": "git",
@@ -23,13 +29,17 @@
   },
   "homepage": "https://github.com/dojimanetwork/dojima-wallet-scripts#readme",
   "dependencies": {
+    "@binance-chain/javascript-sdk": "^4.2.0",
     "@polkadot/api": "^7.6.1",
     "@polkadot/extension-dapp": "^0.42.7",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
     "@solana/web3.js": "^1.32.0",
+    "@xchainjs/xchain-binance": "^5.4.2",
     "@xchainjs/xchain-bitcoin": "^0.18.0-alpha.2",
     "@xchainjs/xchain-client": "^0.11.1",
     "@xchainjs/xchain-crypto": "^0.2.6",
+    "@xchainjs/xchain-ethereum": "^0.23.3",
+    "@xchainjs/xchain-polkadot": "^0.8.3",
     "@xchainjs/xchain-util": "^0.6.0",
     "arweave": "^1.10.23",
     "arweave-mnemonic-keys": "^0.0.9",
@@ -41,6 +51,7 @@
     "ed25519-hd-key": "^1.2.0",
     "ethereumjs-wallet": "^1.0.2",
     "ethers": "^5.5.4",
+    "node-fetch": "^2.6.6",
     "tiny-secp256k1": "^2.2.0",
     "ts-node": "^10.4.0",
     "tweetnacl": "^1.0.3",
