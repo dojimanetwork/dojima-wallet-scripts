@@ -1,7 +1,7 @@
 export const contractData: {
   [key: string]: {
     contractAddress: string;
-    tokenSymbol: string;
+    tokenSymbol: tokenSymbolList;
     decimal: number;
   };
 } = {
@@ -105,6 +105,24 @@ export type tokenList =
   | "WRAPPED_LUNA"
   | "WRAPPED_UST";
 
+export type tokenSymbolList =
+  | "BUSD"
+  | "BNB"
+  | "LINK"
+  | "CRO"
+  | "DAI"
+  | "FTM"
+  | "MKR"
+  | "MATIC"
+  | "SHIB"
+  | "USDT"
+  | "UNI"
+  | "USDC"
+  | "VEN"
+  | "WBTC"
+  | "LUNA"
+  | "UST";
+
 export const minABI = [
   {
     constant: true,
@@ -116,6 +134,6 @@ export const minABI = [
 ];
 
 export type BalanceResult = {
-    balance: number
-    tokenName: string
-}
+  balance: number;
+  tokenName: tokenSymbolList;
+};
