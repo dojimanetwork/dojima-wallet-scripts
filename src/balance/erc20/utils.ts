@@ -114,3 +114,8 @@ export const minABI = [
     type: "function",
   },
 ];
+
+export type BalanceResult = {
+    balance: number
+    tokenName: string
+}
