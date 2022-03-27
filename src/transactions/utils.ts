@@ -69,3 +69,14 @@ export type TransactionHashDataResult = {
   id: string;
   result: EthTxHashDataResult;
 };
+export type SolTxDataResult = {
+  timeStamp: Date;
+  gasFee: number;
+  amount: number;
+  status: string;
+  block: number;
+  from: string;
+  to: string;
+  recentBlockHash: string;
+  instructionData: string;
+};
