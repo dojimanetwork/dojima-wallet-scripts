@@ -17,6 +17,17 @@ export type TxHistoryParams = {
   startBlock?: number;
   endBlock?: number;
 };
+export type ERC20TxHistoryParams = {
+  apiKey: string;
+  action: ActionType;
+  contractAddress:string;
+  fromAddress:string;
+  page?: number;
+  limit?: number;
+  sort?: SortType;
+  startBlock?: number;
+  endBlock?: number;
+};
 export type EthTxDetailsResult = {
   blockNumber: string;
   timeStamp: string;

@@ -8,7 +8,7 @@ export async function http(path: string, args: RequestInit) {
     }
     return response;
   } catch (error) {
-    throw new Error(error.message);
+    throw 'new Error(error.message)';
   }
 }
 export async function get(path: string, args: RequestInit) {
