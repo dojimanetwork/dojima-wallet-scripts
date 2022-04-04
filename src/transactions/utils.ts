@@ -17,6 +17,13 @@ export type TxHistoryParams = {
   startBlock?: number;
   endBlock?: number;
 };
+export type  BinanceChainTxHistory={
+  fromAddress:string;
+  // limit:number;
+  // offset:string;
+  // startTime:string;
+  // txAsset:string;
+}
 export type ERC20TxHistoryParams = {
   apiKey: string;
   action: ActionType;
@@ -27,6 +34,26 @@ export type ERC20TxHistoryParams = {
   sort?: SortType;
   startBlock?: number;
   endBlock?: number;
+};
+export type BinanaceTxDetailsResult ={
+txHash:string;
+blockHeight:string;
+txType:string;
+timeStamp:string;
+fromAddr:string;
+toAddr:string;
+value:string;
+txAsset:string;
+txFee:string;
+proposalld:string;
+txAge:string;
+orderId:string;
+code:string;
+data:string;
+confimrblocks:string;
+memo:string;
+source:string;
+sequence:string;
 };
 export type EthTxDetailsResult = {
   blockNumber: string;
@@ -75,6 +102,10 @@ export type EthTxHashDataResult = {
   r: string;
   s: string;
 };
+export type BinanceTransactionHistoryResult={
+  tx: BinanaceTxDetailsResult[];
+  total:string;
+}
 export type TransactionHashDataResult = {
   jsonrpc: string;
   id: string;

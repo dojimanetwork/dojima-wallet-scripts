@@ -15,6 +15,7 @@
     "btc_transactions": "ts-node ./scripts/btc_transactions",
     "eth_transactions": "ts-node ./scripts/eth_transactions",
     "polka_transactions": "ts-node ./scripts/polka_transactions",
+    "binance_transactions":"ts-node ./scripts/binance_transcations",
     "eth_test": "ts-node ./scripts/eth_test",
     "erc20_wallet": "ts-node ./scripts/erc20_wallet"
   },
