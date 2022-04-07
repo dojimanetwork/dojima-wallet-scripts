@@ -165,7 +165,7 @@ export default class BitcoinChain extends BitcoinAccount {
       recipient: toAddress,
       amount: bsAmount,
       memo: "SWAP:BTC.BTC",
-      feeRate: feeRate ? feeRate : 1,                   // '1' is for testing
+      feeRate: feeRate ? feeRate * Math.pow(10, 8) : 1, // '1' is for testing
     });
     // console.log('Transaction id : ', transactionHash);
     return transactionHash;

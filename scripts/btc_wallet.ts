@@ -9,7 +9,11 @@ async function btc() {
     const gasFee = await btc.getGasFee();
     // console.log('Gas fee : ',gasFee);
     // console.time('Tx')
-    // const tx = await btc.createTransactionAndSend('tb1qqzupd5yjn76rme297uu9q8lrfkjnfp8kfhahny', 0.00001, client);
+    // const buildTx = await btc.buildTransaction('tb1qqzupd5yjn76rme297uu9q8lrfkjnfp8kfhahny', 0.00001, 1);
+    // console.timeEnd('Tx')
+    // console.log('build tx : ',buildTx);
+    // console.time('Tx')
+    // const tx = await btc.createTransactionAndSend('tb1qqzupd5yjn76rme297uu9q8lrfkjnfp8kfhahny', 0.00001);
     // console.timeEnd('Tx')
     // console.log('Tx generated : ',tx);
     // console.time('Tx1')
