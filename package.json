@@ -17,7 +17,11 @@
     "polka_transactions": "ts-node ./scripts/polka_transactions",
     "binance_transactions":"ts-node ./scripts/binance_transcations",
     "eth_test": "ts-node ./scripts/eth_test",
-    "erc20_wallet": "ts-node ./scripts/erc20_wallet"
+    "erc20_wallet": "ts-node ./scripts/erc20_wallet",
+    "sol_transactions": "ts-node ./scripts/solana_transactions",
+    "btc_test": "ts-node ./scripts/btc_test",
+    "bnb_wallet": "ts-node ./scripts/bnb_wallet",
+    "binance_live_tokens_data": "ts-node ./scripts/binance_live_tokens_data"
   },
   "repository": {
     "type": "git",
@@ -44,6 +48,7 @@
     "@xchainjs/xchain-util": "^0.6.0",
     "arweave": "^1.10.23",
     "arweave-mnemonic-keys": "^0.0.9",
+    "axios": "^0.26.1",
     "bignumber.js": "^9.0.2",
     "bip32": "^2.0.5",
     "bip39": "^3.0.4",

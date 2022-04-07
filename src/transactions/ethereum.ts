@@ -49,8 +49,17 @@
 
 import { NetworkType } from "../types/interfaces/network";
 import EthereumAccount from "../accounts/eth_account";
-import { get } from "../types/interfaces/http";
-import { ERC20TxHistoryParams, EthTxDetailsResult, EthTxHashDataResult, TransactionHashDataResult, TransactionHistoryResult, TxHashDataParams, TxHistoryParams } from "./utils";
+// import { get } from "../types/interfaces/http";
+import {
+  ERC20TxHistoryParams,
+  EthTxDetailsResult,
+  EthTxHashDataResult,
+  TransactionHashDataResult,
+  TransactionHistoryResult,
+  TxHashDataParams,
+  TxHistoryParams,
+} from "./utils";
+import axios from "axios";
 
 export default class EthereumTransactions extends EthereumAccount {
   _api: string;
@@ -77,14 +86,9 @@ export default class EthereumTransactions extends EthereumAccount {
     }&api=6IU4JG5P2PNVRSB54YIAMIAQFQ879PXJ7C`;
 
     try {
-      let response = await (
-        await get(requestApi, {
-          method: "GET",
-          redirect: "follow",
-        })
-      ).text();
-console.log("Response: ",response)
-      let parsedData: TransactionHistoryResult = JSON.parse(response);
+      let response = await axios.get(requestApi);
+      console.log("Response: ",response)
+      let parsedData: TransactionHistoryResult = response.data;
       let result: EthTxDetailsResult[] = parsedData.result;
       return {
         txs: (result || []).map((res) => ({
@@ -119,26 +123,44 @@ console.log("Response: ",response)
   }
 
   async getTransactionsHistory(params: TxHistoryParams) {
-    let requestApi = `${this._api}?module=account&action=${
-      params.action
-    }&address=${this.getAddress()}&startblock=${
-      params.startBlock ? params.startBlock : 0
-    }&endblock=${params.endBlock ? params.endBlock : 99999999}&page=${
-      params.page ? params.page : 1
-    }&offset=${params.limit ? params.limit : 10}&sort=${
-      params.sort ? params.sort : "desc"
-    }&api=6IU4JG5P2PNVRSB54YIAMIAQFQ879PXJ7C`;
+    let requestUrl = `${this._api}?module=account&action=txlist`;
+
+    if (params.address) {
+      requestUrl += `&address=${params.address}`;
+    }
+    if (params.apiKey) {
+      requestUrl += `&api=${params.apiKey}`;
+    }
+    if (params.limit) {
+      requestUrl += `&offset=${params.limit}`;
+    } else {
+      requestUrl += `&offset=10`;
+    }
+    if (params.page) {
+      requestUrl += `&page=${params.page}`;
+    } else {
+      requestUrl += `&page=1`;
+    }
+    if (params.sort) {
+      requestUrl += `&sort=${params.sort}`;
+    } else {
+      requestUrl += `&sort=desc`;
+    }
+    if (params.startBlock) {
+      requestUrl += `&startblock=${params.startBlock}`;
+    } else {
+      requestUrl += `&startblock=0`;
+    }
+    if (params.endBlock) {
+      requestUrl += `&endblock=${params.endBlock}`;
+    } else {
+      requestUrl += `&endblock=99999999`;
+    }
 
     try {
-      let response = await (
-        await get(requestApi, {
-          method: "GET",
-          redirect: "follow",
-        })
-      ).text();
-
-      let parsedData: TransactionHistoryResult = JSON.parse(response);
-      let result: EthTxDetailsResult[] = parsedData.result;
+      let response: TransactionHistoryResult = await (await axios.get(requestUrl)).data;
+      let result: EthTxDetailsResult[] = response.result;
+      console.log(result);
       return {
         txs: (result || []).map((res) => ({
           blockNumber: Number(res.blockNumber),
@@ -152,12 +174,12 @@ console.log("Response: ",response)
           value: Number(res.value) / Math.pow(10, 18),
           gas: res.gas,
           gasPrice: Number(res.gasPrice) / Math.pow(10, 18),
-          isError: "0",
-          txreceipt_status: "1",
-          input: "0x",
-          contractAddress: "",
-          cumulativeGasUsed: "7756288",
-          gasUsed: "21000",
+          isError: res.isError,
+          txreceipt_status: res.txreceipt_status,
+          input: res.input,
+          contractAddress: res.contractAddress,
+          cumulativeGasUsed: res.cumulativeGasUsed,
+          gasUsed: res.gasUsed,
           confirmations: Number(res.confirmations),
         })),
       };
@@ -184,17 +206,17 @@ console.log("Response: ",response)
   }
 
   async getTransactionData(params: TxHashDataParams) {
-    let requestApi = `${this._api}?module=proxy&action=${params.action}&txhash=${params.hash}&api=${params.apiKey}`;
+    let requestUrl = `${this._api}?module=proxy&action=eth_getTransactionByHash`;
+    if(params.hash){
+      requestUrl += `&txhash=${params.hash}`;
+    }
+    if(params.apiKey) {
+      requestUrl += `&api=${params.apiKey}`;
+    }
 
     try {
-      let response = await (
-        await get(requestApi, {
-          method: "GET",
-          redirect: "follow",
-        })
-      ).text();
-      let parsedData: TransactionHashDataResult = JSON.parse(response);
-      let result: EthTxHashDataResult = parsedData.result;
+      let response: TransactionHashDataResult = await (await axios.get(requestUrl)).data;
+      let result: EthTxHashDataResult = response.result;
       return {
         blockHash: result.blockHash,
         blockNumber: this.convertHexToInt(this.remove0x(result.blockNumber) as string),
