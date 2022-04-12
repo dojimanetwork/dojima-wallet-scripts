@@ -1,5 +1,5 @@
 import axios from "axios";
-import { NetworkType } from "../types/interfaces/network";
+import { NetworkType } from "../../types/interfaces/network";
 import BinanceClient from "./binance_api";
 import { Last24HrResult, LatestPricesResult } from "./utils";
 import moment from 'moment';
@@ -86,5 +86,31 @@ export default class AssetsData extends BinanceClient {
         console.log("Unexpected error", error);
       }
     }
+  }
+
+  async getHistoricalData() {
+    let requestApi = `${this.api}/api/v3/ticker/price`;
+    try {
+      let response = await axios.get(requestApi);
+      let result: LatestPricesResult[] = response.data;
+      let finalResult: LatestPricesResult[] = [];
+      (result || []).map((res) => {
+        if (res.symbol.endsWith("USDT")) {
+          const data = {
+            symbol: res.symbol.slice(0, res.symbol.lastIndexOf("USDT")),
+            price: res.price,
+          };
+          finalResult.push(data);
+        }
+      });
+      return finalResult;
+    } catch (error) {
+      if (error instanceof Error) {
+        // ✅ TypeScript knows err is Error
+        return new Error(error.message);
+      } else {
+        console.log("Unexpected error", error);
+      }
+    } 
   }
 }
