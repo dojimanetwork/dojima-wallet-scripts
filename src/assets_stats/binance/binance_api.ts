@@ -1,5 +1,4 @@
-import axios from "axios";
-import { NetworkType } from "../types/interfaces/network";
+import { NetworkType } from '../../types/interfaces/network';
 
 export default class BinanceClient {
   api: string;
