@@ -21,7 +21,8 @@
     "sol_transactions": "ts-node ./scripts/solana_transactions",
     "btc_test": "ts-node ./scripts/btc_test",
     "bnb_wallet": "ts-node ./scripts/bnb_wallet",
-    "binance_live_tokens_data": "ts-node ./scripts/binance_live_tokens_data"
+    "binance_live_tokens_data": "ts-node ./scripts/binance_live_tokens_data",
+    "coinGecko": "ts-node ./scripts/asset_prices/coingecko"
   },
   "repository": {
     "type": "git",
