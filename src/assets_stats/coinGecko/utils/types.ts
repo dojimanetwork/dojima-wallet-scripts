@@ -42,6 +42,25 @@ export type PriceHistoryResult = {
   total_volume: number;
 };
 
+export type DayPriceData = [number, number];
+
+export type DayPriceDataResult = {
+  date: string;
+  price: number;
+};
+
+export type PriceHistoryDataByDays = {
+  prices: [DayPriceData];
+  market_caps: [DayPriceData];
+  total_volumes: [DayPriceData];
+};
+
+export type PriceHistoryDataByDaysResult = {
+  prices: DayPriceDataResult[];
+  market_cap: DayPriceDataResult[];
+  total_volume: DayPriceDataResult[];
+};
+
 export type ROI = {
   times: number;
   currency: string;
