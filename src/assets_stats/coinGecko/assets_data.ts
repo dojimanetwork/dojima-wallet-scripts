@@ -1,7 +1,12 @@
 import axios from "axios";
 import moment from "moment";
 import { CurrencyList, DisplayOrderList } from "./utils/lists";
-import { AssetIds, AssetsCurrentMarketDataResult } from "./utils/types";
+import {
+  AssetIds,
+  AssetsCurrentMarketDataResult,
+  PriceHistoryDataByDate,
+  PriceHistoryResult,
+} from "./utils/types";
 
 export default class CoinGecko {
   api: string;
@@ -105,6 +110,29 @@ export default class CoinGecko {
         };
         finalResult.push(values);
       });
+      return finalResult;
+    } catch (error) {
+      console.log("Unexpected error", error);
+    }
+  }
+
+  // Get historical data (name, price, market, stats) at a given date for a coin
+  // By default made use of 'usd' as return value
+  // 'date' input should be of format 'DD-MM-YYYY'
+  async getAssetHistoryPriceByDate(asset: string, date: string) {
+    let requestApi = `${this.api}/coins/${asset}/history?date=${date}`;
+    try {
+      let response = await axios.get(requestApi);
+      let result: PriceHistoryDataByDate = response.data;
+      let finalResult: PriceHistoryResult[] = [];
+      if (result.market_data !== null) {
+        const data = {
+          current_price: result.market_data.current_price.usd,
+          market_cap: result.market_data.market_cap.usd,
+          total_volume: result.market_data.total_volume.usd,
+        };
+        finalResult.push(data);
+      }
       return finalResult;
     } catch (error) {
       console.log("Unexpected error", error);

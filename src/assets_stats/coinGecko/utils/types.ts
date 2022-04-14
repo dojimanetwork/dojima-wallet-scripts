@@ -1,3 +1,5 @@
+import { CurrencyList } from "./lists";
+
 export const AssetIds = [
   "arweave",
   "bitcoin",
@@ -6,6 +8,39 @@ export const AssetIds = [
   "solana",
   "polkadot",
 ];
+
+export type MarketData = {
+  current_price: {
+    [key in CurrencyList]: number;
+  };
+  market_cap: {
+    [key in CurrencyList]: number;
+  };
+  total_volume: {
+    [key in CurrencyList]: number;
+  };
+};
+
+export type PriceHistoryDataByDate = {
+  id: string;
+  symbol: string;
+  name: string;
+  localization: any;
+  image: {
+    thumb: string;
+    small: string;
+  };
+  market_data: MarketData;
+  community_data: any;
+  developer_data: any;
+  public_interest_stats: any;
+};
+
+export type PriceHistoryResult = {
+  current_price: number;
+  market_cap: number;
+  total_volume: number;
+};
 
 export type ROI = {
   times: number;
