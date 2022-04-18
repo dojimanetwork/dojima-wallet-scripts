@@ -12,6 +12,12 @@ import {
   PriceHistoryDataByDaysResult,
 } from "./utils/types";
 
+// export type CoinList = {
+//   id: string;
+//   symbol: string;
+//   name: string;
+// }
+
 export default class CoinGecko {
   api: string;
   constructor() {
@@ -23,20 +29,32 @@ export default class CoinGecko {
     return date;
   }
 
+  convertDateToTimestamp(date: string) {
+    const timestamp = moment(date).format("X"); // lowercase 'x' for timestamp in milliseconds
+    return Number(timestamp);
+  }
+
   convertISOtoUTC(date: string) {
     const utcDate = new Date(date).toUTCString();
     return utcDate;
   }
 
   // Obtain all the coins' id in order to make API calls
-  //   async getAssetsList() {
-  //     let requestApi = `${this.api}/coins/list`;
-  //     try {
-
-  //     } catch (error) {
-
-  //     }
-  //   }
+    // async getAssetsList() {
+    //   let requestApi = `${this.api}/coins/list`;
+    //   try {
+    //     let response = await axios.get(requestApi);
+    //     let result: CoinList[] = response.data;
+    //     let finalResult: string[] = [];
+    //     (result || []).map((res) => {
+    //       finalResult.push(res.id);
+    //     });
+    //     console.log(finalResult.join('|'));
+    //     return finalResult;
+    //   } catch (error) {
+    //     console.log("Error retrieving data from API");
+    //   }
+    // }
 
   // all the coins market data (price, market cap, volume)
   // 'assets' - ids of the coin, comma separated crytocurrency symbols (base) [Ex : 'bitcoin,ethereum,...']
@@ -58,9 +76,6 @@ export default class CoinGecko {
     }
     if (assets) {
       requestApi += `&ids=${assets}`;
-    } else {
-      let arrData = AssetIds.toString();
-      requestApi += `&ids=${arrData}`;
     }
     if (sortOrder) {
       requestApi += `&order=${sortOrder}`;
@@ -70,7 +85,7 @@ export default class CoinGecko {
     if (valuesPerPage) {
       requestApi += `&per_page=${valuesPerPage}`;
     } else {
-      requestApi += `&per_page=100`;
+      requestApi += `&per_page=250`;
     }
     if (page) {
       requestApi += `&page=${page}`;
@@ -115,6 +130,7 @@ export default class CoinGecko {
           };
           finalResult.push(values);
         });
+        console.log(finalResult);
         return finalResult;
       } else {
         console.log("Error retrieving data from API");
@@ -165,6 +181,71 @@ export default class CoinGecko {
       requestApi += `&days=${noOfDays}`;
     }
 
+    try {
+      let response = await axios.get(requestApi);
+      if (response.status == 200) {
+        let result: PriceHistoryDataByDays = response.data;
+        let pricesResult: DayPriceDataResult[] = [];
+        (result.prices || []).map((res: DayPriceData) => {
+          const data = {
+            date: this.convertTimestampToDate(res[0]),
+            price: res[1],
+          };
+          pricesResult.push(data);
+        });
+        let marketCapResult: DayPriceDataResult[] = [];
+        (result.market_caps || []).map((res: DayPriceData) => {
+          const data = {
+            date: this.convertTimestampToDate(res[0]),
+            price: res[1],
+          };
+          marketCapResult.push(data);
+        });
+        let totalVolumeResult: DayPriceDataResult[] = [];
+        (result.total_volumes || []).map((res: DayPriceData) => {
+          const data = {
+            date: this.convertTimestampToDate(res[0]),
+            price: res[1],
+          };
+          totalVolumeResult.push(data);
+        });
+        let finalResult: PriceHistoryDataByDaysResult[] = [];
+        finalResult = [
+          {
+            prices: pricesResult,
+            market_cap: marketCapResult,
+            total_volume: totalVolumeResult,
+          },
+        ];
+        return finalResult;
+      } else {
+        console.log("Error retrieving data from API");
+      }
+    } catch (error) {
+      console.log("Unexpected error", error);
+    }
+  }
+
+  // Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto)
+  // Data granularity is automatic (cannot be adjusted)
+  // 1 day from query time = 5 minute interval data
+  // 1 - 90 days from query time = hourly data
+  // above 90 days from query time = daily data (00:00 UTC)
+  async getAssetHistoryPriceByDateRange(
+    asset: string,
+    fromDate: string,
+    thruDate: string,
+    resCurrency?: CurrencyList
+  ) {
+    const from = this.convertDateToTimestamp(fromDate);
+    const to = this.convertDateToTimestamp(thruDate);
+    let requestApi = `${this.api}/coins/${asset}/market_chart/range`;
+    if (resCurrency) {
+      requestApi += `?vs_currency=${resCurrency}`;
+    } else {
+      requestApi += `?vs_currency=usd`;
+    }
+    requestApi += `&from=${from}&to=${to}`;
     try {
       let response = await axios.get(requestApi);
       if (response.status == 200) {

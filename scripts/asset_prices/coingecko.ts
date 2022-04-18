@@ -8,7 +8,8 @@ async function getData() {
     // }
     const history = await inst.getAssetHistoryPriceByDate('bitcoin', '12-04-2022');
     const dataByDay = await inst.getAssetHistoryPriceByNoOfDays('bitcoin', 2);
-    return dataByDay;
+    const dataByDateRange = await inst.getAssetHistoryPriceByDateRange('bitcoin', '2022-01-12', '2022-04-15');
+    return dataByDateRange;
 }
 
 (async() => {
