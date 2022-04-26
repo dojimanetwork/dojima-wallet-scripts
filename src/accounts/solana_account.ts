@@ -103,6 +103,12 @@ export default class SolanaAccount extends SolanaConnection {
         return accounts;
     }
 
+    async getKeypair(): Promise<Account> {
+      const account = await this.solAcc();
+      const keypair = account[0];
+      return keypair;
+    }
+
     async getAddress(): Promise<string> {
       const account = await this.solAcc();
       const address = account[0].publicKey.toString();
