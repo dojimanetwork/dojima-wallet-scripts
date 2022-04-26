@@ -25,7 +25,7 @@ export default class BitcoinTransactions extends BitcoinClient {
       return transactions;
     } catch (error) {
       //   console.log("No transactions found");
-      return new Error(error.message);
+      throw new Error(error.message);
     }
   }
 
@@ -35,7 +35,7 @@ export default class BitcoinTransactions extends BitcoinClient {
     //   console.log(txData);
       return txData;
     } catch (error) {
-      return new Error(error.message);
+      throw new Error(error.message);
     }
   }
 }

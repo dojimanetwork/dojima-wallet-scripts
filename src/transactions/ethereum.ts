@@ -32,7 +32,7 @@
 //       return transactions;
 //     } catch (error) {
 //       //   console.log("No transactions found");
-//       return new Error(error.message);
+//       throw new Error(error.message);
 //     }
 //   }
 
@@ -42,7 +42,7 @@
 //       //   console.log(txData);
 //       return txData;
 //     } catch (error) {
-//       return new Error(error.message);
+//       throw new Error(error.message);
 //     }
 //   }
 // }
@@ -115,7 +115,7 @@ export default class EthereumTransactions extends EthereumAccount {
     } catch (error) {
       if (error instanceof Error) {
         // ✅ TypeScript knows err is Error
-        return new Error(error.message);
+        throw new Error(error.message);
       } else {
         console.log('Unexpected error', error);
       }
@@ -186,7 +186,7 @@ export default class EthereumTransactions extends EthereumAccount {
     } catch (error) {
       if (error instanceof Error) {
         // ✅ TypeScript knows err is Error
-        return new Error(error.message);
+        throw new Error(error.message);
       } else {
         console.log('Unexpected error', error);
       }
@@ -242,7 +242,7 @@ export default class EthereumTransactions extends EthereumAccount {
     } catch (error) {
       if (error instanceof Error) {
         // ✅ TypeScript knows err is Error
-        return new Error(error.message);
+        throw new Error(error.message);
       } else {
         console.log('Unexpected error', error);
       }

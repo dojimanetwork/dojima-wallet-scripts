@@ -30,7 +30,7 @@ export default class AssetsData extends BinanceClient {
     } catch (error) {
       if (error instanceof Error) {
         // ✅ TypeScript knows err is Error
-        return new Error(error.message);
+        throw new Error(error.message);
       } else {
         console.log("Unexpected error", error);
       }
@@ -81,7 +81,7 @@ export default class AssetsData extends BinanceClient {
     } catch (error) {
       if (error instanceof Error) {
         // ✅ TypeScript knows err is Error
-        return new Error(error.message);
+        throw new Error(error.message);
       } else {
         console.log("Unexpected error", error);
       }
@@ -107,7 +107,7 @@ export default class AssetsData extends BinanceClient {
     } catch (error) {
       if (error instanceof Error) {
         // ✅ TypeScript knows err is Error
-        return new Error(error.message);
+        throw new Error(error.message);
       } else {
         console.log("Unexpected error", error);
       }

@@ -29,7 +29,7 @@ export default class SolanaTransaction extends SolanaAccount {
         instructionData: txData.transaction.message.instructions[0].data,
       };
     } catch (error) {
-      return new Error(error.message);
+      throw new Error(error.message);
     }
   }
 
@@ -51,7 +51,7 @@ export default class SolanaTransaction extends SolanaAccount {
       );
       return signatures;
     } catch (error) {
-      return new Error(error.message);
+      throw new Error(error.message);
     }
   }
 }
