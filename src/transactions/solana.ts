@@ -1,57 +1,63 @@
 import * as web3 from "@solana/web3.js";
 import SolanaAccount from "../accounts/solana_account";
 import { NetworkType } from "../types/interfaces/network";
-import { SolTxDataResult } from "./utils";
+import { SolTxDataResult, SolTxHistoryParams } from "./utils";
 
 export default class SolanaTransaction extends SolanaAccount {
   constructor(mnemonic: string, network: NetworkType) {
     super(mnemonic, network);
   }
 
-  async getTransactionData(
-    hash: string,
-    state?: web3.Finality
-  ): Promise<SolTxDataResult | Error> {
+  async getTransactionData(hash: string, state?: web3.Finality) {
     try {
       let txData = await this._connection.getTransaction(hash, {
-        commitment: state ? state : 'confirmed',
+        commitment: state ? state : "confirmed",
       });
-      let amount = txData.meta.postBalances[1] - txData.meta.preBalances[1];
-      return {
-        timeStamp: new Date(Number(txData.blockTime) * 1000),
-        gasFee: txData.meta.fee / Math.pow(10, 9),
-        amount: amount / Math.pow(10, 9),
-        status: '',
-        block: txData.slot,
-        from: txData.transaction.message.accountKeys[0].toString(),
-        to: txData.transaction.message.accountKeys[0].toString(),
-        recentBlockHash: txData.transaction.message.recentBlockhash,
-        instructionData: txData.transaction.message.instructions[0].data,
-      };
+      if (txData !== null && txData.meta !== null) {
+        let amount = txData.meta.postBalances[1] - txData.meta.preBalances[1];
+        return {
+          timeStamp: new Date(Number(txData.blockTime) * 1000),
+          gasFee: txData.meta.fee / Math.pow(10, 9),
+          amount: amount / Math.pow(10, 9),
+          status: "",
+          block: txData.slot,
+          from: txData.transaction.message.accountKeys[0].toString(),
+          to: txData.transaction.message.accountKeys[1].toString(),
+          recentBlockHash: txData.transaction.message.recentBlockhash,
+          instructionData: txData.transaction.message.instructions[0].data,
+        };
+      } else {
+        console.log("Unable to retrieve data");
+      }
     } catch (error) {
-      throw new Error(error.message);
+      if (error instanceof Error) {
+        // ✅ TypeScript knows err is Error
+        throw new Error(error.message);
+      } else {
+        console.log("Unexpected error", error);
+      }
     }
   }
 
-  async getTransactionsHistory(
-    address: string,
-    offset?: number,
-    beforeHash?: string,
-    untilHash?: string
-  ) {
+  async getTransactionsHistory(params: SolTxHistoryParams) {
     try {
-      const pubKey = new web3.PublicKey(address);
+      const pubKey = new web3.PublicKey(params.address);
       let signatures = await this._connection.getConfirmedSignaturesForAddress2(
         pubKey,
         {
-          limit: offset ? offset : 10,
-          before: beforeHash ? beforeHash : null,
-          until: untilHash ? untilHash : null,
+          limit: params.offset ? params.offset : 10,
+          before: params.beforeHash ? params.beforeHash : undefined,
+          until: params.untilHash ? params.untilHash : undefined,
         }
       );
       return signatures;
     } catch (error) {
-      throw new Error(error.message);
+      if (error instanceof Error) {
+        // ✅ TypeScript knows err is Error
+        throw new Error(error.message);
+      } else {
+        console.log("Unexpected error", error);
+      }
     }
   }
 }

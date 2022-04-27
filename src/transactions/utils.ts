@@ -121,3 +121,9 @@ export type SolTxDataResult = {
   recentBlockHash: string;
   instructionData: string;
 };
+export type SolTxHistoryParams = {
+  address: string;
+  offset?: number;
+  beforeHash?: string;
+  untilHash?: string;
+}
