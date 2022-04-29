@@ -18,11 +18,13 @@
     "binance_transactions": "ts-node ./scripts/binance_transcations",
     "eth_test": "ts-node ./scripts/eth_test",
     "erc20_wallet": "ts-node ./scripts/erc20_wallet",
-    "sol_transactions": "ts-node ./scripts/solana_transactions",
+    "sol_transactions": "ts-node ./scripts/sol_transactions",
     "btc_test": "ts-node ./scripts/btc_test",
     "bnb_wallet": "ts-node ./scripts/bnb_wallet",
     "binance_live_tokens_data": "ts-node ./scripts/binance_live_tokens_data",
-    "coinGecko": "ts-node ./scripts/asset_prices/coingecko"
+    "coinGecko": "ts-node ./scripts/asset_prices/coingecko",
+    "cryptoCompare": "ts-node ./scripts/asset_prices/cryptocompare",
+    "password": "ts-node ./scripts/password_test"
   },
   "repository": {
     "type": "git",
@@ -54,6 +56,7 @@
     "bip32": "^2.0.5",
     "bip39": "^3.0.4",
     "bitcoinjs-lib": "^6.0.1",
+    "dotenv": "^16.0.0",
     "ecpair": "^2.0.1",
     "ed25519-hd-key": "^1.2.0",
     "ethereumjs-wallet": "^1.0.2",
