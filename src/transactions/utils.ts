@@ -8,6 +8,51 @@ export type ActionType =
   | "tokennfttx"
   | "getminedblocks"
   | "eth_getTransactionByHash";
+
+export type BtcTxHistoryBlockObject = {
+  height: number;
+  position: number;
+};
+export type BtcTxHistoryResult = {
+  txid: string;
+  block: BtcTxHistoryBlockObject;
+};
+export type BtcTxDataInputObject = {
+  coinbase: boolean;
+  txid: string;
+  output: number;
+  sigscript: string;
+  sequence: number;
+  pkscript: string;
+  value: number;
+  address: string;
+  witness: [];
+};
+export type BtcTxDataOutputObject = {
+  address: string;
+  pkscript: string;
+  value: number;
+  spent: boolean;
+  spender: {
+    txid: string;
+    input: number;
+  } | null;
+};
+export type BtcTxDataResult = {
+  txid: string;
+  size: number;
+  version: number;
+  locktime: number;
+  fee: number;
+  inputs: BtcTxDataInputObject[];
+  outputs: BtcTxDataOutputObject[];
+  block: BtcTxHistoryBlockObject;
+  deleted: boolean;
+  time: number;
+  rbf: boolean;
+  weight: number;
+};
+
 export type TxHistoryParams = {
   address: string;
   apiKey: string;
@@ -17,43 +62,43 @@ export type TxHistoryParams = {
   startBlock?: number;
   endBlock?: number;
 };
-export type  BinanceChainTxHistory={
-  fromAddress:string;
+export type BinanceChainTxHistory = {
+  fromAddress: string;
   // limit:number;
   // offset:string;
   // startTime:string;
   // txAsset:string;
-}
+};
 export type ERC20TxHistoryParams = {
   apiKey: string;
   action: ActionType;
-  contractAddress:string;
-  fromAddress:string;
+  contractAddress: string;
+  fromAddress: string;
   page?: number;
   limit?: number;
   sort?: SortType;
   startBlock?: number;
   endBlock?: number;
 };
-export type BinanaceTxDetailsResult ={
-txHash:string;
-blockHeight:string;
-txType:string;
-timeStamp:string;
-fromAddr:string;
-toAddr:string;
-value:string;
-txAsset:string;
-txFee:string;
-proposalld:string;
-txAge:string;
-orderId:string;
-code:string;
-data:string;
-confimrblocks:string;
-memo:string;
-source:string;
-sequence:string;
+export type BinanaceTxDetailsResult = {
+  txHash: string;
+  blockHeight: string;
+  txType: string;
+  timeStamp: string;
+  fromAddr: string;
+  toAddr: string;
+  value: string;
+  txAsset: string;
+  txFee: string;
+  proposalld: string;
+  txAge: string;
+  orderId: string;
+  code: string;
+  data: string;
+  confimrblocks: string;
+  memo: string;
+  source: string;
+  sequence: string;
 };
 export type EthTxDetailsResult = {
   blockNumber: string;
@@ -82,6 +127,7 @@ export type TransactionHistoryResult = {
 };
 export type TxHashDataParams = {
   hash: string;
+  address: string;
   apiKey: string;
 };
 export type EthTxHashDataResult = {
@@ -101,14 +147,19 @@ export type EthTxHashDataResult = {
   r: string;
   s: string;
 };
-export type BinanceTransactionHistoryResult={
+export type BinanceTransactionHistoryResult = {
   tx: BinanaceTxDetailsResult[];
-  total:string;
-}
+  total: string;
+};
 export type TransactionHashDataResult = {
   jsonrpc: string;
   id: string;
   result: EthTxHashDataResult;
+};
+export type BtcTxHistoryParams = {
+  address: string;
+  startIndex?: number;
+  limit?: number;
 };
 export type SolTxDataResult = {
   timeStamp: Date;
@@ -126,4 +177,4 @@ export type SolTxHistoryParams = {
   offset?: number;
   beforeHash?: string;
   untilHash?: string;
-}
+};
