@@ -67,7 +67,7 @@ export type ROI = {
   percentage: number;
 };
 
-export type AssetsCurrentMarketDataResult = {
+export type AssetsDetailedCurrentMarketDataResult = {
   id: string;
   symbol: string;
   name: string;
@@ -94,4 +94,19 @@ export type AssetsCurrentMarketDataResult = {
   atl_date: string;
   roi: ROI | undefined;
   last_updated: string;
+};
+
+export type AssetsCurrentMarketDataResult = {
+  current_price: number;
+  market_cap: number;
+  total_volume: number;
+  circulating_supply: number;
+  total_supply: number | undefined;
+  max_supply: number | undefined;
+  ath: number;
+  ath_change_percentage: number;
+  ath_date: string;
+  atl: number;
+  atl_change_percentage: number;
+  atl_date: string;
 };

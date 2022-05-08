@@ -3,6 +3,7 @@ import moment from "moment";
 import { AssetsIdList } from "./utils/asset_Ids";
 import { CurrencyList, DisplayOrderList } from "./utils/lists";
 import {
+  AssetsDetailedCurrentMarketDataResult,
   AssetsCurrentMarketDataResult,
   DayPriceData,
   PriceHistoryDataByDate,
@@ -13,12 +14,12 @@ import {
 } from "./utils/types";
 
 interface CurrentMarketDataOptions {
-  assets?: Array<AssetsIdList>;
+  assets: AssetsIdList;
   resCurrency?: CurrencyList;
   sortOrder?: DisplayOrderList;
   valuesPerPage?: number;
   page?: number;
-};
+}
 // export type CoinList = {
 //   id: string;
 //   symbol: string;
@@ -68,33 +69,29 @@ export default class CoinGecko {
   // 'resCurrency' - target currency of market data (usd, eur, jpy, etc.)
   // 'sortOrder' - Order of result display . Default 'market_cap_desc'
   // 'valuesPerPage' - Total results per page: 1 - 250
-  async getAssestsCurrentMarketData(
+  async getDetailedAssestsCurrentMarketData(
     options?: CurrentMarketDataOptions
   ) {
     let requestApi = `${this.api}/coins/markets`;
-    if (options!==undefined && options.resCurrency) {
+    if (options !== undefined && options.resCurrency) {
       requestApi += `?vs_currency=${options.resCurrency}`;
     } else {
       requestApi += `?vs_currency=usd`;
     }
-    if (options!==undefined && options.assets) {
-      let assetString = '';
-      if(options.assets.length>=1){
-        assetString = options.assets.join(',');
-      }
-      requestApi += `&ids=${assetString}`;
+    if (options !== undefined && options.assets) {
+      requestApi += `&ids=${options.assets}`;
     }
-    if (options!==undefined && options.sortOrder) {
+    if (options !== undefined && options.sortOrder) {
       requestApi += `&order=${options.sortOrder}`;
     } else {
       requestApi += `&order=market_cap_desc`;
     }
-    if (options!==undefined && options.valuesPerPage) {
+    if (options !== undefined && options.valuesPerPage) {
       requestApi += `&per_page=${options.valuesPerPage}`;
     } else {
       requestApi += `&per_page=250`;
     }
-    if (options!==undefined && options.page) {
+    if (options !== undefined && options.page) {
       requestApi += `&page=${options.page}`;
     } else {
       requestApi += `&page=1`;
@@ -103,42 +100,103 @@ export default class CoinGecko {
     try {
       let response = await axios.get(requestApi);
       if (response.status == 200) {
-        let result: AssetsCurrentMarketDataResult[] = response.data;
-        let finalResult: AssetsCurrentMarketDataResult[] = [];
-        (result || []).map((res) => {
-          const values = {
-            id: res.id,
-            symbol: res.symbol,
-            name: res.name,
-            image: res.image,
-            current_price: res.current_price,
-            market_cap: res.market_cap,
-            market_cap_rank: res.market_cap_rank,
-            fully_diluted_valuation: res.fully_diluted_valuation,
-            total_volume: res.total_volume,
-            high_24h: res.high_24h,
-            low_24h: res.low_24h,
-            price_change_24h: res.price_change_24h,
-            price_change_percentage_24h: res.price_change_percentage_24h,
-            market_cap_change_24h: res.market_cap_change_24h,
-            market_cap_change_percentage_24h:
-              res.market_cap_change_percentage_24h,
-            circulating_supply: res.circulating_supply,
-            total_supply: res.total_supply,
-            max_supply: res.max_supply,
-            ath: res.ath,
-            ath_change_percentage: res.ath_change_percentage,
-            ath_date: this.convertISOtoUTC(res.ath_date),
-            atl: res.atl,
-            atl_change_percentage: res.atl_change_percentage,
-            atl_date: this.convertISOtoUTC(res.atl_date),
-            roi: res.roi,
-            last_updated: this.convertISOtoUTC(res.last_updated),
+        let result: AssetsDetailedCurrentMarketDataResult[] = response.data;
+        if (result !== (null || undefined)) {
+          let finalResult: AssetsDetailedCurrentMarketDataResult[] = [];
+          result.map((res) => {
+            const values = {
+              id: res.id,
+              symbol: res.symbol,
+              name: res.name,
+              image: res.image,
+              current_price: res.current_price,
+              market_cap: res.market_cap,
+              market_cap_rank: res.market_cap_rank,
+              fully_diluted_valuation: res.fully_diluted_valuation,
+              total_volume: res.total_volume,
+              high_24h: res.high_24h,
+              low_24h: res.low_24h,
+              price_change_24h: res.price_change_24h,
+              price_change_percentage_24h: res.price_change_percentage_24h,
+              market_cap_change_24h: res.market_cap_change_24h,
+              market_cap_change_percentage_24h:
+                res.market_cap_change_percentage_24h,
+              circulating_supply: res.circulating_supply,
+              total_supply: res.total_supply,
+              max_supply: res.max_supply,
+              ath: res.ath,
+              ath_change_percentage: res.ath_change_percentage,
+              ath_date: this.convertISOtoUTC(res.ath_date),
+              atl: res.atl,
+              atl_change_percentage: res.atl_change_percentage,
+              atl_date: this.convertISOtoUTC(res.atl_date),
+              roi: res.roi,
+              last_updated: this.convertISOtoUTC(res.last_updated),
+            };
+            finalResult.push(values);
+          });
+          // console.log(finalResult);
+          return finalResult;
+        } else {
+          console.log("Error retrieving data from API");
+        }
+      } else {
+        console.log("Error retrieving data from API");
+      }
+    } catch (error) {
+      console.log("Unexpected error", error);
+    }
+  }
+
+  async getAssestsCurrentMarketData(options?: CurrentMarketDataOptions) {
+    let requestApi = `${this.api}/coins/markets`;
+    if (options !== undefined && options.resCurrency) {
+      requestApi += `?vs_currency=${options.resCurrency}`;
+    } else {
+      requestApi += `?vs_currency=usd`;
+    }
+    if (options !== undefined && options.assets) {
+      requestApi += `&ids=${options.assets}`;
+    }
+    if (options !== undefined && options.sortOrder) {
+      requestApi += `&order=${options.sortOrder}`;
+    } else {
+      requestApi += `&order=market_cap_desc`;
+    }
+    if (options !== undefined && options.valuesPerPage) {
+      requestApi += `&per_page=${options.valuesPerPage}`;
+    } else {
+      requestApi += `&per_page=250`;
+    }
+    if (options !== undefined && options.page) {
+      requestApi += `&page=${options.page}`;
+    } else {
+      requestApi += `&page=1`;
+    }
+
+    try {
+      let response = await axios.get(requestApi);
+      if (response.status == 200) {
+        let result: AssetsDetailedCurrentMarketDataResult = response.data[0];
+        if (result !== (null || undefined)) {
+          const finalResult: AssetsCurrentMarketDataResult = {
+            current_price: result.current_price,
+            market_cap: result.market_cap,
+            total_volume: result.total_volume,
+            circulating_supply: result.circulating_supply,
+            total_supply: result.total_supply,
+            max_supply: result.max_supply,
+            ath: result.ath,
+            ath_change_percentage: result.ath_change_percentage,
+            ath_date: this.convertISOtoUTC(result.ath_date),
+            atl: result.atl,
+            atl_change_percentage: result.atl_change_percentage,
+            atl_date: this.convertISOtoUTC(result.atl_date),
           };
-          finalResult.push(values);
-        });
-        console.log(finalResult);
-        return finalResult;
+          return finalResult;
+        } else {
+          console.log("Error retrieving data from API");
+        }
       } else {
         console.log("Error retrieving data from API");
       }
