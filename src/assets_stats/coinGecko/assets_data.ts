@@ -14,7 +14,7 @@ import {
 } from "./utils/types";
 
 interface CurrentMarketDataOptions {
-  assets: AssetsIdList;
+  assets: string;
   resCurrency?: CurrencyList;
   sortOrder?: DisplayOrderList;
   valuesPerPage?: number;
