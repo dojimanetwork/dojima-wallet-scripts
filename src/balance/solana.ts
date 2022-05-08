@@ -67,7 +67,7 @@ export default class SolanaChain extends SolanaAccount {
 
   async signAndSend(rawTx: web3.Transaction): Promise<string> {
     // Get account details
-    const account = await this.solAcc();
+    const account = await this.getKeypair();
 
     // Sign the transaction
     let signature = await web3.sendAndConfirmTransaction(this._connection, rawTx, [
