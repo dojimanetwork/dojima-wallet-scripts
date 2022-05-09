@@ -183,7 +183,7 @@ export default class BitcoinTransactions extends BitcoinClient {
               transaction_type: tx_type,
               transaction_hash: result.txid,
               value: Number(amount / Math.pow(10, 8)),
-              block: result.block,
+              block: result.block.height,
               date: date,
               time: time,
               gas_fee: Number(result.fee / Math.pow(10, 8)),
