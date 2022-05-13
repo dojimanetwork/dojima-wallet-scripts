@@ -280,7 +280,7 @@ export default class EthereumTransactions extends EthereumAccount {
                 )
               ).format("HH:mm:ss"),
               transaction_hash: res.hash,
-              contract_address: res.contractAddress,
+              contract_address: (res.contractAddress !== '') ? res.contractAddress : 'NA',
               value: Number(res.value) / Math.pow(10, 18),
               gas_price: (Number(res.gasPrice) / Math.pow(10, 18)).toFixed(9),
               from: res.from,
