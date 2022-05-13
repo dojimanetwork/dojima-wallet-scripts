@@ -1,11 +1,11 @@
 // import { Client } from "@xchainjs/xchain-bitcoin";
 import axios from "axios";
-import BitcoinClient from "../types/interfaces/bitcoin_client";
+import BitcoinAccount from '../accounts/bitcoin_account'
 import { NetworkType } from "../types/interfaces/network";
 import { BtcTxDataResult, BtcTxHistoryParams, BtcTxHistoryResult } from "./utils";
 import moment from "moment";
 
-export default class BitcoinTransactions extends BitcoinClient {
+export default class BitcoinTransactions extends BitcoinAccount {
   _api: string;
   constructor(mnemonic: string, network: NetworkType) {
     super(mnemonic, network);
@@ -143,7 +143,8 @@ export default class BitcoinTransactions extends BitcoinClient {
     }
   }
 
-  async getTransactionData(address: string, txHash: string) {
+  async getTransactionData(txHash: string) {
+    let address = this.getAddress();
     let requestUrl = `${this._api}/transaction/${txHash}`;
     try {
       let response = await axios.get(requestUrl);
@@ -163,13 +164,13 @@ export default class BitcoinTransactions extends BitcoinClient {
               time = moment(this.convertISOtoUTC(dateValue)).format("HH:mm:ss");
             }
             if (
-              result.inputs !== ([] || null) &&
+              (result.inputs !== null || result.inputs !==  []) &&
               result.inputs[0].address === address
             ) {
               tx_type = "Send | BTC";
               amount = result.inputs[0].value;
             } else {
-              if (result.outputs !== ([] || null)) {
+              if (result.outputs !== null || result.outputs !== []) {
                 for (let i = 0; i < result.outputs.length; i++) {
                   if (result.outputs[i].address === address) {
                     tx_type = "Receive | BTC";
