@@ -50,7 +50,7 @@ export default class SolanaChain extends SolanaAccount {
     // Convert toAddress string to PublicKey
     const to = new web3.PublicKey(toAddress);
 
-    const toAmount = amount * Math.pow(10, 9);
+    const toAmount = Math.floor(amount * Math.pow(10, 9));
     // console.log('To Amount : ' , toAmount);
 
     // Add transaction for the required amount
