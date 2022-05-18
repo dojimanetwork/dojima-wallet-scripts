@@ -104,7 +104,7 @@ export default class ArweaveTxs extends ArweaveAccount {
           const outerResult: OuterDataResult = {
             timestamp: res.node.block.timestamp,
             transaction_hash: res.node.id,
-            block: res.node.block.id,
+            block: res.node.block.height,
             from: res.node.owner.address,
             to: res.node.recipient,
             value: res.node.quantity.ar,
@@ -125,7 +125,7 @@ export default class ArweaveTxs extends ArweaveAccount {
           const innerResult: InnerDataResult = {
             timestamp: res.node.block.timestamp,
             transaction_hash: res.node.id,
-            block: res.node.block.id,
+            block: res.node.block.height,
             from: res.node.owner.address,
             to: res.node.recipient,
             value: res.node.quantity.ar,
@@ -162,7 +162,7 @@ export default class ArweaveTxs extends ArweaveAccount {
           const outerResult: OuterDataResult = {
             timestamp: res.node.block.timestamp,
             transaction_hash: res.node.id,
-            block: res.node.block.id,
+            block: res.node.block.height,
             from: res.node.owner.address,
             to: res.node.recipient,
             value: res.node.quantity.ar,
@@ -183,7 +183,7 @@ export default class ArweaveTxs extends ArweaveAccount {
           const innerResult: InnerDataResult = {
             timestamp: res.node.block.timestamp,
             transaction_hash: res.node.id,
-            block: res.node.block.id,
+            block: res.node.block.height,
             from: res.node.owner.address,
             to: res.node.recipient,
             value: res.node.quantity.ar,

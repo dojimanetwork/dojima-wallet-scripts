@@ -67,7 +67,7 @@ export default interface GQLResultInterface {
 export interface OuterDataResult {
   timestamp: number;
   transaction_hash: string;
-  block: string;
+  block: number;
   from: string;
   to: string;
   value: string;
@@ -79,7 +79,7 @@ export interface OuterDataResult {
 export interface InnerDataResult {
   timestamp: number;
   transaction_hash: string;
-  block: string;
+  block: number;
   from: string;
   to: string;
   value: string;
