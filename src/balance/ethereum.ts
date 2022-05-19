@@ -98,7 +98,7 @@ export default class EthereumChain extends EthereumAccount {
     let rawTxDetails = {
       from: this.getAddress(),
       to: toAddress,
-      value: this._web3.utils.toWei(amount.toString(), "ether"), // Amount in Eth, 1 eth = 10^9 gwei(1,000,000,000)
+      value: this._web3.utils.toWei(amount.toFixed(9), "ether"), // Amount in Eth, 1 eth = 10^9 gwei(1,000,000,000)
       gas: 21000, // Minimum / base gas fee is 21,000
       gasPrice: Math.round(feeRate * Math.pow(10, 18)),
     };

@@ -9,6 +9,7 @@ import GQLResultInterface, {
 } from "./utils/gqlResult";
 import moment from "moment";
 import _ from "lodash";
+import Transaction from "arweave/node/lib/transaction";
 
 export interface ReqVariables {
   ownersFilter: Array<string>;
@@ -56,6 +57,21 @@ export default class ArweaveTxs extends ArweaveAccount {
       this.convertISOtoUTC(this.convertTimestampToDate(timestamp * 1000))
     ).format("HH:mm:ss");
     return date;
+  }
+
+  async getTransactionData(hash: string) {
+    const tx: Transaction = await this._arweave.transactions.get(hash);
+    if(tx !== null) {
+      return {
+        transaction_hash: tx.id,
+        to: tx.target,
+        value: Number(tx.quantity) / Math.pow(10, 12),
+        gas_price: (Number(tx.reward) / Math.pow(10, 12)).toFixed(12),
+        signature: tx.signature,
+      }
+    } else {
+      return null;
+    }
   }
 
   async getTransactionsHistory(owner: string, limit?: number) {
