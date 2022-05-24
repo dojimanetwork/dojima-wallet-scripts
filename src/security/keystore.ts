@@ -1,5 +1,4 @@
 import {
-  generatePhrase,
   validatePhrase,
   encryptToKeyStore,
   decryptFromKeystore,
@@ -7,26 +6,18 @@ import {
 } from "@xchainjs/xchain-crypto";
 
 export default class KeyStoreSecurity {
-  mnemonic: string;
-  constructor(mnemonic: string) {
-    this.mnemonic = mnemonic;
-  }
+  constructor() {}
 
-  async getEncryptedData(key: string) {
+  async getEncryptedData(mnemonic: string, key: string) {
     try {
-      if (validatePhrase(this.mnemonic)) {
-        const keyStore = await encryptToKeyStore(this.mnemonic, key);
+      if (validatePhrase(mnemonic)) {
+        const keyStore = await encryptToKeyStore(mnemonic, key);
         return keyStore;
       } else {
         throw new Error("Invalid mnemonic");
       }
     } catch (error) {
-      if (error instanceof Error) {
-        // ✅ TypeScript knows err is Error
-        throw new Error(error.message);
-      } else {
-        console.log("Unexpected error", error);
-      }
+      throw new Error("Unable to Encrypt");
     }
   }
 
@@ -35,12 +26,7 @@ export default class KeyStoreSecurity {
       const phrase = await decryptFromKeystore(keyStore, key);
       return phrase;
     } catch (error) {
-      if (error instanceof Error) {
-        // ✅ TypeScript knows err is Error
-        throw new Error(error.message);
-      } else {
-        console.log("Unexpected error", error);
-      }
+      throw new Error("Unable to Decrypt");
     }
   }
 }
