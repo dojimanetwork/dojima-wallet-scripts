@@ -38,12 +38,14 @@ import chains from "../src/balance";
 // console.log(getInit());
 
 async function getInit() {
-    const {ArweaveChain} = chains
-    const arweaveInstance = new ArweaveChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn',"testnet");
-    const arwAddress = await arweaveInstance.getAddress();
+    const {ArweaveChain} = chains;
+    const phrase = 'letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn';
+    const arweaveInstance = new ArweaveChain(phrase ,"testnet");
+    const arwAddress = await arweaveInstance.getAddress(phrase);
     console.log('Address : ', arwAddress);
-    await arweaveInstance.mintArTokens();
-    let balance = await arweaveInstance.getBalance();
+    // 7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4
+    await arweaveInstance.mintArTokens(arwAddress);
+    let balance = await arweaveInstance.getBalance(arwAddress);
     console.log('Balance : ', balance);
     const rawTx = await arweaveInstance.createTransaction('UV6NJyujIFMIaL-oD9TK9P3QQlpmov3UFTdMtvY5xbI', 0.5);
     console.log('Raw Transaction : ', rawTx);
@@ -51,7 +53,7 @@ async function getInit() {
     console.log('Gas Fee : ', gasFee);
     const transactionHash = await arweaveInstance.signAndSend(rawTx);
     console.log('Transaction Hash : ', transactionHash);
-    balance = await arweaveInstance.getBalance();
+    balance = await arweaveInstance.getBalance(arwAddress);
 }
 
 console.log(getInit());

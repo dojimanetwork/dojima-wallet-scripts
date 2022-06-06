@@ -36,20 +36,20 @@ import ArweaveInitialise from "../types/interfaces/arweave_initialise";
 import { NetworkType } from "../types/interfaces/network";
 
 export default class ArweaveAccount extends ArweaveInitialise {
-  constructor(mnemonic: string, network: NetworkType) {
-    super(mnemonic, network);
+  constructor(network: NetworkType) {
+    super(network);
   }
 
-  async getAddress(): Promise<string> {
-    const keyPair = await getKeyFromMnemonic(this._mnemonic);
+  async getAddress(mnemonic: string): Promise<string> {
+    const keyPair = await getKeyFromMnemonic(mnemonic);
     const address = await this._arweave.wallets.jwkToAddress(keyPair);
     return address;
   }
 
-  async mintArTokens() {
-    const pvtKey = await getKeyFromMnemonic(this._mnemonic);
+  async mintArTokens(pubAddress: string) {
+    // const pvtKey = await getKeyFromMnemonic(this._mnemonic);
     // console.log('Pvt key is : ' + pvtKey);
-    const pubAddress = await this._arweave.wallets.jwkToAddress(pvtKey);
+    // const pubAddress = await this._arweave.wallets.jwkToAddress(pvtKey);
     // console.log('Pub Address is : ' + pubAddress);
 
     // testnet tokens in winston

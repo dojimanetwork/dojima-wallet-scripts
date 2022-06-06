@@ -3,12 +3,10 @@ import Arweave from "arweave";
 import { NetworkType } from "./network";
 
 export default class ArweaveInitialise {
-  _mnemonic: string;
   public _arweave: Arweave;
   _network: NetworkType;
 
-  constructor(mnemonic: string, network: NetworkType) {
-    this._mnemonic = mnemonic;
+  constructor(network: NetworkType) {
     this._network = network;
     if (this._network === "testnet" || this._network === "devnet") {
       // Testnet

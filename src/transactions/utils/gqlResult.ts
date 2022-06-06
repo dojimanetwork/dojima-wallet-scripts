@@ -90,7 +90,16 @@ export interface InnerDataResult {
   block_hash: string;
 }
 
-export interface ArTxDataResult {
+export interface ArTxsResult {
   outer: OuterDataResult[];
   inner: InnerDataResult[];
+}
+
+export interface ArTxDataResult {
+  transaction_hash: string;
+  from: string;
+  to: string;
+  value: number;
+  gas_price: string;
+  signature: string;
 }

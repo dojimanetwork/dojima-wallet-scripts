@@ -6,14 +6,16 @@ import ArweaveAccount from "../accounts/arweave_account";
 import Transaction from "arweave/node/lib/transaction";
 
 export default class ArweaveChain extends ArweaveAccount {
+  _mnemonic: string;
   constructor(mnemonic: string, network: NetworkType) {
-    super(mnemonic, network);
+    super(network);
+    this._mnemonic = mnemonic;
   }
 
-  async getBalance(): Promise<number> {
-    const pvtKey = await getKeyFromMnemonic(this._mnemonic);
+  async getBalance(pubAddress: string): Promise<number> {
+    // const pvtKey = await getKeyFromMnemonic(this._mnemonic);
     // console.log('Pvt key is : ' + pvtKey);
-    const pubAddress = await this._arweave.wallets.jwkToAddress(pvtKey);
+    // const pubAddress = await this._arweave.wallets.jwkToAddress(pvtKey);
     // console.log('Pub Address is : ' + pubAddress);
 
     // Get balance
