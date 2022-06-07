@@ -18,10 +18,11 @@ import EthereumChain from '../src/balance/ethereum';
 // console.log(chains.EthereumChain());
 
 async function Eth() {
-    const ethereumInstance = new EthereumChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn', 'testnet');
-    const address = ethereumInstance.getAddress()
+    const seed = 'letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn';
+    const ethereumInstance = new EthereumChain(seed, 'testnet');
+    const address = ethereumInstance.getAddress(seed)
     console.log(address);
-    const balance = await ethereumInstance.getBalance();
+    const balance = await ethereumInstance.getBalance(address);
     console.log(balance);
     const gasFee = await ethereumInstance.getGasFee();
     console.log(gasFee);
@@ -39,7 +40,7 @@ async function Eth() {
     const transfer2 = await ethereumInstance.signAndSend(tx2);
     // console.timeEnd('Tx2')
     // console.log('Transfer status : ', transfer2);
-    const tx3 = ethereumInstance.createTransaction('0x46Bd84009D313c34f94bC883C353f72D3453A5B9', 0.0005, gasFee.fast.fee)
+    const tx3 = ethereumInstance.createTransaction('0x46Bd84009D313c34f94bC883C353f72D3453A5B9', 0.5, gasFee.fast.fee)
     // console.time('Tx3')
     const transfer3 = await ethereumInstance.signAndSend(tx3);
     // console.timeEnd('Tx3')

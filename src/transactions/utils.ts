@@ -80,6 +80,32 @@ export type ERC20TxHistoryParams = {
   startBlock?: number;
   endBlock?: number;
 };
+
+export type ERC20TxsArray = {
+  blockNumber: number;
+  timeStamp: Date;
+  hash: string;
+  nonce: number;
+  blockHash: string;
+  transactionIndex: number;
+  from: string;
+  to: string;
+  value: number;
+  gas: string;
+  gasPrice: number;
+  isError: string;
+  txreceipt_status: string;
+  input: string;
+  contractAddress: string;
+  cumulativeGasUsed: string;
+  gasUsed: string;
+  confirmations: number;
+}
+
+export type ERC20TxsResult = {
+  txs: Array<ERC20TxsArray>;
+}
+
 export type BinanaceTxDetailsResult = {
   txHash: string;
   blockHeight: string;
@@ -120,6 +146,21 @@ export type EthTxDetailsResult = {
   gasUsed: string;
   confirmations: string;
 };
+export type EthTxsArrayResult = {
+  block: number;
+  date: string;
+  time: string;
+  transaction_hash: string;
+  contract_address: string;
+  value: number;
+  gas_price: string;
+  from: string;
+  transaction_type: string;
+}
+
+export type EthTxsResult = {
+  txs: Array<EthTxsArrayResult>;
+}
 export type TransactionHistoryResult = {
   status: string;
   message: string;
@@ -147,6 +188,25 @@ export type EthTxHashDataResult = {
   r: string;
   s: string;
 };
+
+export interface EthTxDataResult {
+  blockHash: string;
+  blockNumber: number;
+  from: string;
+  gas: number;
+  gasPrice: number;
+  hash: string;
+  input: string;
+  nonce: number;
+  to: string;
+  transactionIndex: number;
+  value: number;
+  type: string;
+  v: string;
+  r: string;
+  s: string;
+}
+
 export type BinanceTransactionHistoryResult = {
   tx: BinanaceTxDetailsResult[];
   total: string;

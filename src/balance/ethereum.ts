@@ -51,12 +51,14 @@ import EthereumAccount from "../accounts/eth_account";
 // }
 
 export default class EthereumChain extends EthereumAccount {
+  _mnemonic: string;
   constructor(mnemonic: string, network: NetworkType) {
-    super(mnemonic, network);
+    super(network);
+    this._mnemonic = mnemonic;
   }
 
-  async getBalance(): Promise<number> {
-    const gweiBalance = await this._web3.eth.getBalance(this.getAddress());
+  async getBalance(pubAddress: string): Promise<number> {
+    const gweiBalance = await this._web3.eth.getBalance(pubAddress);
     // console.log('Balance in gwei is : ', gweiBalance);     // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
 
     const ethBalance = this._web3.utils.fromWei(gweiBalance);
@@ -96,7 +98,7 @@ export default class EthereumChain extends EthereumAccount {
     feeRate: number
   ) {
     let rawTxDetails = {
-      from: this.getAddress(),
+      from: this.getAddress(this._mnemonic),
       to: toAddress,
       value: this._web3.utils.toWei(amount.toFixed(9), "ether"), // Amount in Eth, 1 eth = 10^9 gwei(1,000,000,000)
       gas: 21000, // Minimum / base gas fee is 21,000

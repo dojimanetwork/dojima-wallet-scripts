@@ -48,12 +48,14 @@
 // }
 
 import { NetworkType } from "../types/interfaces/network";
-import EthereumAccount from "../accounts/eth_account";
 // import { get } from "../types/interfaces/http";
 import {
   ERC20TxHistoryParams,
+  ERC20TxsResult,
+  EthTxDataResult,
   EthTxDetailsResult,
   EthTxHashDataResult,
+  EthTxsResult,
   TransactionHashDataResult,
   TransactionHistoryResult,
   TxHashDataParams,
@@ -61,16 +63,11 @@ import {
 } from "./utils";
 import axios from "axios";
 import moment from "moment";
+import EthereumWeb3 from "../types/interfaces/ethereum_web3";
 
-export default class EthereumTransactions extends EthereumAccount {
-  _api: string;
-  constructor(mnemonic: string, network: NetworkType) {
-    super(mnemonic, network);
-    if (network === "mainnet" || network === "devnet") {
-      this._api = "https://api.etherscan.io/api";
-    } else {
-      this._api = "https://api-ropsten.etherscan.io/api";
-    }
+export default class EthereumTransactions extends EthereumWeb3 {
+  constructor(network: NetworkType) {
+    super(network);
   }
   convertDateToTimestamp(date: string) {
     const timestamp = moment(date).format("X"); // lowercase 'x' for timestamp in milliseconds
@@ -107,9 +104,9 @@ export default class EthereumTransactions extends EthereumAccount {
       console.log(parsedData.status);
       if (parsedData.status === "1") {
         let result: EthTxDetailsResult[] = parsedData.result;
-        console.log(result);
+        // console.log(result);
         if (result !== (null || undefined)) {
-          return {
+          const resultTxs: ERC20TxsResult = {
             txs: result.map((res) => ({
               blockNumber: Number(res.blockNumber),
               timeStamp: new Date(Number(res.timeStamp) * 1000),
@@ -131,6 +128,7 @@ export default class EthereumTransactions extends EthereumAccount {
               confirmations: Number(res.confirmations),
             })),
           };
+          return resultTxs;
         } else {
           return null;
         }
@@ -266,7 +264,7 @@ export default class EthereumTransactions extends EthereumAccount {
         // console.log(result);
         if (result !== (null || undefined)) {
           console.log(params.address);
-          return {
+          const resultTxs: EthTxsResult = {
             txs: result.map((res) => ({
               block: Number(res.blockNumber),
               date: moment(
@@ -290,6 +288,7 @@ export default class EthereumTransactions extends EthereumAccount {
                   : "Receive | ETH",
             })),
           };
+          return resultTxs;
         } else {
           return {
             txs: [],
@@ -332,6 +331,7 @@ export default class EthereumTransactions extends EthereumAccount {
       ).data;
       let result: EthTxHashDataResult = response.result;
       if (result !== (null || undefined)) {
+        let tx_type = '';
         let etherGasPrice = Number(
           this.convertHexToInt(this.remove0x(result.gasPrice as string)) /
             Math.pow(10, 18)
@@ -340,10 +340,16 @@ export default class EthereumTransactions extends EthereumAccount {
           Number(etherGasPrice) * Math.pow(10, 9)
         ).toFixed(9);
         let type = this.remove0x(result.type);
+        if(result.from === params.address) {
+          tx_type = 'Send | SOL';
+        } else {
+          tx_type = 'Receive | SOL'
+        }
         return {
           block: this.convertHexToInt(
             this.remove0x(result.blockNumber as string)
           ),
+          transaction_type: tx_type,
           from: this.remove0x(result.from),
           to: this.remove0x(result.to),
           gas: this.convertHexToInt(this.remove0x(result.gas as string)),
@@ -377,9 +383,9 @@ export default class EthereumTransactions extends EthereumAccount {
         await axios.get(requestUrl)
       ).data;
       let result: EthTxHashDataResult = response.result;
-      console.log(result);
+      // console.log(result);
       if (result !== (null || undefined)) {
-        return {
+        const resultData: EthTxDataResult = {
           blockHash: result.blockHash,
           blockNumber: this.convertHexToInt(
             this.remove0x(result.blockNumber as string)
@@ -404,6 +410,7 @@ export default class EthereumTransactions extends EthereumAccount {
           r: result.r,
           s: result.s,
         };
+        return resultData;
       } else {
         return null;
       }

@@ -12,12 +12,12 @@ import EthereumWeb3 from '../types/interfaces/ethereum_web3';
 import { NetworkType } from '../types/interfaces/network';
 
 export default class EthereumAccount extends EthereumWeb3 {
-    constructor(mnemonic: string, network: NetworkType) {
-        super(mnemonic, network)
+    constructor(network: NetworkType) {
+        super(network)
     }
 
-    getAddress(): string {
-        const account = ethers.Wallet.fromMnemonic(this._mnemonic);
+    getAddress(mnemonic: string): string {
+        const account = ethers.Wallet.fromMnemonic(mnemonic);
         const address = account.address;
         return address;
     }

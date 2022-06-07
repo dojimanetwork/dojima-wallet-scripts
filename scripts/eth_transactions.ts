@@ -2,7 +2,6 @@ import EthereumTransaction from "../src/transactions/ethereum";
 
 async function getEth() {
   const ethInstance = new EthereumTransaction(
-    "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn",
     "testnet"
   );
   const txHistory = await ethInstance.getTransactionsHistory({
