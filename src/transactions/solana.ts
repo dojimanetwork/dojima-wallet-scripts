@@ -1,12 +1,12 @@
 import * as web3 from "@solana/web3.js";
 import moment from "moment";
-import SolanaAccount from "../accounts/solana_account";
 import { NetworkType } from "../types/interfaces/network";
-import { SolTxDataResult, SolTxHistoryParams } from "./utils";
+import SolanaConnection from "../types/interfaces/solana_connection";
+import { SolTxDataResult, SolTxHistoryParams, SolTxsResult } from "./utils";
 
-export default class SolanaTransaction extends SolanaAccount {
-  constructor(mnemonic: string, network: NetworkType) {
-    super(mnemonic, network);
+export default class SolanaTransaction extends SolanaConnection {
+  constructor(network: NetworkType) {
+    super(network);
   }
 
   convertDateToTimestamp(date: string) {
@@ -31,8 +31,8 @@ export default class SolanaTransaction extends SolanaAccount {
       });
       if (txData !== null && txData.meta !== null) {
         let amount = txData.meta.postBalances[1] - txData.meta.preBalances[1];
-        return {
-          timeStamp: new Date(Number(txData.blockTime) * 1000),
+        const resultData: SolTxDataResult = {
+          timeStamp: txData.blockTime ? txData.blockTime : 0,
           gasFee: txData.meta.fee / Math.pow(10, 9),
           amount: amount / Math.pow(10, 9),
           status: "",
@@ -42,6 +42,7 @@ export default class SolanaTransaction extends SolanaAccount {
           recentBlockHash: txData.transaction.message.recentBlockhash,
           instructionData: txData.transaction.message.instructions[0].data,
         };
+        return resultData;
       } else {
         return null;
       }
@@ -50,9 +51,9 @@ export default class SolanaTransaction extends SolanaAccount {
     }
   }
 
-  async getTransactionData(hash: string, state?: web3.Finality) {
+  async getTransactionData(hash: string, address: string, state?: web3.Finality) {
     try {
-      const address = await this.getAddress();
+      // const address = await this.getAddress();
       let txData = await this._connection.getTransaction(hash, {
         commitment: state ? state : "confirmed",
       });
@@ -93,8 +94,7 @@ export default class SolanaTransaction extends SolanaAccount {
 
   async getTransactionsHistory(params: SolTxHistoryParams) {
     try {
-      const keypair = await this.getKeypair();
-      const pubKey = keypair[0].publicKey;
+      const pubKey = new web3.PublicKey(params.address);
       let signatures = await this._connection.getSignaturesForAddress(
         pubKey,
         {
@@ -123,7 +123,7 @@ export default class SolanaTransaction extends SolanaAccount {
       };
 
       if (signatures !== null) {
-        return {
+        const resultTxs: SolTxsResult = {
           txs: signatures.map((res) => ({
             transaction_hash: res.signature,
             block: res.slot,
@@ -131,6 +131,7 @@ export default class SolanaTransaction extends SolanaAccount {
             time: (res.blockTime && (res.blockTime !== (null || undefined))) ? convertTimestampToTime(res.blockTime) : '-' ,
           })),
         };
+        return resultTxs;
       } else {
         return {
           txs: [],

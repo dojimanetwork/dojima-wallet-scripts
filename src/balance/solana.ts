@@ -4,13 +4,15 @@ import { NetworkType } from "../types/interfaces/network";
 import SolanaAccount from "../accounts/solana_account";
 
 export default class SolanaChain extends SolanaAccount {
+  _mnemonic: string;
   constructor(mnemonic: string, network: NetworkType) {
-    super(mnemonic, network);
+    super(network);
+    this._mnemonic = mnemonic;
   }
 
-  async getBalance(): Promise<number> {
+  async getBalance(pubAddress: string): Promise<number> {
     // Get account details
-    const pubKey = new web3.PublicKey(await this.getAddress());
+    const pubKey = new web3.PublicKey(pubAddress);
 
     // Retrieve user token balance
     let balance = await this._connection.getBalance(pubKey);
@@ -45,7 +47,7 @@ export default class SolanaChain extends SolanaAccount {
   // Create transaction details based on user input
   async createTransaction(toAddress: string, amount: number): Promise<web3.Transaction> {
     // Get account address
-    const pubKey = new web3.PublicKey(await this.getAddress());
+    const pubKey = new web3.PublicKey(await this.getAddress(this._mnemonic));
 
     // Convert toAddress string to PublicKey
     const to = new web3.PublicKey(toAddress);
@@ -67,7 +69,7 @@ export default class SolanaChain extends SolanaAccount {
 
   async signAndSend(rawTx: web3.Transaction): Promise<string> {
     // Get account details
-    const account = await this.getKeypair();
+    const account = await this.getKeypair(this._mnemonic);
 
     // Sign the transaction
     let signature = await web3.sendAndConfirmTransaction(this._connection, rawTx, [

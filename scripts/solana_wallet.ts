@@ -24,12 +24,13 @@ import SolanaChain from "../src/balance/solana";
 // console.log(Sol());
 
 async function Sol() {
-    const solanaInstance = new SolanaChain('letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn', 'devnet');
-    const address = await solanaInstance.getAddress();
+    const seed = 'letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn';
+    const solanaInstance = new SolanaChain(seed, 'devnet');
+    const address = await solanaInstance.getAddress(seed);
     console.log(address);
-    const keypair = await solanaInstance.getKeypair();
+    const keypair = await solanaInstance.getKeypair(seed);
     console.log(keypair);
-    let bal = await solanaInstance.getBalance()
+    let bal = await solanaInstance.getBalance(address)
     console.log('Balance is : ', bal);
     // console.log(await solanaInstance.createTransactionAndSend('G9GtD3uJDdpURr9eKogWUQmYqYfYSoqEpESMtzBPVQ1n', 0.001, solConnection)); // Send SOL tokens for example
     const gasFee = await solanaInstance.getFees();

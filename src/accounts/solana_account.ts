@@ -6,12 +6,12 @@ import { NetworkType } from "../types/interfaces/network";
 import SolanaConnection from "../types/interfaces/solana_connection";
 
 export default class SolanaAccount extends SolanaConnection {
-  constructor(mnemonic: string, network: NetworkType) {
-    super(mnemonic, network);
+  constructor(network: NetworkType) {
+    super(network);
   }
 
-  async getKeypair(): Promise<Keypair[]> {
-    const seed = bip39.mnemonicToSeedSync(this._mnemonic, ""); // (mnemonic, password)
+  async getKeypair(mnemonic: string): Promise<Keypair[]> {
+    const seed = bip39.mnemonicToSeedSync(mnemonic, ""); // (mnemonic, password)
     const keyPairResult: web3.Keypair[] = [];
     for (let i = 0; i < 10; i++) {
       const path = `m/44'/501'/${i}'/0'`;
@@ -23,8 +23,8 @@ export default class SolanaAccount extends SolanaConnection {
     return keyPairResult;
   }
 
-  async getAddress() {
-    const keypair = await this.getKeypair();
+  async getAddress(mnemonic: string) {
+    const keypair = await this.getKeypair(mnemonic);
     const address = keypair[0].publicKey.toBase58();
     return address;
   }
