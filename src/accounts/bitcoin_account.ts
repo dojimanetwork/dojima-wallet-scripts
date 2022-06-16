@@ -38,16 +38,30 @@
 // }
 
 // import { Client } from "@xchainjs/xchain-bitcoin";
-import BitcoinClient from "../types/interfaces/bitcoin_client";
+// import BitcoinClient from "../types/interfaces/bitcoin_client";
+// import { NetworkType } from "../types/interfaces/network";
+
+// export default class BitcoinAccount extends BitcoinClient {
+//     constructor(mnemonic: string, network: NetworkType) {
+//         super(mnemonic, network)
+//     }
+
+//     getAddress(): string {
+//         const address = this._client.getAddress();
+//         return address;
+//     }
+// }
+
+import BtcClient from "../types/interfaces/bitcoin_client";
 import { NetworkType } from "../types/interfaces/network";
 
-export default class BitcoinAccount extends BitcoinClient {
-    constructor(mnemonic: string, network: NetworkType) {
-        super(mnemonic, network)
+export default class BitcoinAccount extends BtcClient {
+    constructor(network: NetworkType) {
+        super(network)
     }
 
-    getAddress(): string {
-        const address = this._client.getAddress();
+    getAddress(mnemonic: string): string {
+        const address = this._client.getAddress(mnemonic);
         return address;
     }
 }

@@ -19,7 +19,7 @@ export interface SochainBalanceResult {
   data: SochainBalData;
 }
 
-export interface RawTransactionResult {
+export interface BtcRawTransactionResult {
   tx_hex: string;
   gas_fee: number;
 }

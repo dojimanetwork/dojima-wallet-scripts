@@ -1,5 +1,4 @@
 import { NetworkType } from "../../types/interfaces/network";
-import { baseAmount } from "@xchainjs/xchain-util";
 import BigNumber from "bignumber.js";
 import * as bip39 from "bip39";
 import * as bip32 from "bip32";
@@ -9,7 +8,7 @@ import { FeeOption } from "./types/fees";
 import BTCTxClient from "./transaction";
 import * as utils from "./utils";
 import axios from "axios";
-import { HaskoinBalanceResult, RawTransactionResult, SochainBalanceResult } from "./types/client";
+import { HaskoinBalanceResult, BtcRawTransactionResult, SochainBalanceResult } from "./types/client";
 import * as Bitcoin from "bitcoinjs-lib";
 
 const ECPair = ECPairFactory(ecc);
@@ -107,20 +106,20 @@ export default class BitcoinClient extends BTCTxClient {
     feeRate?: number,
     memo?: string,
     walletIndex?: number
-  ): Promise<RawTransactionResult> {
+  ): Promise<BtcRawTransactionResult> {
     // Convert amount to BigNumber
     const toAmount = new BigNumber(amount * Math.pow(10, 8));
     // console.log("To amount : ", toAmount.toNumber().toFixed(2));
 
     // BaseAmount value
-    const bsAmount = baseAmount(toAmount, 8);
+    // const bsAmount = baseAmount(toAmount, 8);
     // console.log("Base amount : ", bsAmount.amount());
     const feeRateValue = feeRate || (await this.getFeeRates())[FeeOption.Fast];
     // console.log("Fee Rate Value :: ", feeRateValue);
     const fromAddressIndex = 0;
     const memoString = memo ? memo : undefined;
     const { psbt } = await this.buildTx(
-      bsAmount,
+      toAmount,
       recipient,
       sender,
       this._network,
@@ -139,7 +138,7 @@ export default class BitcoinClient extends BTCTxClient {
     // console.log("PSBT FEERATE :: ", psbt.getFeeRate());
     const extractedTx = psbt.extractTransaction();
     const txHex = extractedTx.toHex(); // TX extracted and formatted to hex
-    const result: RawTransactionResult = {
+    const result: BtcRawTransactionResult = {
       tx_hex: txHex,
       gas_fee: (psbt.getFee()) / Math.pow(10, 8)
     }

@@ -38,7 +38,7 @@ export type BtcTxDataOutputObject = {
     input: number;
   } | null;
 };
-export type BtcTxDataResult = {
+export type BtcTxHashDataResult = {
   txid: string;
   size: number;
   version: number;
@@ -52,6 +52,36 @@ export type BtcTxDataResult = {
   rbf: boolean;
   weight: number;
 };
+
+export interface BtcTxsArray {
+  transaction_hash: string;
+  block: number;
+}
+
+export interface BtcTxsResult {
+  txs: Array<BtcTxsArray>;
+}
+
+export interface BtcTxDataResult {
+  txid: string;
+  size: number;
+  version: number;
+  locktime: number;
+  fee: number;
+  inputs: BtcTxDataInputObject[];
+  outputs: BtcTxDataOutputObject[];
+  block: BtcTxHistoryBlockObject;
+  deleted: boolean;
+  timestamp: string;
+  rbf: boolean;
+  weight: number;
+  from: string;
+  fromValue: number;
+  to1: string;
+  to1Value: number;
+  to2: string;
+  to2Value: number;
+}
 
 export type TxHistoryParams = {
   address: string;

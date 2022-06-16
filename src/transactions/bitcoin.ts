@@ -1,19 +1,12 @@
-// import { Client } from "@xchainjs/xchain-bitcoin";
 import axios from "axios";
-import BitcoinAccount from '../accounts/bitcoin_account'
 import { NetworkType } from "../types/interfaces/network";
-import { BtcTxDataResult, BtcTxHistoryParams, BtcTxHistoryResult } from "./utils";
+import { BtcTxDataResult, BtcTxHashDataResult, BtcTxHistoryParams, BtcTxHistoryResult, BtcTxsResult } from "./utils";
 import moment from "moment";
+import BtcClient from "../types/interfaces/bitcoin_client";
 
-export default class BitcoinTransactions extends BitcoinAccount {
-  _api: string;
-  constructor(mnemonic: string, network: NetworkType) {
-    super(mnemonic, network);
-    if (network === "mainnet" || network === "devnet") {
-      this._api = "https://api.haskoin.com/btc";
-    } else {
-      this._api = "https://api.haskoin.com/btctest";
-    }
+export default class BitcoinTransactions extends BtcClient {
+  constructor(network: NetworkType) {
+    super(network);
   }
 
   convertDateToTimestamp(date: string) {
@@ -56,7 +49,7 @@ export default class BitcoinTransactions extends BitcoinAccount {
     //     console.log("Unexpected error", error);
     //   }
     // }
-    let requestUrl = `${this._api}/address/transactions?addresses=${params.address}`;
+    let requestUrl = `${this._client.haskoinUrl}/address/transactions?addresses=${params.address}`;
     if (params.limit) {
       requestUrl += `&limit=${params.limit}`;
     } else {
@@ -72,12 +65,13 @@ export default class BitcoinTransactions extends BitcoinAccount {
       if (response.status && response.status === 200) {
         let result: BtcTxHistoryResult[] = response.data;
         if (result !== (null || undefined)) {
-          return {
+          const finalResult: BtcTxsResult = {
             txs: result.map((res) => ({
               transaction_hash: res.txid,
               block: res.block.height,
             })),
           };
+          return finalResult;
         } else {
           return {
             txs: [],
@@ -104,14 +98,14 @@ export default class BitcoinTransactions extends BitcoinAccount {
     //     console.log("Unexpected error", error);
     //   }
     // }
-    let requestUrl = `${this._api}/transaction/${txHash}`;
+    let requestUrl = `${this._client.haskoinUrl}/transaction/${txHash}`;
     try {
       let response = await axios.get(requestUrl);
       if (response.status) {
         if (response.status === 200) {
-          let result: BtcTxDataResult = response.data;
+          let result: BtcTxHashDataResult = response.data;
           if (result !== (null || undefined)) {
-            return {
+            const finalResult: BtcTxDataResult = {
               txid: result.txid,
               size: result.size,
               version: result.version,
@@ -131,6 +125,7 @@ export default class BitcoinTransactions extends BitcoinAccount {
               to2: result.outputs[1].address,
               to2Value: Number(result.outputs[1].value / Math.pow(10, 8)),
             };
+            return finalResult;
           } else {
             return null;
           }
@@ -143,14 +138,13 @@ export default class BitcoinTransactions extends BitcoinAccount {
     }
   }
 
-  async getTransactionData(txHash: string) {
-    let address = this.getAddress();
-    let requestUrl = `${this._api}/transaction/${txHash}`;
+  async getTransactionData(txHash: string, address: string) {
+    let requestUrl = `${this._client.haskoinUrl}/transaction/${txHash}`;
     try {
       let response = await axios.get(requestUrl);
       if (response.status) {
         if (response.status === 200) {
-          let result: BtcTxDataResult = response.data;
+          let result: BtcTxHashDataResult = response.data;
           if (result !== (null || undefined)) {
             let date = "";
             let time = "";

@@ -2,9 +2,9 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { NetworkType } from "../../types/interfaces/network";
 import BTCUtxosClient from "./utxos";
 import * as utils from "./utils";
-import { BaseAmount } from "@xchainjs/xchain-util";
 import * as Bitcoin from "bitcoinjs-lib";
 import { BuildTxResult, UTXO } from "./types/utxos";
+import BigNumber from "bignumber.js";
 
 let coinSelect = require("coinselect");
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -53,7 +53,7 @@ export default class BTCTxClient extends BTCUtxosClient {
   }
 
   async buildTx(
-    amount: BaseAmount,
+    amount: BigNumber,
     recipient: string,
     sender: string,
     network: NetworkType,
@@ -82,11 +82,10 @@ export default class BTCTxClient extends BTCUtxosClient {
     const compiledMemo = memo ? utils.compileMemo(memo) : null;
 
     const targetOutputs = [];
-    console.log("Build tx :: ", amount.amount().toNumber());
     //1. add output amount and recipient to targets
     targetOutputs.push({
       address: recipient,
-      value: amount.amount().toNumber(),
+      value: amount.decimalPlaces(2).toNumber(),
     });
     //2. add output memo to targets (optional)
     if (compiledMemo) {

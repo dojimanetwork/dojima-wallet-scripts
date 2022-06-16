@@ -1,5 +1,5 @@
-import { AssetAmount, assetAmount, baseAmount } from "@xchainjs/xchain-util";
 import axios from "axios";
+import BigNumber from "bignumber.js";
 import { NetworkType } from "../../types/interfaces/network";
 import BTCFeesClient from "./fees";
 import {
@@ -184,20 +184,13 @@ export default class BTCUtxosClient extends BTCFeesClient {
         const utxos: BtcAddressUTXO[] = confirmedOnly
           ? await this.getConfirmedUnspentTxs(sochainUrl, network, address)
           : await this.getUnspentTxs(sochainUrl, network, address);
-
         return await Promise.all(
           utxos.map(async (utxo) => ({
             hash: utxo.txid,
             index: utxo.output_no,
-            value: utils
-              .assetToBase(assetAmount(utxo.value, 8))
-              .amount()
-              .toNumber(),
+            value: (new BigNumber(Number(utxo.value) * Math.pow(10, 8))).decimalPlaces(2).toNumber(),
             witnessUtxo: {
-              value: utils
-                .assetToBase(assetAmount(utxo.value, 8))
-                .amount()
-                .toNumber(),
+              value: (new BigNumber(Number(utxo.value) * Math.pow(10, 8))).decimalPlaces(2).toNumber(),
               script: Buffer.from(utxo.script_hex, "hex"),
             },
             txHex: withTxHex
@@ -222,9 +215,9 @@ export default class BTCUtxosClient extends BTCFeesClient {
           utxos.map(async (utxo) => ({
             hash: utxo.txid,
             index: utxo.index,
-            value: baseAmount(utxo.value, 8).amount().toNumber(),
+            value: utxo.value,
             witnessUtxo: {
-              value: baseAmount(utxo.value, 8).amount().toNumber(),
+              value: utxo.value,
               script: Buffer.from(utxo.pkscript, "hex"),
             },
             txHex: withTxHex

@@ -1,6 +1,5 @@
 import { NetworkType } from "../../types/interfaces/network";
 import * as Bitcoin from "bitcoinjs-lib";
-import { AssetAmount, baseAmount } from "@xchainjs/xchain-util";
 
 export function btcNetwork(network: NetworkType): Bitcoin.networks.Network {
   switch (network) {
@@ -39,10 +38,3 @@ export function compileMemo(memo: string): Buffer {
   return Bitcoin.script.compile([Bitcoin.opcodes.OP_RETURN, data]); // Compile OP_RETURN script
 }
 
-export function assetToBase(asset: AssetAmount) {
-  const value = asset
-    .amount()
-    .multipliedBy(10 ** asset.decimal)
-    .integerValue();
-  return baseAmount(value, asset.decimal);
-}
