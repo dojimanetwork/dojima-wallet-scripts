@@ -10,8 +10,13 @@ async function btc() {
   const btc = new chains.BitcoinChain("testnet");
   const bal = await btc.getBalance(address);
   console.log("Balance generated : ", bal);
-  // const gasFee = await btc.getGasFee();
-  // console.log('Gas fee : ',gasFee);
+  const gasFee = await btc.getGasFee(
+    0.00001,
+    'globe sock famous ocean idle float law brown shallow imitate master asthma',
+    1,
+    "tb1qqzupd5yjn76rme297uu9q8lrfkjnfp8kfhahny"
+  );
+  console.log('Gas fee : ',gasFee);
   // console.time('Tx')
   // const buildTx = await btc.buildTransaction('tb1qqzupd5yjn76rme297uu9q8lrfkjnfp8kfhahny', 0.00001, 1);
   // console.timeEnd('Tx')
@@ -40,8 +45,8 @@ async function btc() {
     1
   );
   console.log('Raw Tx Details :: ', rawTxDetails)
-  // const txHash = await btc.transfer(rawTxDetails.tx_hex);
-  // console.log('Tx hash :: ', txHash);
+  const txHash = await btc.transfer(rawTxDetails.tx_hex);
+  console.log('Tx hash :: ', txHash);
 }
 
 console.log(btc());

@@ -12,6 +12,48 @@ export default class BitcoinChain extends BtcClient {
     return balance;
   }
 
+  async getGasFee(
+    amount: number,
+    mnemonic: string,
+    feeRate: number,
+    to?: string,
+    memo?: string
+  ): Promise<number> {
+    const from: string = this._client.getAddress(mnemonic);
+    try {
+      const rawTxDetails: BtcRawTransactionResult = await this._client.createTransaction(
+        amount,
+        from,
+        to ? to : 'tb1q8w9emc5tdxwc7d3phupc8ltp0djmsnc2ngxnpp',
+        mnemonic,
+        feeRate,
+        memo ? memo : undefined,
+      );
+      return rawTxDetails.gas_fee;
+    } catch (error) {
+      if (error instanceof Error) {
+        if(error.message === 'No utxos to send') {
+          console.log('Entered if else');
+          const from: string = this._client.getAddress(process.env.SAMPLE_SEED_PHRASE as string);
+          const rawTxDetails: BtcRawTransactionResult = await this._client.createTransaction(
+            amount,
+            from,
+            to ? to : 'tb1q8w9emc5tdxwc7d3phupc8ltp0djmsnc2ngxnpp',
+            process.env.SAMPLE_SEED_PHRASE as string,
+            feeRate,
+            memo ? memo : undefined,
+          );
+          return rawTxDetails.gas_fee;
+        } else {
+          // ✅ TypeScript knows err is Error
+          throw new Error(error.message);
+        }
+      } else {
+        throw new Error("Unexpected error");
+      }
+    }
+  }
+
   async rawTransaction(
     amount: number,
     mnemonic: string,
