@@ -30,17 +30,17 @@ async function Eth() {
     // const transfer = await ethereumInstance.createTransactionAndSend('0x46Bd84009D313c34f94bC883C353f72D3453A5B9', 0.5, ethWeb3);
     // console.timeEnd('Tx')
     // console.log('Transfer status : ', transfer);
-    const tx1 = ethereumInstance.createTransaction('0x46Bd84009D313c34f94bC883C353f72D3453A5B9', 0.0005, gasFee.slow.fee)
+    const tx1 = ethereumInstance.createTransaction('0x46Bd84009D313c34f94bC883C353f72D3453A5B9', 0.0005, gasFee.slow.fee.asset_fee)
     // console.time('Tx1')
     const transfer1 = await ethereumInstance.signAndSend(tx1);
     // console.timeEnd('Tx1')
     // console.log('Transfer status : ', transfer1);
-    const tx2 = ethereumInstance.createTransaction('0x46Bd84009D313c34f94bC883C353f72D3453A5B9', 0.0005, gasFee.average.fee)
+    const tx2 = ethereumInstance.createTransaction('0x46Bd84009D313c34f94bC883C353f72D3453A5B9', 0.0005, gasFee.average.fee.asset_fee)
     // console.time('Tx2')
     const transfer2 = await ethereumInstance.signAndSend(tx2);
     // console.timeEnd('Tx2')
     // console.log('Transfer status : ', transfer2);
-    const tx3 = ethereumInstance.createTransaction('0x46Bd84009D313c34f94bC883C353f72D3453A5B9', 0.5, gasFee.fast.fee)
+    const tx3 = ethereumInstance.createTransaction('0x46Bd84009D313c34f94bC883C353f72D3453A5B9', 0.5, gasFee.fast.fee.asset_fee)
     // console.time('Tx3')
     const transfer3 = await ethereumInstance.signAndSend(tx3);
     // console.timeEnd('Tx3')

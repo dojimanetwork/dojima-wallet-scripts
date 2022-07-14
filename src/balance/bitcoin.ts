@@ -1,6 +1,8 @@
 import BtcClient from "../types/interfaces/bitcoin_client";
 import { BtcRawTransactionResult } from "../core/bitcoin";
 import { NetworkType } from "../types/interfaces/network";
+import CoinGecko from "../assets_stats/coinGecko/assets_data";
+import { GasfeeResult } from "./utils";
 
 export default class BitcoinChain extends BtcClient {
   constructor(network: NetworkType) {
@@ -18,7 +20,7 @@ export default class BitcoinChain extends BtcClient {
     feeRate: number,
     to?: string,
     memo?: string
-  ): Promise<number> {
+  ): Promise<GasfeeResult> {
     const from: string = this._client.getAddress(mnemonic);
     try {
       const rawTxDetails: BtcRawTransactionResult = await this._client.createTransaction(
@@ -29,11 +31,31 @@ export default class BitcoinChain extends BtcClient {
         feeRate,
         memo ? memo : undefined,
       );
-      return rawTxDetails.gas_fee;
+      const btc_gasFee = rawTxDetails.gas_fee;
+      const pricesInst = new CoinGecko();
+      const pricesData = await pricesInst.getAssestsCurrentMarketData({
+        assets: 'bitcoin'
+      });
+      if(pricesData !== undefined) {
+        const usdt_gasFee = btc_gasFee * pricesData.current_price;
+        const resultFee = {
+          fee: {
+            asset_fee: btc_gasFee,
+            usdt_fee: usdt_gasFee
+          }
+        }
+        return { 
+          slow: resultFee,
+          average: resultFee,
+          fast: resultFee
+        };
+      } else {
+        throw new Error("Unable to retrieve current asset-usdt price");
+      }
     } catch (error) {
       if (error instanceof Error) {
         if(error.message === 'No utxos to send') {
-          console.log('Entered if else');
+          // console.log('Entered if else');
           const from: string = this._client.getAddress(process.env.SAMPLE_SEED_PHRASE as string);
           const rawTxDetails: BtcRawTransactionResult = await this._client.createTransaction(
             amount,
@@ -43,7 +65,27 @@ export default class BitcoinChain extends BtcClient {
             feeRate,
             memo ? memo : undefined,
           );
-          return rawTxDetails.gas_fee;
+          const btc_gasFee = rawTxDetails.gas_fee;
+          const pricesInst = new CoinGecko();
+          const pricesData = await pricesInst.getAssestsCurrentMarketData({
+            assets: 'bitcoin'
+          });
+          if(pricesData !== undefined) {
+            const usdt_gasFee = btc_gasFee * pricesData.current_price;
+            const resultFee = {
+              fee: {
+                asset_fee: btc_gasFee,
+                usdt_fee: usdt_gasFee
+              }
+            }
+            return { 
+              slow: resultFee,
+              average: resultFee,
+              fast: resultFee
+            };
+          } else {
+            throw new Error("Unable to retrieve current asset-usdt price");
+          }
         } else {
           // ✅ TypeScript knows err is Error
           throw new Error(error.message);

@@ -2,6 +2,8 @@ import * as web3 from "@solana/web3.js";
 import { NetworkType } from "../types/interfaces/network";
 // import { SolanaConnection } from "../types/interfaces/solana_connection";
 import SolanaAccount from "../accounts/solana_account";
+import CoinGecko from "../assets_stats/coinGecko/assets_data";
+import { GasfeeResult } from "./utils";
 
 export default class SolanaChain extends SolanaAccount {
   _mnemonic: string;
@@ -29,23 +31,47 @@ export default class SolanaChain extends SolanaAccount {
   }
 
   // Calculate Gas fee based in recent block hash
-  async getFees() {
+  async getFees(): Promise<GasfeeResult> {
     const { feeCalculator } = await this.getRecentBlockHash();
-    return {
-      slow: {
-        fee: (feeCalculator.lamportsPerSignature / Math.pow(10, 9)),
-      },
-      average: {
-        fee: (feeCalculator.lamportsPerSignature / Math.pow(10, 9)),
-      },
-      fast: {
-        fee: (feeCalculator.lamportsPerSignature / Math.pow(10, 9)),
-      },
-    };
+    // return {
+    //   slow: {
+    //     fee: (feeCalculator.lamportsPerSignature / Math.pow(10, 9)),
+    //   },
+    //   average: {
+    //     fee: (feeCalculator.lamportsPerSignature / Math.pow(10, 9)),
+    //   },
+    //   fast: {
+    //     fee: (feeCalculator.lamportsPerSignature / Math.pow(10, 9)),
+    //   },
+    // };
+    const sol_gasFee = feeCalculator.lamportsPerSignature / Math.pow(10, 9);
+    const pricesInst = new CoinGecko();
+    const pricesData = await pricesInst.getAssestsCurrentMarketData({
+      assets: "solana",
+    });
+    if (pricesData !== undefined) {
+      const usdt_gasFee = sol_gasFee * pricesData.current_price;
+      const resultFee = {
+        fee: {
+          asset_fee: sol_gasFee,
+          usdt_fee: usdt_gasFee,
+        },
+      };
+      return {
+        slow: resultFee,
+        average: resultFee,
+        fast: resultFee,
+      };
+    } else {
+      throw new Error("Unable to retrieve current asset-usdt price");
+    }
   }
 
   // Create transaction details based on user input
-  async createTransaction(toAddress: string, amount: number): Promise<web3.Transaction> {
+  async createTransaction(
+    toAddress: string,
+    amount: number
+  ): Promise<web3.Transaction> {
     // Get account address
     const pubKey = new web3.PublicKey(await this.getAddress(this._mnemonic));
 
@@ -72,9 +98,11 @@ export default class SolanaChain extends SolanaAccount {
     const account = await this.getKeypair(this._mnemonic);
 
     // Sign the transaction
-    let signature = await web3.sendAndConfirmTransaction(this._connection, rawTx, [
-      account[0],
-    ]);
+    let signature = await web3.sendAndConfirmTransaction(
+      this._connection,
+      rawTx,
+      [account[0]]
+    );
     // console.log('Transaction details: ', JSON.stringify(transaction));
     // console.log('Transaction hash : ', signature);
 
