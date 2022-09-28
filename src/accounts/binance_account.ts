@@ -25,27 +25,27 @@ export const api = {
 }
 export default class BinanceAccount extends BinanceConnection {
 
-    constructor() {
-        super();
+    constructor(network:NetworkType) {
+        super(network);
     }
 
-    async getAddress(mnemonic: string) {
-        const account = await this._client.recoverAccountFromMnemonic(mnemonic);
-        return account;
+     getAddress(mnemonic: string) {
+        const account =  this._client.recoverAccountFromMnemonic(mnemonic);
+        return account.address;
     }
-     async getBalance(address: string): Promise<Balance[]> {
+     async getBalance(address: string){
         const balances:BinanceBalance[] =await this._client.getBalance(address);
-        return balances
+        return balances[0].free
         
       }
-      async transfer(amount:number,recepient:string,mnemonic:string,assest:string,memo?:string){
-        await this._client.initChain()
-        const from = await this.getAddress(mnemonic);
-        await this._client.setPrivateKey(from.privateKey)
-        const fromadd = from.address
-        const txhash =await this._client.transfer(fromadd,recepient,amount,assest,memo?memo:undefined)
-        return txhash;
-      }
+      // async transfer(amount:number,recepient:string,mnemonic:string,assest:string,memo?:string){
+      //   await this._client.initChain()
+      //   const fromAccount =  this._client.recoverAccountFromMnemonic(mnemonic);
+      //   await this._client.setPrivateKey(fromAccount.privateKey)
+      //   const fromadd = fromAccount.address
+      //   const txhash =await this._client.transfer(fromadd,recepient,amount,assest,memo?memo:undefined)
+      //   return txhash;
+      // }
     //    async getTx(hash:string){
     //       // const data = await this._httpClient.request("get", `${api.getTx}/${hash}`)
     //       // return data
@@ -65,53 +65,56 @@ export default class BinanceAccount extends BinanceConnection {
     //    }
     // https://testnet-dex.binance.org/api/v1/transactions?address=tbnb1w4apnl25avlefrvfkxvs0nq72t23sp27jk89va&startTime=1662229800000&endTime=1662656072494&limit=6&offset=2
 
-      async getTranscations(params:TransactionParam){
-        let requestUrl = `https://testnet-dex.binance.org/api/v1/transactions?address=${params.address}`;
-        if(params.endTime){
-          requestUrl += `&endTime=${params.endTime}`
-        }
-        if(params.startTime){
-          requestUrl += `&startTime=${params.startTime}`
-        }
-        if(params.limit){
-          requestUrl += `&limit=${params.limit}`
-        }else{
-          requestUrl += `&limit=2`
-        }
-        if(params.offset){
-          requestUrl += `&endTime=${params.offset}`
-        }
-        console.log("transction")
-        try {
-          let response = await axios.get(requestUrl);
-          console.log("respone - ", response.status);
-          if (response.status && response.status === 200) {
-            let result  = response.data;
-            if (result.tx.length > 0) {
-              const txsResult :BnbGetTranscationHistroyArrayResult[] =result.tx
-              const finalResult :BnbGetTranscationHistroyFinalResult= {
-                tx: result.map((res) => ({
-                  txHash: res.txHash,
-                  blockHeight: res.blockHeight,
-                })),
-              };
-              console.log("hello - ",finalResult);
+      // async getTranscations(params:TransactionParam){
+      //   let requestUrl = `https://testnet-dex.binance.org/api/v1/transactions?address=${params.address}`;
+      //   if(params.endTime){
+      //     requestUrl += `&endTime=${params.endTime}`
+      //   }
+      //   if(params.startTime){
+      //     requestUrl += `&startTime=${params.startTime}`
+      //   }
+      //   if(params.limit){
+      //     requestUrl += `&limit=${params.limit}`
+      //   }else{
+      //     requestUrl += `&limit=2`
+      //   }
+      //   if(params.offset){
+      //     requestUrl += `&endTime=${params.offset}`
+      //   }
+      //   console.log("transction")
+      //   try {
+      //     let response = await axios.get(requestUrl);
+      //     console.log("respone - ", response.status);
+      //     if (response.status && response.status === 200) {
+      //       let result  = response.data;
+      //       if (result.tx.length > 0) {
+      //         const txsResult :BnbGetTranscationHistroyArray[] =result.tx
+      //         // txsResult.map((res) =>{
+      //         //   res.
+      //         // }) 
+      //         const finalResult :BnbGetTranscationHistroyFinalResult= {
+      //          txs: txsResult.map((res) => ({
+      //             txHash: res.txHash,
+      //             blockHeight: res.blockHeight,
+      //           })),
+      //         };
+      //         console.log("hello - ",finalResult);
 
-              return finalResult;
-            } else {
-              return {
-                txs: [],
-              };
-            }
-            console.log("hi -",result)
-          } else {
-            return null;
-          }
-        } catch (error) {
-          throw new Error("Something went wrong");
-        }
+      //         return finalResult;
+      //       } else {
+      //         return {
+      //           txs: [],
+      //         };
+      //       }
+      //       // console.log("hi -",result)
+      //     } else {
+      //       return null;
+      //     }
+      //   } catch (error) {
+      //     throw new Error("Something went wrong");
+      //   }
 
-      }
+      // }
       
     async getTxData(hash:string){
       console.log("enter")
