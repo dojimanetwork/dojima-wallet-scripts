@@ -6,6 +6,9 @@ import { BASENUMBER, checkNumber } from "@binance-chain/javascript-sdk/lib/utils
 import { AminoPrefix } from "@binance-chain/javascript-sdk/lib/types";
 import { Transaction } from "@binance-chain/javascript-sdk";
 import BinanceAccount from "../accounts/binance_account";
+import { TransferFee, Fees,Fees as BinanceFees, isTransferFee } from "../util/binance";
+import axios from "axios";
+
 
 
 export default class BinanceChain extends BinanceAccount {
@@ -99,4 +102,43 @@ export default class BinanceChain extends BinanceAccount {
       console.log("raw -",txHash);
       return txHash;
     }
+
+     async getTransferFee(): Promise<TransferFee> {
+      const feesArray = (await axios.get<BinanceFees>(`${this._clientUrl}/api/v1/fees`)).data
+  
+      const [transferFee] = feesArray.filter(isTransferFee)
+      if (!transferFee) throw new Error('failed to get transfer fees')
+      console.log(transferFee.fixed_fee_params.fee)
+      return transferFee
+    }
+    // getFees = async (): Promise<Fees> => {
+    //   try {
+    //     const response = await axios.get<Fees>(`${this._clientUrl}}/api/v1/fees`)
+    //     console.log("response -",response.data)
+    //     return response.data
+    //   } catch (error) {
+    //     return Promise.reject(error)
+    //   }
+    // }
+  
+    /**
+     * Get the current fee.
+     *
+     * @returns {Fees} The current fee.
+     */
+    // async getFees(): Promise<Fees> {
+    //   let singleTxFee:undefined
+    //   try {
+    //     singleTxFee = await this.getFeeRateFromThorchain()
+    //   } catch (error) {
+    //     console.log(error)
+    //     console.warn(`Error pulling rates from thorchain, will try alternate`)
+    //   }
+    //   if (!singleTxFee) {
+    //     const transferFee = await this.getTransferFee()
+    //     singleTxFee = baseAmount(transferFee.fixed_fee_params.fee)
+    //   }
+  
+    //   return singleFee(FeeType.FlatFee, singleTxFee)
+    // }
 }
