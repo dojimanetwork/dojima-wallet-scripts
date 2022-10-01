@@ -103,13 +103,15 @@ export default class BinanceChain extends BinanceAccount {
       return txHash;
     }
 
-     async getTransferFee(): Promise<TransferFee> {
+     async getTransferFee() {
       const feesArray = (await axios.get<BinanceFees>(`${this._clientUrl}/api/v1/fees`)).data
   
       const [transferFee] = feesArray.filter(isTransferFee)
       if (!transferFee) throw new Error('failed to get transfer fees')
-      console.log(transferFee.fixed_fee_params.fee)
-      return transferFee
+      let gasFee = transferFee.fixed_fee_params.fee
+      //     console.log("balance : ",n/10**18)
+      console.log(gasFee/10**8);
+      return gasFee
     }
     // getFees = async (): Promise<Fees> => {
     //   try {
