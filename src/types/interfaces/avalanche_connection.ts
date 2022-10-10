@@ -25,12 +25,7 @@ export class AvalancheConnection{
         // console.log(defaultAvaxParams)
     }
     // Create new Avax Asset 
-//  assetRIP: Asset = {
-//     chain: Chain.Avalanche,
-//     symbol: `RIP-0x224695ba2a98e4a096a519b503336e06d9116e48`,
-//     ticker: `RIP`,
-//     synth: false,
-//   }
+
 }
 
 
