@@ -1,5 +1,4 @@
-import { Balance } from "@xchainjs/xchain-client";
-import { assetToString, baseToAsset } from "@xchainjs/xchain-util";
+import { baseToAsset } from "@xchainjs/xchain-util";
 import { AvalancheConnection } from "../types/interfaces/avalanche_connection";
 import { NetworkType } from "../types/interfaces/network";
 
@@ -16,11 +15,16 @@ export class AvalancheAccount extends AvalancheConnection{
 
     async getBalance(address:string){
         let balance = await this._client.getBalance(address);
-        let assetAmount = balance
-       await balance.forEach((bal: Balance) => {
-            console.log(`${assetToString(bal.asset)} = ${bal.amount.amount()}`)
-          })
-        //   console.log(assetAmount)
-        //   return balance
+        let isValid =this._client.validateAddress(address)
+        if( isValid === true ){
+            try {
+                const balance = await this._client.getBalance(address)
+                let avax_balance = (baseToAsset(balance[0].amount)).amount()
+                console.log(`With balance: ${avax_balance}`)
+                return avax_balance;
+            } catch (error) {
+                console.log(`Caught: ${error}`)
+            }
     }
+  }
 }

@@ -1,8 +1,6 @@
 import { Client, defaultAvaxParams } from "@xchainjs/xchain-avax"
 import { Network } from "@xchainjs/xchain-client"
 import { NetworkType } from "./network";
-import {  Asset, Chain  } from "@xchainjs/xchain-util"
-
 
 export class AvalancheConnection{
     _network: NetworkType;
@@ -22,10 +20,7 @@ export class AvalancheConnection{
         }
         defaultAvaxParams.phrase = this._mnemonic;
          this._client = new Client(defaultAvaxParams)
-        // console.log(defaultAvaxParams)
     }
-    // Create new Avax Asset 
-
 }
 
 
