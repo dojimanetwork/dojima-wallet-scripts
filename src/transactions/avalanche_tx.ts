@@ -53,19 +53,21 @@ export class Avalanche_tx extends AvalancheTransfer{
                 status = "fail"
             }
             if(response !== (null || undefined)){
-                const finalResponse = {
-                    from :response.data.data.items[0].from_address,
-                    to: response.data.data.items[0].to_address,
-                    block:response.data.data.items[0].block_height,
-                    hash:response.data.data.items[0].tx_hash,
-                    status:status,
-                    amount:response.data.data.items[0].value / Math.pow(10, 18),
-                    gasFee:response.data.data.items[0].fees_paid/ Math.pow(10, 18),
-                    // gasPrice:response.data.data.items[0].gas_price/Math.pow(10,20),
-                    gasLimit:response.data.data.items[0].gas_limit,
+                if(response.data.data.items[0]!== (null|| undefined)){
+                    const finalResponse = {
+                        from :response.data.data.items[0].from_address,
+                        to: response.data.data.items[0].to_address,
+                        block:response.data.data.items[0].block_height,
+                        hash:response.data.data.items[0].tx_hash,
+                        status:status,
+                        amount:response.data.data.items[0].value / Math.pow(10, 18),
+                        gasFee:response.data.data.items[0].fees_paid/ Math.pow(10, 18),
+                        // gasPrice:response.data.data.items[0].gas_price/Math.pow(10,20),
+                        gasLimit:response.data.data.items[0].gas_limit,
+                    }
+                    console.log(finalResponse);
+                    return finalResponse;
                 }
-                console.log(finalResponse);
-                return finalResponse;
             }
         }
         catch (error) {
@@ -132,22 +134,21 @@ export class Avalanche_tx extends AvalancheTransfer{
         const result:AvaxTxHistroyFinalData = response.data;
         if(result !== (null || undefined)){
             const res = result.data
-            let date= moment(this.convertISOtoUTC(res.date.toString())).format("DD/MM/YYYY");
-            const txHistroy ={
-                txs:res.items.map((item)=>({
-                    date: date,
-                    block_height: item.block_height,
-                    tx_hash : item.tx_hash,
-                    from: item.from_address,
-                    to :item.to_address,
-                    value :item.value,
-                    gasFee: item.fees_paid,
-                }))
+            if(res.items.length>0){
+                const txHistroy ={
+                    txs:res.items.map((item)=>({
+                        date:  moment(this.convertISOtoUTC(item.block_signed_at)).format("DD/MM/YYYY"),
+                        block_height: item.block_height,
+                        tx_hash : item.tx_hash,
+                        from: item.from_address,
+                        to :item.to_address,
+                        value :Number(item.value)/Math.pow(10,18),
+                        gasFee: Number(item.fees_paid)/Math.pow(10,18),
+                    }))
+                }
+                return txHistroy;
             }
-            // console.log(txHistroy);
-
-        }
-       
+        }   
     }
 
     convertDateToTimestamp(date: string) {
