@@ -277,3 +277,71 @@ export interface SolTxsArrayType {
 export interface SolTxsResult {
   txs: Array<SolTxsArrayType>;
 }
+
+export interface Avax_item{
+  from_address: any;
+  to_address: any;
+  fees_paid: any;
+  block_signed_at: string;
+  block_height: number;
+  tx_hash : string;
+  tx_offset:number;
+  successful:true;
+  from: string;
+  from_address_label:string;
+  to :string;
+  to_address_label : string;
+  value :string;
+  value_quote:string;
+  gas_offered:number;
+  gas_spent:number;
+  gas_price:number;
+  gasFee: number;
+  gas_quote:number;
+  gas_quote_rate:number;
+  log_events:[];
+}
+
+export interface AvaxTxHistroy{
+  date:string;
+  block_height: number;
+  tx_hash : string;
+  from: string;
+  to :string;
+  value :string;
+  gasFee: number;
+}
+
+export interface AvaxTxHistroyData{
+  date: string;
+  address:string;
+  updated_at:Date;
+  next_updated_at:Date;
+  quote_currency:string;
+  chain_id :number;
+  items: Array<Avax_item>;
+  pagination:AvaxTxHistroyPagination;
+}
+
+export interface AvaxTxHistroyFinalData{
+  data:AvaxTxHistroyData
+  error: boolean;
+  error_message:string;
+  error_code:string
+}
+
+export interface AvaxTxHistroyPagination{
+  has_more : boolean;
+  page_number:number;
+  page_size: number;
+  total_count:number;
+}
+
+export interface AvaxDetailTranscationData{
+  updated_at:Date;
+  items: Array<Avax_item>;
+  pagination:AvaxTxHistroyPagination;
+  error: boolean;
+  error_message:string;
+  error_code:string
+}
