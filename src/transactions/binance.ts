@@ -1,26 +1,17 @@
 import axios from "axios";
-import BinanceAccount from "../accounts/binance_account";
 import BinanceChain from "../balance/binance";
 import { BinanceConnection } from "../types/interfaces/binance_connections";
 import { NetworkType } from "../types/interfaces/network";
 import { BnbGetTranscationHistroyArray, BnbGetTranscationHistroyFinalResult, TransactionParam } from "../util/binance";
 
-// export const api = {
-//     getTransactions: "/api/v1/transactions",
-//     getTxs: "/bc/api/v1/txs",
-//     getTx: "/api/v1/tx",
-//   }
-
-export default class BinanceTx extends BinanceChain{
+export default class BinanceTx extends BinanceConnection{
     constructor(network: NetworkType) {
         super(network);
       }
 
-      async getTxData(hash:string){
-        console.log("enter")
-        try {
+      async getDetailTranscationData(hash:string){
+        try{
           let response = (await axios.get(`${this._clientUrl}/api/v1/tx/${hash}?format=json`));
-          // let response = (await axios.get(`requestUrl?format=json`)).data;
           if (response.status && response.status === 200) {
             let result = response.data
               const finalResult = {
@@ -32,7 +23,34 @@ export default class BinanceTx extends BinanceChain{
                 amount:result.tx.value.msg[0].value.inputs[0].coins[0].amount,
                 asset:result.tx.value.msg[0].value.inputs[0].coins[0].denom,
                 to:result.tx.value.msg[0].value.outputs[0].address,
-                signature: result.tx.value.signatures[0].signature
+                signature: result.tx.value.signatures[0].signature,
+                sequence:result.tx.value.signatures[0].sequence,
+            }
+            console.log("final - ",finalResult);
+            return finalResult 
+          } else {
+            return null;
+          }
+        }catch(error){
+          throw new Error("Something went wrong");
+        }
+      }
+
+      async getTxData(hash:string){
+        console.log("enter")
+        try {
+          let response = (await axios.get(`${this._clientUrl}/api/v1/tx/${hash}?format=json`));
+          if (response.status && response.status === 200) {
+            let result = response.data
+              const finalResult = {
+                hash : result.hash,
+                blockNumber: result.height,
+                type: result.tx.value.msg[0].type,
+                from: result.tx.value.msg[0].value.inputs[0].address,
+                amount:result.tx.value.msg[0].value.inputs[0].coins[0].amount,
+                asset:result.tx.value.msg[0].value.inputs[0].coins[0].denom,
+                to:result.tx.value.msg[0].value.outputs[0].address,
+                memo: result.tx.value.memo,
             }
             console.log("final - ",finalResult);
             return finalResult 
