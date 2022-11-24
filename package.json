@@ -30,7 +30,8 @@
     "binance_connection": "ts-node ./scripts/binance_connections_test",
     "avalanche_Wallet": "ts-node ./scripts/avalanche_wallet",
     "thor_wallet": "ts-node ./scripts/thor_wallet",
-    "doj_wallet": "ts-node ./scripts/doj_wallet"
+    "doj_wallet": "ts-node ./scripts/doj_wallet",
+    "atom_wallet": "ts-node ./scripts/cosmos_wallet"
   },
   "repository": {
     "type": "git",
