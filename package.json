@@ -31,7 +31,8 @@
     "avalanche_Wallet": "ts-node ./scripts/avalanche_wallet",
     "thor_wallet": "ts-node ./scripts/thor_wallet",
     "doj_wallet": "ts-node ./scripts/doj_wallet",
-    "atom_wallet": "ts-node ./scripts/cosmos_wallet"
+    "atom_wallet": "ts-node ./scripts/cosmos_wallet",
+    "eth_wallet": "ts-node ./scripts/eth_wallet"
   },
   "repository": {
     "type": "git",
