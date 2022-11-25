@@ -9,8 +9,7 @@ import {assetAmount, assetToBase} from "@d11k-ts/utils";
 
 async function checkDoj() {
     const phrase =
-        // "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
-        "pipe expire lecture state pilot latin stamp senior market much dilemma tooth airport oblige flower caught risk canoe radar gadget tag narrow inch trust";
+        "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
 
     const dojClient = new HermesSdkClient({phrase, network: Network.Testnet});
     const address = dojClient.getAddress();
