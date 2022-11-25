@@ -1,12 +1,11 @@
 import {Client} from '../src/core/ethereum';
 import {Network} from "@d11k-ts/client";
 import {
-    // assetAmount,
-    // assetToBase,
+    assetAmount,
+    assetToBase,
     baseToAsset
 } from "@d11k-ts/utils";
-// import {ETH_DECIMAL} from "../src/core/ethereum";
-// import {ethers} from "ethers";
+import {ETH_DECIMAL} from "../src/core/ethereum";
 
 async function checkEth() {
     const phrase =
@@ -29,21 +28,21 @@ async function checkEth() {
     console.log("Balance :: ", balance.toNumber());
     const data = await ethClient.getTransactionData("0x9ad4e1501ea6d1fba141de33f523dc907b2c51ef4a1eaf583e297f6881e3d235");
     console.log("Tx data : ", data);
-    // let amountToTransfer = 0.0000001
-    // let amount = assetToBase(assetAmount(amountToTransfer, ETH_DECIMAL))
-    // const fees = await ethClient.estimateFeesWithGasPricesAndLimits({ amount, recipient: '0x0577e1e35c4f30ca8379269b7fd85cbce7f084f4' });
-    // console.log(`
-    //     Fees average : ${baseToAsset(fees.fees.average).amount()},
-    //     gas limits: ${fees.gasLimit},
-    //     gas prices average: ${baseToAsset(fees.gasPrices.average).amount()}
-    // `)
-    // const txs = await ethClient.getTransactions({address: "0x0577e1e35c4f30ca8379269b7fd85cbce7f084f4"});
-    // console.log("Txs : ", txs);
-    // const hash = await ethClient.transfer({
-    //     amount,
-    //     recipient: '0x0577e1e35c4f30ca8379269b7fd85cbce7f084f4'
-    // });
-    // console.log("Tx hash : ", hash);
+    let amountToTransfer = 0.0000001
+    let amount = assetToBase(assetAmount(amountToTransfer, ETH_DECIMAL))
+    const fees = await ethClient.estimateFeesWithGasPricesAndLimits({ amount, recipient: '0x0577e1e35c4f30ca8379269b7fd85cbce7f084f4' });
+    console.log(`
+        Fees average : ${baseToAsset(fees.fees.average).amount()},
+        gas limits: ${fees.gasLimit},
+        gas prices average: ${baseToAsset(fees.gasPrices.average).amount()}
+    `)
+    const txs = await ethClient.getTransactions({address: "0x0577e1e35c4f30ca8379269b7fd85cbce7f084f4"});
+    console.log("Txs : ", txs);
+    const hash = await ethClient.transfer({
+        amount,
+        recipient: '0x0577e1e35c4f30ca8379269b7fd85cbce7f084f4'
+    });
+    console.log("Tx hash : ", hash);
 }
 
 (async () => {
