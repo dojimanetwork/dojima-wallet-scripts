@@ -1,5 +1,5 @@
 import BtcClient from "../types/interfaces/bitcoin_client";
-import { BtcRawTransactionResult } from "../core/bitcoin";
+import { BtcRawTransactionResult } from "../core/btc";
 import { NetworkType } from "../types/interfaces/network";
 import CoinGecko from "../assets_stats/coinGecko/assets_data";
 import { GasfeeResult } from "./utils";

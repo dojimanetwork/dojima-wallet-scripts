@@ -21,7 +21,7 @@
 //     }
 // }
 
-import BitcoinClient from '../../core/bitcoin';
+import BitcoinClient from '../../core/btc';
 import { NetworkType } from './network';
 
 export default class BtcClient {

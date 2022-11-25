@@ -1,4 +1,4 @@
-import Client from "../src/core/bitcoin/client";
+import Client from "../src/core/btc/client";
 
 async function checkBitcoin() {
   const phrase =
