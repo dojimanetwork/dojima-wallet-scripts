@@ -50,6 +50,7 @@
     "@d11k-ts/client": "^0.1.1",
     "@d11k-ts/cosmos": "^0.1.0",
     "@d11k-ts/crypto": "^0.1.1",
+    "@d11k-ts/ethereum": "^0.1.0",
     "@d11k-ts/hermes": "^0.1.0",
     "@d11k-ts/utils": "^0.1.1",
     "@polkadot/api": "^7.6.1",

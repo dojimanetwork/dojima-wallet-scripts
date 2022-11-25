@@ -117,6 +117,15 @@
     hdkey "^2.0.1"
     uuid "^8.3.2"
 
+"@d11k-ts/ethereum@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@d11k-ts/ethereum/-/ethereum-0.1.0.tgz#bae3485044b68baa76684618624abaa0953d1c1a"
+  integrity sha512-Oja/2mlOH3AR9C3ynkIBUOIHvj9Te48nm7rxTIQIl0Qapi9M9d8ei7D5hiyJ+xT7QvlBXdoyWMUC7ipXV08LXQ==
+  dependencies:
+    "@d11k-ts/client" "^0.1.1"
+    "@d11k-ts/crypto" "^0.1.1"
+    "@d11k-ts/utils" "^0.1.1"
+
 "@d11k-ts/hermes@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@d11k-ts/hermes/-/hermes-0.1.0.tgz#3c270796c61ac1b2d9738f9f6c87d1d2af92ca84"
