@@ -35,7 +35,8 @@
     "eth_wallet": "ts-node ./scripts/eth_wallet",
     "bitcoin_wallet": "ts-node ./scripts/bitcoin_wallet",
     "polka_wallet": "ts-node ./scripts/polka_wallet",
-    "sol_wallet": "ts-node ./scripts/sol_wallet"
+    "sol_wallet": "ts-node ./scripts/sol_wallet",
+    "ar_wallet": "ts-node ./scripts/ar_wallet"
   },
   "repository": {
     "type": "git",

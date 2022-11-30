@@ -20,14 +20,16 @@ class SolanaClient implements SolanaChainClient {
     protected network: Network;
     protected cluster: web3.Cluster;
     protected connection: web3.Connection;
-    protected phrase: string
+    protected phrase = ''
 
     constructor({
                     phrase,
                     network = Network.Mainnet
     }: ChainClientParams) {
-        if (!validatePhrase(phrase)) {
-            throw new Error('Invalid phrase')
+        if (phrase) {
+            if (!validatePhrase(phrase)) {
+                throw new Error('Invalid phrase')
+            }
             this.phrase = phrase
         }
         this.network = network
