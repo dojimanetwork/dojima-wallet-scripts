@@ -1,20 +1,51 @@
 import {ApiPromise, Keyring, WsProvider} from '@polkadot/api'
 import { KeyringPair } from "@polkadot/keyring/types";
-import {SubmittableExtrinsic} from "@polkadot/api/types";
-import {ISubmittableResult} from "@polkadot/types/types";
+import {ChainClientParams, Network} from "@d11k-ts/client";
+import {validatePhrase} from "@d11k-ts/crypto";
+import {GasfeeResult, PolkachainClientParams, PolkaTxParams, ProviderId, ProviderIds, rawTxType} from "./types";
 
-class PolkadotClient {
-    _provider: string
-    private _phrase: string
-    constructor(phrase?: string) {
-        this._phrase = phrase
-        // this._provider = 'ws://127.0.0.1:9944'
-        // this._provider = 'wss://rpc.polkadot.io'
-        this._provider = 'wss://westend-rpc.polkadot.io'
+export const DOT_DECIMAL = 12
+
+export interface PolkaChainClient {
+    createInstance(): Promise<ApiPromise>
+    getAddress(): Promise<string>,
+    getBalance(address: string): Promise<number>,
+    getFees(params: PolkaTxParams): Promise<GasfeeResult>
+    buildTx(params: PolkaTxParams): Promise<rawTxType>
+    transfer(params: PolkaTxParams): Promise<string>
+    polkaBatchTxsToHermes(rawTxs: rawTxType[], memo?: string): Promise<string>
+}
+
+class PolkadotClient implements PolkaChainClient{
+    protected network: Network
+    protected providers: ProviderIds
+    protected phrase = ''
+
+    constructor({
+                    phrase,
+                    network = Network.Mainnet,
+                    providers = {
+                        [Network.Mainnet]: 'wss://rpc.polkadot.io',
+                        [Network.Stagenet]: 'wss://rpc.polkadot.io',
+                        [Network.Testnet]: 'wss://westend-rpc.polkadot.io',
+                    }
+                }: ChainClientParams & PolkachainClientParams) {
+        if (phrase) {
+            if (!validatePhrase(phrase)) {
+                throw new Error('Invalid phrase')
+            }
+            this.phrase = phrase
+        }
+        this.network = network
+        this.providers = providers
+    }
+
+    getProvider(): ProviderId {
+        return this.providers[this.network]
     }
 
     rpcProvider(): WsProvider {
-        const wsProvider = new WsProvider(`${this._provider}`)
+        const wsProvider = new WsProvider(`${this.getProvider()}`)
         return wsProvider
     }
 
@@ -23,10 +54,10 @@ class PolkadotClient {
     }
 
     private mnemonicAccount(): KeyringPair {
-        if (!this._phrase) throw new Error('Phrase not set')
+        if (!this.phrase) throw new Error('Phrase not set')
 
         const keyring = new Keyring({type: 'sr25519'})
-        const newPair = keyring.addFromUri(this._phrase)
+        const newPair = keyring.addFromUri(this.phrase)
         return newPair
     }
 
@@ -38,7 +69,7 @@ class PolkadotClient {
      *
      * @throws {Error} Thrown if phrase has not been set before. A phrase is needed to create a wallet and to derive an address from it.
      */
-    async getAddress(index = 0): Promise<string> {
+    async getAddress(): Promise<string> {
         await this.createInstance()
         const keyPair = this.mnemonicAccount()
         return keyPair.address
@@ -53,31 +84,37 @@ class PolkadotClient {
         return balance;
     }
 
-    async buildTx(receipient: string, amount: number): Promise<SubmittableExtrinsic<"promise", ISubmittableResult>> {
+    async buildTx({ recipient, amount }: PolkaTxParams): Promise<rawTxType> {
         const api = await this.createInstance()
         const toAmount = amount * Math.pow(10, 12);
-        const rawTx = api.tx.balances.transfer(receipient, toAmount)
+        const rawTx: rawTxType = api.tx.balances.transfer(recipient, toAmount)
         return rawTx
     }
 
-    async transfer(receipient: string, amount: number): Promise<string> {
-        const rawTx = await this.buildTx(receipient, amount);
+    async transfer({ recipient, amount }: PolkaTxParams): Promise<string> {
+        const rawTx = await this.buildTx({recipient, amount});
         const hash = await rawTx.signAndSend(this.mnemonicAccount())
         return hash.toHex()
     }
 
-    async getFees(receipient: string, amount: number): Promise<number> {
-        const rawTx = await this.buildTx(receipient, amount);
+    async getFees({ recipient, amount }: PolkaTxParams): Promise<GasfeeResult> {
+        const rawTx = await this.buildTx({recipient, amount});
         const paymentInfo = await rawTx.paymentInfo(await this.getAddress());
         const gasFee = paymentInfo.partialFee.toNumber() / Math.pow(10, 12);
-        return gasFee
+        return {
+            slow: gasFee,
+            average: gasFee,
+            fast: gasFee,
+        };
     }
 
-    async hermesTransaction(receipient: string, amount: number, memo: string): Promise<string> {
-        const rawTx = await this.buildTx(receipient, amount);
+    async polkaBatchTxsToHermes(rawTxs: rawTxType[], memo?: string): Promise<string> {
         const api = await this.createInstance()
-        const remark = api.tx.system.remark(`${memo}`)
-        const batchTx = await api.tx.utility.batchAll([remark, rawTx]).signAndSend(this.mnemonicAccount())
+        if (memo) {
+            const remark = api.tx.system.remark(`${memo}`)
+            rawTxs.concat(remark)
+        }
+        const batchTx = await api.tx.utility.batchAll(rawTxs).signAndSend(this.mnemonicAccount())
         return batchTx.toHex()
     }
 }
