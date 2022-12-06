@@ -57,9 +57,6 @@ export const getAsset = (denom: string): Asset | null => {
         return {
             chain: CosmosChain,
             symbol: denom,
-            // TODO (xchain-contributors)
-            // Get readable ticker for IBC assets from denom #600 https://github.com/xchainjs/xchainjs-lib/issues/600
-            // At the meantime ticker will be empty
             ticker: '',
             synth: false,
         }

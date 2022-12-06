@@ -16,8 +16,8 @@ import {
     ChainClient,
     ChainClientParams,
     singleFee,
-} from '@d11k-ts/client'
-import { CosmosSDKClient, RPCTxResult } from '@d11k-ts/cosmos'
+} from '../client'
+import { CosmosSDKClient, RPCTxResult } from '../cosmos'
 import {
     Address,
     Asset,
@@ -26,7 +26,7 @@ import {
     assetFromString,
     assetToString,
     baseAmount, AssetDOJNative, isAssetDOJNative,
-} from '@d11k-ts/utils'
+} from '../utils'
 import axios from 'axios'
 import BigNumber from 'bignumber.js'
 import Long from 'long'
@@ -46,7 +46,7 @@ import {
 } from './types'
 import { TxResult } from './messages'
 import {
-    DECIMAL,
+    DOJDECIMAL,
     DEFAULT_GAS_LIMIT_VALUE,
     DEPOSIT_GAS_LIMIT_VALUE,
     MAX_TX_COUNT,
@@ -79,7 +79,7 @@ export interface HermeschainClient {
 /**
  * Custom Hermeschain Client
  */
-class Client extends BaseChainClient implements HermeschainClient, ChainClient {
+class HermesSdkClient extends BaseChainClient implements HermeschainClient, ChainClient {
     private clientUrl: ClientUrl
     private explorerUrls: ExplorerUrls
     private chainIds: ChainIds
@@ -100,8 +100,8 @@ class Client extends BaseChainClient implements HermeschainClient, ChainClient {
                     phrase,
                     clientUrl = {
                         [Network.Testnet]: {
-                            node: 'http://localhost:1317',
-                            rpc: 'http://localhost:26657',
+                            node: 'http://api-test.h4s.dojima.network',
+                            rpc: 'http://rpc-test.h4s.dojima.network',
                         },
                         [Network.Stagenet]: {
                             node: 'http://localhost:1317',
@@ -121,7 +121,7 @@ class Client extends BaseChainClient implements HermeschainClient, ChainClient {
                     chainIds = {
                         [Network.Mainnet]: 'hermeschain',
                         [Network.Stagenet]: 'hermeschain',
-                        [Network.Testnet]: 'hermeschain',
+                        [Network.Testnet]: 'hermes-testnet',
                     },
                 }: ChainClientParams & HermeschainClientParams) {
         super(Chain.Cosmos, { network, rootDerivationPaths, phrase })
@@ -422,11 +422,11 @@ class Client extends BaseChainClient implements HermeschainClient, ChainClient {
         result.observed_tx.tx.coins.forEach((coin) => {
             from.push({
                 from: result.observed_tx.tx.from_address,
-                amount: baseAmount(coin.amount, DECIMAL),
+                amount: baseAmount(coin.amount, DOJDECIMAL),
             })
             to.push({
                 to: result.observed_tx.tx.to_address,
-                amount: baseAmount(coin.amount, DECIMAL),
+                amount: baseAmount(coin.amount, DOJDECIMAL),
             })
             asset = assetFromString(coin.asset)
         })
@@ -458,10 +458,10 @@ class Client extends BaseChainClient implements HermeschainClient, ChainClient {
                   }: DepositParam): Promise<TxHash> {
         const balances = await this.getBalance(this.getAddress(walletIndex))
         const dojBalance: BaseAmount =
-            balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DECIMAL)
+            balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DOJDECIMAL)
         const assetBalance: BaseAmount =
             balances.filter(({ asset: assetInList }) => assetToString(assetInList) === assetToString(asset))[0]?.amount ??
-            baseAmount(0, DECIMAL)
+            baseAmount(0, DOJDECIMAL)
 
         const { average: fee } = await this.getFees()
 
@@ -536,10 +536,10 @@ class Client extends BaseChainClient implements HermeschainClient, ChainClient {
                    }: TxParams & { gasLimit?: BigNumber }): Promise<TxHash> {
         const balances = await this.getBalance(this.getAddress(walletIndex), [asset])
         const dojBalance: BaseAmount =
-            balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DECIMAL)
+            balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DOJDECIMAL)
         const assetBalance: BaseAmount =
             balances.filter(({ asset: assetInList }) => assetToString(assetInList) === assetToString(asset))[0]?.amount ??
-            baseAmount(0, DECIMAL)
+            baseAmount(0, DOJDECIMAL)
 
         const fee = (await this.getFees()).average
 
@@ -602,7 +602,7 @@ class Client extends BaseChainClient implements HermeschainClient, ChainClient {
                               recipient,
                               memo,
                               fromDojBalance: from_doj_balance,
-                              fromAssetBalance: from_asset_balance = baseAmount(0, DECIMAL),
+                              fromAssetBalance: from_asset_balance = baseAmount(0, DOJDECIMAL),
                               fromAccountNumber = Long.ZERO,
                               fromSequence = Long.ZERO,
                               gasLimit = new BigNumber(DEFAULT_GAS_LIMIT_VALUE),
@@ -668,4 +668,4 @@ class Client extends BaseChainClient implements HermeschainClient, ChainClient {
     }
 }
 
-export { Client }
+export { HermesSdkClient }

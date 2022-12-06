@@ -1,7 +1,7 @@
 import {
-    Client,
-    DECIMAL
-} from "../../core/dojima";
+    HermesSdkClient,
+    DOJDECIMAL
+} from "../../core/hermes";
 import { NetworkType } from "./network";
 import {
     assetAmount,
@@ -12,15 +12,14 @@ import { Network } from "@d11k-ts/client";
 
 export default class DojimaClient {
     _network: NetworkType;
-    _client: Client;
+    _client: HermesSdkClient;
     constructor(mnemonic: string, network: NetworkType) {
         this._network = network;
-        this._client = new Client({phrase: mnemonic, network: Network.Mainnet});
+        this._client = new HermesSdkClient({phrase: mnemonic, network: Network.Mainnet});
     }
 
     async getAddress() {
         const address = this._client.getAddress();
-        console.log("Node : ", this._client.getClientUrl())
         return address;
     }
 
@@ -32,8 +31,8 @@ export default class DojimaClient {
     }
 
     async getTxData(hash: string) {
-        // const address = await this.getAddress();
-        const data = await this._client.getTransactionData(hash, "dojima1ek92jm68wkwv9zvjwn5gdgnt3vu4na3h5k5uje");
+        const address = await this.getAddress();
+        const data = await this._client.getTransactionData(hash, address);
         return data;
     }
 
@@ -48,7 +47,7 @@ export default class DojimaClient {
     }
 
     async transfer(amountToTransfer: number, to: string) {
-        let amount = assetToBase(assetAmount(amountToTransfer, DECIMAL ))
+        let amount = assetToBase(assetAmount(amountToTransfer, DOJDECIMAL ))
         const txhash = await this._client.transfer({
             amount, recipient: to
         });

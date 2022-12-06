@@ -20,7 +20,7 @@ import { ChainId, ExplorerUrls, NodeInfoResponse, TxData } from './types'
 import { MsgNativeTx } from './messages'
 import types from './proto/MsgCompiled'
 
-export const DECIMAL = 8
+export const DOJDECIMAL = 8
 export const DEFAULT_GAS_ADJUSTMENT = 2
 export const DEFAULT_GAS_LIMIT_VALUE = '4000000'
 export const DEPOSIT_GAS_LIMIT_VALUE = '600000000'
@@ -28,7 +28,7 @@ export const MAX_TX_COUNT = 100
 
 const DENOM_DOJ_NATIVE = 'doj'
 
-const DEFAULT_EXPLORER_URL = 'http://localhost:1317'
+const DEFAULT_EXPLORER_URL = 'http://api-test.h4s.dojima.network'
 const txUrl = `${DEFAULT_EXPLORER_URL}/tx`
 const addressUrl = `${DEFAULT_EXPLORER_URL}/address`
 export const defaultExplorerUrls: ExplorerUrls = {
@@ -135,11 +135,12 @@ export const getDepositTxDataFromLogs = (logs: TxLog[], address: Address): TxDat
     const transferDataList: TransferDataList = events.reduce((acc: TransferDataList, { type, attributes }) => {
         if (type === 'transfer') {
             return attributes.reduce((acc2, { key, value }, index) => {
-                if (index % 3 === 0) acc2.push({ sender: '', recipient: '', amount: baseAmount(0, DECIMAL) })
+                console.log(key, ' :: ', value)
+                if (index % 3 === 0) acc2.push({ sender: '', recipient: '', amount: baseAmount(0, DOJDECIMAL) })
                 const newData = acc2[acc2.length - 1]
                 if (key === 'sender') newData.sender = value
                 if (key === 'recipient') newData.recipient = value
-                if (key === 'amount') newData.amount = baseAmount(value.replace(/doj/, ''), DECIMAL)
+                if (key === 'amount') newData.amount = baseAmount(value.replace(/doj/, ''), DOJDECIMAL)
                 return acc2
             }, acc)
         }
@@ -168,7 +169,7 @@ export const getDepositTxDataFromLogs = (logs: TxLog[], address: Address): TxDat
  * @returns {Fees} The default fee.
  */
 export const getDefaultFees = (): Fees => {
-    const fee = assetToBase(assetAmount(0.02 /* 0.02 DOJ */, DECIMAL))
+    const fee = assetToBase(assetAmount(0.02 /* 0.02 DOJ */, DOJDECIMAL))
     return singleFee(FeeType.FlatFee, fee)
 }
 
@@ -398,7 +399,7 @@ export const getBalance = async ({
     return balances
         .map((balance) => ({
             asset: (balance.denom && assetFromDenom(balance.denom)) || AssetDOJNative,
-            amount: baseAmount(balance.amount, DECIMAL),
+            amount: baseAmount(balance.amount, DOJDECIMAL),
         }))
         .filter(
             (balance) => !assets || assets.filter((asset) => assetToString(balance.asset) === assetToString(asset)).length,

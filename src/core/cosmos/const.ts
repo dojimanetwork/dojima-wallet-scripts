@@ -1,4 +1,4 @@
-import { baseAmount } from '@xchainjs/xchain-util'
+import { baseAmount } from '@d11k-ts/utils'
 
 /**
  * The decimal for cosmos chain.

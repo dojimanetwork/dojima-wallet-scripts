@@ -12,7 +12,7 @@ const prf = 'hmac-sha256'
 const dklen = 32
 const c = 262144
 const hashFunction = 'sha256'
-const meta = 'xchain-keystore'
+const meta = 'd11k-keystore'
 
 /**
  * The Keystore interface
