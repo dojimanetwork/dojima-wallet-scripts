@@ -2,11 +2,19 @@ import Arweave from "arweave";
 import {ChainClientParams, Network} from "@d11k-ts/client";
 import {validatePhrase} from "@d11k-ts/crypto";
 import {getKeyFromMnemonic} from "arweave-mnemonic-keys";
-import Transaction from "arweave/node/lib/transaction";
-import {ArTxDataResult, ArTxParams, ArTxs, ArTxsHistoryParams, GasfeeResult, TxStatusResponse} from "./types";
+import Transaction, {Tag} from "arweave/node/lib/transaction";
+import {
+    ArTxDataResult,
+    ArTxParams,
+    ArTxs,
+    ArTxsHistoryParams,
+    GasfeeResult,
+    TxStatusResponse
+} from "./types";
 import ArweaveTxClient from "./tx-client";
 import {ApiConfig} from "arweave/node/lib/api";
 import {defaultArConfig} from "./utils";
+import {InboundAddressResult, SwapAssetList} from "../utils";
 
 export interface ArweaveChainClient {
     getAddress(): Promise<string>,
@@ -85,7 +93,8 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
     /** Create transaction based on user inputs */
     async createTransaction(
         recipient: string,
-        amount: number
+        amount: number,
+        tag?: Tag
     ): Promise<Transaction> {
         const pvtKey = await getKeyFromMnemonic(this.phrase);
         // const pubAddress = await this.arweave.wallets.jwkToAddress(pvtKey);
@@ -95,6 +104,7 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
             {
                 target: recipient, // Receiver address
                 quantity: this.arweave.ar.arToWinston(amount.toString()), // Amount to transfer in Ar
+                tags: tag ? [tag] : []
             },
             pvtKey
         );
@@ -143,6 +153,57 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
             txs
         }
         return txsResult
+    }
+
+    async getInboundObject(): Promise<InboundAddressResult> {
+        const response = await this.arweave.api.get('http://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
+        if (response.status !== 200) {
+            throw new Error(
+                `Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`
+            );
+        }
+
+        const data: Array<InboundAddressResult> = response.data;
+        const inboundObj: InboundAddressResult = data.find(res => res.chain === 'AR')
+        return inboundObj
+    }
+
+    async getArweaveInboundAddress(): Promise<string> {
+        const inboundObj = await this.getInboundObject()
+        return inboundObj.address
+    }
+
+    async getDefaultLiquidityPoolGasFee(): Promise<number> {
+        const inboundObj = await this.getInboundObject()
+
+        /** Convert from Winston to Ar. (1 Ar = 10^12) */
+        const arGasFee = this.arweave.ar.winstonToAr(inboundObj.gas_rate);
+
+        return Number(arGasFee);
+    }
+
+    async addLiquidityPool(amount: number, inboundAddress: string, dojNodeAddress: string): Promise<string> {
+        const tag = new Tag(
+            "memo",
+            `ADD:AR.AR:${dojNodeAddress}`
+        )
+        const rawTx = await this.createTransaction(inboundAddress, amount, tag)
+
+        const txHash = await this.signAndSend(rawTx)
+
+        return txHash
+    }
+
+    async swap(amount: number, token: SwapAssetList, inboundAddress: string, recipient: string): Promise<string> {
+        const tag = new Tag(
+            "memo",
+            `SWAP:${token}:${recipient}`
+        )
+        const rawTx = await this.createTransaction(inboundAddress, amount, tag)
+
+        const txHash = await this.signAndSend(rawTx)
+
+        return txHash
     }
 }
 
