@@ -182,11 +182,18 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
         return Number(arGasFee);
     }
 
-    async addLiquidityPool(amount: number, inboundAddress: string, dojNodeAddress: string): Promise<string> {
-        const tag = new Tag(
-            "memo",
-            `ADD:AR.AR:${dojNodeAddress}`
-        )
+    async addLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
+        const tag = dojAddress ?
+            new Tag(
+                "memo",
+                `ADD:AR.AR:${dojAddress}`
+            )
+            :
+            new Tag(
+                "memo",
+                `ADD:AR.AR`
+            )
+
         const rawTx = await this.createTransaction(inboundAddress, amount, tag)
 
         const txHash = await this.signAndSend(rawTx)
@@ -199,6 +206,7 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
             "memo",
             `SWAP:${token}:${recipient}`
         )
+
         const rawTx = await this.createTransaction(inboundAddress, amount, tag)
 
         const txHash = await this.signAndSend(rawTx)
