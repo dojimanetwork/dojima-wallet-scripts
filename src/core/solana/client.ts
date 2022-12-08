@@ -34,10 +34,11 @@ class SolanaClient implements SolanaChainClient {
         }
         this.network = network
         this.cluster = this.getCluster()
-        this.connection = new web3.Connection(
-            web3.clusterApiUrl(this.cluster),
-            "confirmed"
-        );
+        // this.connection = new web3.Connection(
+        //     web3.clusterApiUrl(this.cluster),
+        //     "confirmed"
+        // );
+        this.connection = new web3.Connection('http://sol-test.h4s.dojima.network', 'confirmed');
     }
 
     getCluster(): web3.Cluster {
@@ -133,8 +134,9 @@ class SolanaClient implements SolanaChainClient {
 
     async transfer({walletIndex = 0, recipient, amount}: SolTxParams): Promise<string> {
         const rawTx = await this.createTransaction(walletIndex, recipient, amount);
+        console.log(rawTx)
         const txHash = await this.signAndSend(walletIndex, rawTx);
-
+        console.log(txHash)
         if (!txHash) throw Error(`Invalid transaction hash: ${txHash}`)
 
         return txHash
