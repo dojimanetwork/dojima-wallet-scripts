@@ -3,6 +3,8 @@ import { KeyringPair } from "@polkadot/keyring/types";
 import {ChainClientParams, Network} from "@d11k-ts/client";
 import {validatePhrase} from "@d11k-ts/crypto";
 import {GasfeeResult, PolkachainClientParams, PolkaTxParams, ProviderId, ProviderIds, rawTxType} from "./types";
+import {InboundAddressResult, SwapAssetList} from "../utils";
+import axios from "axios";
 
 export const DOT_DECIMAL = 12
 
@@ -13,7 +15,6 @@ export interface PolkaChainClient {
     getFees(params: PolkaTxParams): Promise<GasfeeResult>
     buildTx(params: PolkaTxParams): Promise<rawTxType>
     transfer(params: PolkaTxParams): Promise<string>
-    polkaBatchTxsToHermes(rawTxs: rawTxType[], memo?: string): Promise<string>
 }
 
 class PolkadotClient implements PolkaChainClient{
@@ -27,7 +28,7 @@ class PolkadotClient implements PolkaChainClient{
                     providers = {
                         [Network.Mainnet]: 'wss://rpc.polkadot.io',
                         [Network.Stagenet]: 'wss://rpc.polkadot.io',
-                        [Network.Testnet]: 'wss://westend-rpc.polkadot.io',
+                        [Network.Testnet]: 'wss://dotws-test.h4s.dojima.network',
                     }
                 }: ChainClientParams & PolkachainClientParams) {
         if (phrase) {
@@ -108,14 +109,57 @@ class PolkadotClient implements PolkaChainClient{
         };
     }
 
-    async polkaBatchTxsToHermes(rawTxs: rawTxType[], memo?: string): Promise<string> {
-        const api = await this.createInstance()
-        if (memo) {
-            const remark = api.tx.system.remark(`${memo}`)
-            rawTxs.concat(remark)
+    async getInboundObject(): Promise<InboundAddressResult> {
+        const response = await axios.get('http://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
+        if (response.status !== 200) {
+            throw new Error(
+                `Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`
+            );
         }
-        const batchTx = await api.tx.utility.batchAll(rawTxs).signAndSend(this.mnemonicAccount())
+
+        const data: Array<InboundAddressResult> = response.data;
+        const inboundObj: InboundAddressResult = data.find(res => res.chain === 'DOT')
+        return inboundObj
+    }
+
+    async getPolkadotInboundAddress(): Promise<string> {
+        const inboundObj = await this.getInboundObject()
+        return inboundObj.address
+    }
+
+    async getDefaultLiquidityPoolGasFee(): Promise<number> {
+        const inboundObj = await this.getInboundObject()
+
+        const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, 12);
+
+        return gasFee;
+    }
+
+    async polkaBatchTxsToHermes(amount: number, inboundAddress: string, memo: string): Promise<string> {
+        const api = await this.createInstance()
+        const rawTx = await this.buildTx({recipient: inboundAddress, amount})
+        const remark = api.tx.system.remark(`${memo}`)
+        const batchTx = await api.tx.utility.batchAll([rawTx, remark]).signAndSend(this.mnemonicAccount())
         return batchTx.toHex()
+    }
+
+    async addLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
+        const memo = dojAddress ?
+            `memo:ADD:DOT.DOT:${dojAddress}`
+            :
+            `memo:ADD:DOT.DOT`
+
+        const txHash = await this.polkaBatchTxsToHermes(amount, inboundAddress, memo)
+
+        return txHash
+    }
+
+    async swap(amount: number, token: SwapAssetList, inboundAddress: string, recipient: string): Promise<string> {
+        const memo = `memo:SWAP:${token}:${recipient}`
+
+        const txHash = await this.polkaBatchTxsToHermes(amount, inboundAddress, memo)
+
+        return txHash
     }
 }
 
