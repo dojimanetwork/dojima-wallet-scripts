@@ -1,6 +1,6 @@
 import {
     HermesSdkClient,
-    DOJDECIMAL
+    DOJ_DECIMAL
 } from "../../core/hermes";
 import { NetworkType } from "./network";
 import {
@@ -47,7 +47,7 @@ export default class DojimaClient {
     }
 
     async transfer(amountToTransfer: number, to: string) {
-        let amount = assetToBase(assetAmount(amountToTransfer, DOJDECIMAL ))
+        let amount = assetToBase(assetAmount(amountToTransfer, DOJ_DECIMAL ))
         const txhash = await this._client.transfer({
             amount, recipient: to
         });

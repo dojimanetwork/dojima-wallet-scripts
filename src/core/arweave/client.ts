@@ -62,7 +62,7 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
 
     /** testnet tokens in winston */
     async mintArTokens(address: string) {
-        const test_ar_amount = 5000000000000;
+        const test_ar_amount = 2000000000000;
 
         // Mint balance in Arlocal for testing
         await this.arweave.api.get(`/mint/${address}/${test_ar_amount}`);
@@ -117,7 +117,7 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
         const pvtKey = await getKeyFromMnemonic(this.phrase);
         // const pubAddress = await this._arweave.wallets.jwkToAddress(pvtKey);
 
-        /** Sign transaction and retreive status */
+        /** Sign transaction and retrieve status */
         await this.arweave.transactions.sign(rawTx, pvtKey);
         const status = await this.arweave.transactions.post(rawTx);
         await this.arweave.api.get("/mine");
@@ -156,7 +156,7 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
     }
 
     async getInboundObject(): Promise<InboundAddressResult> {
-        const response = await this.arweave.api.get('http://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
+        const response = await this.arweave.api.get('https://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
         if (response.status !== 200) {
             throw new Error(
                 `Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`

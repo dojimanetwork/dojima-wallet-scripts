@@ -4,7 +4,7 @@ import * as bip39 from "bip39";
 import {derivePath} from "ed25519-hd-key";
 import {GasfeeResult, SolTxData, SolTxParams, SolTxs, SolTxsHistoryParams} from "./types";
 import {validatePhrase} from "@d11k-ts/crypto";
-import {SOL_DECIMAL, lamportsToBase, baseToLamports} from "./utils";
+import {baseToLamports, lamportsToBase, SOL_DECIMAL} from "./utils";
 
 export interface SolanaChainClient {
     getCluster(): web3.Cluster,
@@ -16,6 +16,12 @@ export interface SolanaChainClient {
     getTransactionsHistory(params?: SolTxsHistoryParams): Promise<SolTxs>
 }
 
+export type ChainEndpointParams = {
+    endpoint?: string
+}
+
+export const defaultSolEndpoint = web3.clusterApiUrl('mainnet-beta')
+
 class SolanaClient implements SolanaChainClient {
     protected network: Network;
     protected cluster: web3.Cluster;
@@ -24,8 +30,9 @@ class SolanaClient implements SolanaChainClient {
 
     constructor({
                     phrase,
-                    network = Network.Mainnet
-    }: ChainClientParams) {
+                    network = Network.Mainnet,
+                    endpoint = defaultSolEndpoint
+    }: ChainClientParams & ChainEndpointParams) {
         if (phrase) {
             if (!validatePhrase(phrase)) {
                 throw new Error('Invalid phrase')
@@ -34,11 +41,10 @@ class SolanaClient implements SolanaChainClient {
         }
         this.network = network
         this.cluster = this.getCluster()
-        // this.connection = new web3.Connection(
-        //     web3.clusterApiUrl(this.cluster),
-        //     "confirmed"
-        // );
-        this.connection = new web3.Connection('http://sol-test.h4s.dojima.network', 'confirmed');
+        if ((this.network !== Network.Mainnet) && endpoint === defaultSolEndpoint) {
+            throw Error(`'config' params can't be empty for 'testnet' or 'stagenet'`)
+        }
+        this.connection = new web3.Connection(endpoint, 'confirmed')
     }
 
     getCluster(): web3.Cluster {
@@ -74,11 +80,19 @@ class SolanaClient implements SolanaChainClient {
     async getBalance(address: string): Promise<number> {
         // Get account details
         const pubKey = new web3.PublicKey(address);
-
         // Retrieve user token balance
         let balance = await this.connection.getBalance(pubKey);
         balance = lamportsToBase(balance, SOL_DECIMAL);
         return balance;
+    }
+
+    /** Testnet tokens for solana */
+    async requestSolTokens(faucetEndpoint: string, address: string): Promise<string> {
+        const faucetConnection = new web3.Connection(`${faucetEndpoint}`, 'confirmed')
+        const pubKey = new web3.PublicKey(address);
+        const amt = baseToLamports(2, SOL_DECIMAL)
+        const requestHash = await faucetConnection.requestAirdrop(pubKey, amt)
+        return requestHash
     }
 
     // Calculate Gas fee based in recent block hash

@@ -1,12 +1,19 @@
 import {ApiPromise, Keyring, WsProvider} from '@polkadot/api'
-import { KeyringPair } from "@polkadot/keyring/types";
+import { BN } from '@polkadot/util'
+import {KeyringPair} from "@polkadot/keyring/types";
 import {ChainClientParams, Network} from "@d11k-ts/client";
 import {validatePhrase} from "@d11k-ts/crypto";
-import {GasfeeResult, PolkachainClientParams, PolkaTxParams, ProviderId, ProviderIds, rawTxType} from "./types";
+import {GasfeeResult, PolkaTxParams, rawTxType} from "./types";
 import {InboundAddressResult, SwapAssetList} from "../utils";
 import axios from "axios";
+import '@polkadot/api-augment'
 
-export const DOT_DECIMAL = 12
+export type ChainProviderParams = {
+    provider?: string
+}
+
+export const defaultDotProvider = 'wss://rpc.polkadot.io'
+export const DOT_DECIMAL = 10
 
 export interface PolkaChainClient {
     createInstance(): Promise<ApiPromise>
@@ -19,18 +26,14 @@ export interface PolkaChainClient {
 
 class PolkadotClient implements PolkaChainClient{
     protected network: Network
-    protected providers: ProviderIds
+    protected provider: string
     protected phrase = ''
 
     constructor({
                     phrase,
                     network = Network.Mainnet,
-                    providers = {
-                        [Network.Mainnet]: 'wss://rpc.polkadot.io',
-                        [Network.Stagenet]: 'wss://rpc.polkadot.io',
-                        [Network.Testnet]: 'wss://dotws-test.h4s.dojima.network',
-                    }
-                }: ChainClientParams & PolkachainClientParams) {
+                    provider = defaultDotProvider
+                }: ChainClientParams & ChainProviderParams) {
         if (phrase) {
             if (!validatePhrase(phrase)) {
                 throw new Error('Invalid phrase')
@@ -38,15 +41,14 @@ class PolkadotClient implements PolkaChainClient{
             this.phrase = phrase
         }
         this.network = network
-        this.providers = providers
-    }
-
-    getProvider(): ProviderId {
-        return this.providers[this.network]
+        if (this.network !== Network.Mainnet && provider === defaultDotProvider) {
+            throw Error(`'provider' param can't be empty for 'testnet' or 'stagenet'`)
+        }
+        this.provider = provider
     }
 
     rpcProvider(): WsProvider {
-        const wsProvider = new WsProvider(`${this.getProvider()}`)
+        const wsProvider = new WsProvider(`${this.provider}`)
         return wsProvider
     }
 
@@ -78,16 +80,22 @@ class PolkadotClient implements PolkaChainClient{
 
     async getBalance(address: string): Promise<number> {
         const api = await this.createInstance()
-        let balance = (
-            await api.derive.balances.all(address)
-        ).availableBalance.toNumber();
-        balance = balance / Math.pow(10, 12);
-        return balance;
+        // const { nonce, data: balance } = await api.query.system.account(address); or
+        // const balance = (await api.derive.balances.all(address)).availableBalance.toBigInt()
+        // const resultBal = Number(balance) / Math.pow(10, DOT_DECIMAL)
+        // return resultBal
+        const { data: balance } = await api.query.system.account(address);
+        const decimals = api.registry.chainDecimals;
+        const base = new BN(10).pow(new BN(decimals))
+        const freeBalance = (`${balance.free}`)
+        const dm = new BN(freeBalance).divmod(base);
+        const resultBalance = parseFloat(dm.div.toString() + "." + dm.mod.toString())
+        return resultBalance
     }
 
     async buildTx({ recipient, amount }: PolkaTxParams): Promise<rawTxType> {
         const api = await this.createInstance()
-        const toAmount = amount * Math.pow(10, 12);
+        const toAmount = amount * Math.pow(10, DOT_DECIMAL);
         const rawTx: rawTxType = api.tx.balances.transfer(recipient, toAmount)
         return rawTx
     }
@@ -101,7 +109,7 @@ class PolkadotClient implements PolkaChainClient{
     async getFees({ recipient, amount }: PolkaTxParams): Promise<GasfeeResult> {
         const rawTx = await this.buildTx({recipient, amount});
         const paymentInfo = await rawTx.paymentInfo(await this.getAddress());
-        const gasFee = paymentInfo.partialFee.toNumber() / Math.pow(10, 12);
+        const gasFee = paymentInfo.partialFee.toNumber() / Math.pow(10, DOT_DECIMAL);
         return {
             slow: gasFee,
             average: gasFee,
@@ -110,7 +118,7 @@ class PolkadotClient implements PolkaChainClient{
     }
 
     async getInboundObject(): Promise<InboundAddressResult> {
-        const response = await axios.get('http://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
+        const response = await axios.get('https://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
         if (response.status !== 200) {
             throw new Error(
                 `Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`
@@ -130,7 +138,7 @@ class PolkadotClient implements PolkaChainClient{
     async getDefaultLiquidityPoolGasFee(): Promise<number> {
         const inboundObj = await this.getInboundObject()
 
-        const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, 12);
+        const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, DOT_DECIMAL);
 
         return gasFee;
     }
