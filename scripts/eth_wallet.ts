@@ -26,7 +26,7 @@ async function checkEth() {
     // console.log("Balance :: ", bal);
     const balance = (baseToAsset(bal[0].amount)).amount();
     console.log("Balance :: ", balance.toNumber());
-    const data = await ethClient.getTransactionData("0x9ad4e1501ea6d1fba141de33f523dc907b2c51ef4a1eaf583e297f6881e3d235");
+    const data = await ethClient.getTransactionData("0xc88e8642588dc9eea1d4b2c5833fb40b60278233f44244e1c606bc55de4505be");
     console.log("Tx data : ", data);
     let amountToTransfer = 0.0000001
     let amount = assetToBase(assetAmount(amountToTransfer, ETH_DECIMAL))

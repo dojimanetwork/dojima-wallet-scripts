@@ -64,3 +64,29 @@ export type CallParams = {
 }
 
 export type EstimateCallParams = Pick<CallParams, 'contractAddress' | 'abi' | 'funcName' | 'funcParams'>
+
+// export type EthTxDataResult = {
+//     blockHash: string,
+//     blockNumber: string,
+//     from: string,
+//     gas: string,
+//     gasPrice: string,
+//     hash: string,
+//     input: string,
+//     nonce: string,
+//     to: string,
+//     transactionIndex: string,
+//     value: string,
+//     type: string,
+//     chainId: string,
+//     v: string,
+//     r: string,
+//     s: string,
+//     maxFeePerGas?: string,
+//     maxPriorityFeePerGas?: string
+// }
+// export type EthTxDataType = {
+//     jsonrpc: string,
+//     id: number,
+//     result: EthTxDataResult
+// }

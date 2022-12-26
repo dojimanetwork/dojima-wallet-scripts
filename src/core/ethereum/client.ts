@@ -32,6 +32,8 @@ import {
     EstimateApproveParams,
     EstimateCallParams,
     EthNetwork,
+    // EthTxDataResult,
+    // EthTxDataType,
     ExplorerUrl,
     FeesWithGasPricesAndLimits,
     GasOracleResponse,
@@ -61,6 +63,7 @@ import {
     validateAddress,
     chainNetworkToEths,
 } from './utils'
+// import axios from "axios";
 
 /**
  * Interface for custom Ethereum client
@@ -453,6 +456,20 @@ class Client extends BaseChainClient implements ChainClient, EthereumClient {
         }
     }
 
+    // remove0x (string: string): string {
+    //     if (string.startsWith("0x")) {
+    //         const removed0xString = string.substring(2);
+    //         return removed0xString;
+    //     } else {
+    //         return string;
+    //     }
+    // }
+    //
+    // convertHexToInt (hexValue: string): number {
+    //     const intValue = parseInt(hexValue, 16);
+    //     return intValue;
+    // }
+
     /**
      * Get the transaction details of a given transaction id.
      *
@@ -479,18 +496,18 @@ class Client extends BaseChainClient implements ChainClient, EthereumClient {
                 const etherscan = this.getEtherscanProvider()
                 const txInfo = await etherscan.getTransaction(txId)
                 if (txInfo) {
-                    if (assetAddress) {
-                        tx =
-                            (
-                                await etherscanAPI.getTokenTransactionHistory({
-                                    baseUrl: etherscan.baseUrl,
-                                    assetAddress,
-                                    startblock: txInfo.blockNumber,
-                                    endblock: txInfo.blockNumber,
-                                    apiKey: etherscan.apiKey,
-                                })
-                            ).filter((info) => info.hash === txId)[0] ?? null
-                    } else {
+                    // if (assetAddress) {
+                    //     tx =
+                    //         (
+                    //             await etherscanAPI.getTokenTransactionHistory({
+                    //                 baseUrl: etherscan.baseUrl,
+                    //                 assetAddress,
+                    //                 startblock: txInfo.blockNumber,
+                    //                 endblock: txInfo.blockNumber,
+                    //                 apiKey: etherscan.apiKey,
+                    //             })
+                    //         ).filter((info) => info.hash === txId)[0] ?? null
+                    // } else {
                         tx =
                             (
                                 await etherscanAPI.getETHTransactionHistory({
@@ -501,7 +518,7 @@ class Client extends BaseChainClient implements ChainClient, EthereumClient {
                                     address: txInfo.from,
                                 })
                             ).filter((info) => info.hash === txId)[0] ?? null
-                    }
+                    // }
                 }
 
                 if (!tx) throw new Error('Could not get transaction history')
@@ -510,6 +527,81 @@ class Client extends BaseChainClient implements ChainClient, EthereumClient {
             }
         }
     }
+
+    // async getDetailTransactionData(txId: string, assetAddress?: Address): Promise<EthTxDataResult> {
+    //     let apiUrl: string
+    //     switch (this.getNetwork()) {
+    //         case Network.Mainnet:
+    //         case Network.Stagenet:
+    //             apiUrl = 'https://api.etherscan.io/'
+    //         case Network.Testnet:
+    //             apiUrl = 'https://api-goerli.etherscan.io/'
+    //     }
+    //     const response = await axios.get(`${apiUrl}api?module=proxy&action=eth_getTransactionByHash&txhash=${txId}&apikey=${this.etherscanApiKey}`)
+    //     if (response.status !== 200) {
+    //         throw new Error(
+    //             `Unable to retrieve tx data.`
+    //         );
+    //     }
+    //
+    //     const data: EthTxDataType = response.data;
+    //     const result: EthTxDataResult = data.result;
+    //
+    //     if (JSON.stringify(result).includes('Invalid API Key')) throw new Error('Invalid API Key')
+    //
+    //     const txData: EthTxDataResult = {
+    //         blockHash: result.hash,
+    //         blockNumber: `${this.convertHexToInt(
+    //             this.remove0x(result.blockNumber as string)
+    //         )}`,
+    //         from: result.from,
+    //         gas: `${Number(
+    //             this.convertHexToInt(this.remove0x(result.gas as string)) /
+    //             Math.pow(10, 9)
+    //         ).toFixed(9)} Gwei`,
+    //         gasPrice: `${Number(
+    //             this.convertHexToInt(this.remove0x(result.gasPrice as string)) /
+    //             Math.pow(10, 18)
+    //         ).toFixed(18)}`,
+    //         hash: result.hash,
+    //         input: result.input,
+    //         nonce: `${this.convertHexToInt(
+    //             this.remove0x(result.nonce as string)
+    //         )}`,
+    //         to: result.to,
+    //         transactionIndex: `${this.convertHexToInt(
+    //             this.remove0x(result.transactionIndex as string)
+    //         )}`,
+    //         value: `${this.convertHexToInt(this.remove0x(result.value as string)) /
+    //         Math.pow(10, 18)}`,
+    //         type: `${this.remove0x(result.type) === "0" ? "Success" : this.remove0x(result.type) === "1" ? "Pending" : "Failed"}`,
+    //         chainId: `${this.convertHexToInt(
+    //             this.remove0x(result.chainId as string)
+    //         )}`,
+    //         v: `${this.convertHexToInt(
+    //             this.remove0x(result.v as string)
+    //         )}`,
+    //         r: result.r,
+    //         s: result.s,
+    //         maxFeePerGas: this.getNetwork() === Network.Mainnet
+    //             ?
+    //             `${Number(
+    //                 this.convertHexToInt(this.remove0x(result.maxFeePerGas as string)) /
+    //                 Math.pow(10, 9)
+    //             ).toFixed(9)} Gwei`
+    //             :
+    //             '-',
+    //         maxPriorityFeePerGas: this.getNetwork() === Network.Mainnet
+    //             ?
+    //             `${Number(
+    //                 this.convertHexToInt(this.remove0x(result.maxPriorityFeePerGas as string)) /
+    //                 Math.pow(10, 9)
+    //             ).toFixed(9)} Gwei`
+    //             :
+    //             '-'
+    //     }
+    //     return txData
+    // }
 
     /**
      * Call a contract function.

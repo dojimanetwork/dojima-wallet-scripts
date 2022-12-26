@@ -148,9 +148,7 @@ class SolanaClient implements SolanaChainClient {
 
     async transfer({walletIndex = 0, recipient, amount}: SolTxParams): Promise<string> {
         const rawTx = await this.createTransaction(walletIndex, recipient, amount);
-        console.log(rawTx)
         const txHash = await this.signAndSend(walletIndex, rawTx);
-        console.log(txHash)
         if (!txHash) throw Error(`Invalid transaction hash: ${txHash}`)
 
         return txHash

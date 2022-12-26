@@ -1,7 +1,5 @@
 import { Network } from '@d11k-ts/client'
 
-export declare const BTC_DECIMAL = 8;
-
 export type Witness = {
     value: number
     script: Buffer
