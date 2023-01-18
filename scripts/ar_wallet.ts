@@ -47,10 +47,10 @@ async function checkArweave() {
     console.log('Liquidity pool default gas fee :: ', LPDefaultGasFee)
     const liquidityPoolHash = await arClient.addLiquidityPool(20, inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
     console.log('Liquidity pool hash : ', liquidityPoolHash)
-    // const swapHash = await arClient.swap(1,'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
-    // console.log('Swap tx hash : ', swapHash)
-    const swapHash = await arClient.swap(5,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
-    console.log('Swap tx hash : ', swapHash)
+    const d11kswapHash = await arClient.swap(1,'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
+    console.log('D11K Swap tx hash : ', d11kswapHash)
+    const dotswapHash = await arClient.swap(5,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
+    console.log('DOT Swap tx hash : ', dotswapHash)
 }
 
 (async () => {
