@@ -29,6 +29,12 @@ export const getGasOracle = async (baseUrl: string, apiKey?: string): Promise<Ga
     return (await axios.get(url + getApiKeyQueryParameter(apiKey))).data.result
 }
 
+export const getGoerliGasOracle = async (baseUrl: string, apiKey?: string): Promise<string> => {
+    const url = baseUrl + '/api?module=proxy&action=eth_gasPrice'
+
+    return (await axios.get(url + getApiKeyQueryParameter(apiKey))).data.result
+}
+
 /**
  * Get token balance
  *

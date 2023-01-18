@@ -2,18 +2,17 @@ import Web3 from "web3";
 import {Network} from "../client";
 import * as ethers from "ethers";
 import BigNumber from "bignumber.js";
-import {EthTransferParams, EthTxData, GasfeeResult} from "./types";
+import {DojTransferParams, DojTxData, GasfeeResult} from "./types";
 import {ChainClientParams} from "@d11k-ts/client";
 import {validatePhrase} from "@d11k-ts/crypto";
-import {defaultEthInfuraRpcUrl, defaultInfuraApiKey} from "./const";
-import {Transaction} from "web3-eth";
+import {defaultDojInfuraRpcUrl, defaultInfuraApiKey} from "./const";
 
-export type EthRpcParams = {
+export type DojRpcParams = {
     rpcUrl?: string,
     infuraApiKey?: string,
 }
 
-export default class EthChain {
+export default class DojimaChain {
     protected network: Network;
     protected web3: Web3;
     protected rpcUrl: string;
@@ -23,9 +22,9 @@ export default class EthChain {
     constructor({
                     phrase,
                     network = Network.Mainnet,
-                    rpcUrl = defaultEthInfuraRpcUrl,
-                    infuraApiKey = defaultInfuraApiKey
-                }: ChainClientParams & EthRpcParams) {
+                    rpcUrl = defaultDojInfuraRpcUrl,
+                    infuraApiKey = defaultInfuraApiKey,
+                }: ChainClientParams & DojRpcParams) {
         if (phrase) {
             if (!validatePhrase(phrase)) {
                 throw new Error('Invalid phrase')
@@ -33,7 +32,7 @@ export default class EthChain {
             this.phrase = phrase
         }
         this.network = network;
-        if ((this.network !== Network.Mainnet) && rpcUrl === defaultEthInfuraRpcUrl) {
+        if ((this.network !== Network.Mainnet) && rpcUrl === defaultDojInfuraRpcUrl) {
             throw Error(`'rpcUrl' param can't be empty for 'testnet' or 'stagenet'`)
         }
         if(this.network === Network.Testnet || this.network === Network.Stagenet) {
@@ -51,9 +50,9 @@ export default class EthChain {
     }
 
     async getBalance(address: string): Promise<number> {
-        const gweiBalance = await this.web3.eth.getBalance(address);    // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
-        const ethBalance = this.web3.utils.fromWei(gweiBalance);
-        return Number(ethBalance);
+        const gweiBalance = await this.web3.eth.getBalance(address);    // Results balance in gwei, 1 doj = 10^9 gwei(1,000,000,000)
+        const dojBalance = this.web3.utils.fromWei(gweiBalance);
+        return Number(dojBalance);
     }
 
     calculateDojFee(baseGasFee: number, multiplier: number): number {
@@ -79,14 +78,14 @@ export default class EthChain {
             fast: this.calculateDojFee(estimateGas, 2) / Math.pow(10, 9),
         };
         // const baseGasFee = await this.web3.eth.getGasPrice();
-        // const eth_gasFee = {
+        // const doj_gasFee = {
         //     slow: this.calculateDojFee(parseFloat(baseGasFee), 1) / Math.pow(10, 18),
         //     average: this.calculateDojFee(parseFloat(baseGasFee), 1.5) / Math.pow(10, 18),
         //     fast: this.calculateDojFee(parseFloat(baseGasFee), 2) / Math.pow(10, 18),
         // };
     }
 
-    async transfer(params: EthTransferParams): Promise<string> {
+    async transfer(params: DojTransferParams): Promise<string> {
         const transaction = await this.web3.eth.accounts.signTransaction(
             {
                 from: this.getAddress(),
@@ -104,8 +103,11 @@ export default class EthChain {
         return transactionResult.transactionHash;
     }
 
-    async getTransactionData(hash: string): Promise<EthTxData> {
-        const data: Transaction = await this.web3.eth.getTransaction(hash);
+    async getTransactionData(hash: string): Promise<DojTxData> {
+        console.log(
+            (await this.estimateGasFee(0.01, undefined) * 2)
+        )
+        const data = await this.web3.eth.getTransaction(hash);
         if(data) {
             return {
                 transaction_hash: data.hash,
