@@ -4,7 +4,14 @@ import * as bip39 from "bip39";
 import {derivePath} from "ed25519-hd-key";
 import {GasfeeResult, SolTxData, SolTxParams, SolTxs, SolTxsHistoryParams} from "./types";
 import {validatePhrase} from "@d11k-ts/crypto";
-import {baseToLamports, lamportsToBase, SOL_DECIMAL} from "./utils";
+import {baseToLamports, IDL, lamportsToBase, SOL_DECIMAL} from "./utils";
+import {
+    Program,
+    Provider,
+    Wallet
+} from "@project-serum/anchor";
+import {InboundAddressResult, SwapAssetList} from "../utils";
+import axios from "axios";
 
 export interface SolanaChainClient {
     getCluster(): web3.Cluster,
@@ -90,7 +97,7 @@ class SolanaClient implements SolanaChainClient {
     async requestSolTokens(faucetEndpoint: string, address: string): Promise<string> {
         const faucetConnection = new web3.Connection(`${faucetEndpoint}`, 'confirmed')
         const pubKey = new web3.PublicKey(address);
-        const amt = baseToLamports(2, SOL_DECIMAL)
+        const amt = baseToLamports(20, SOL_DECIMAL)
         const requestHash = await faucetConnection.requestAirdrop(pubKey, amt)
         return requestHash
     }
@@ -220,6 +227,90 @@ class SolanaClient implements SolanaChainClient {
             txs: await Promise.all(signatures.map(({ signature }) => this.getTransactionData(signature))),
         };
         return resultTxs;
+    }
+
+    async getInboundObject(): Promise<InboundAddressResult> {
+        const response = await axios.get(
+            "https://api-test.h4s.dojima.network/hermeschain/inbound_addresses"
+        );
+        if (response.status !== 200) {
+            throw new Error(
+                `Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`
+            );
+        }
+
+        const data: Array<InboundAddressResult> = response.data;
+        const inboundObj = data.find(
+            (res) => res.chain === "SOL"
+        ) as InboundAddressResult;
+        return inboundObj;
+    }
+
+    async getSolanaInboundAddress(): Promise<string> {
+        const inboundObj = await this.getInboundObject();
+        return inboundObj.address;
+    }
+
+    async getDefaultLiquidityPoolGasFee(): Promise<number> {
+        const inboundObj = await this.getInboundObject();
+
+        const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, SOL_DECIMAL);
+
+        return gasFee;
+    }
+
+    async getProvider() {
+        const opts: web3.ConfirmOptions = {
+            preflightCommitment: 'processed'
+        }
+        const provider = new Provider(this.connection, new Wallet((await this.getKeypair())[0]), opts);
+        return provider;
+    }
+
+    async solanaBatchTxsToHermes(amount: number, recipient: string, memo: string) {
+        const provider = await this.getProvider()
+        const programIDPPubKey = new web3.PublicKey('2dkwKCkTQz4xXxyjcvhUYdSb5fb3Bw15ra95o94WkyVo');
+        const program = new Program(IDL, programIDPPubKey, provider);
+        const fromWallet = await this.getKeypair()
+        const swapHash = await program.rpc.transferNativeTokens(`${amount}`, memo, {
+            accounts: {
+                from: fromWallet[0].publicKey,
+                to: new web3.PublicKey(recipient),
+                systemProgram: web3.SystemProgram.programId,
+            },
+            signers: [fromWallet[0]],
+        });
+        // await this.connection.confirmTransaction(swapHash);
+        return swapHash;
+    }
+
+    async addLiquidityPool(
+        amount: number,
+        inboundAddress: string,
+        programId: string,
+        dojAddress?: string
+    ) {
+        const toAmount = baseToLamports(amount, SOL_DECIMAL)
+        const memo = dojAddress
+            ? `ADD:SOL.SOL:${dojAddress}`
+            : `ADD:SOL.SOL`;
+        const poolHash = await this.solanaBatchTxsToHermes(toAmount, inboundAddress, memo);
+        // await this.connection.confirmTransaction(swapHash);
+        return poolHash;
+    }
+
+    async swap(
+        amount: number,
+        token: SwapAssetList,
+        inboundAddress: string,
+        recipient: string,
+        programId: string
+    ) {
+        const toAmount = baseToLamports(amount, SOL_DECIMAL)
+        const memo = `SWAP:${token}:${recipient}`
+        const swapHash = await this.solanaBatchTxsToHermes(toAmount, inboundAddress, memo);
+        // await this.connection.confirmTransaction(swapHash);
+        return swapHash;
     }
 }
 

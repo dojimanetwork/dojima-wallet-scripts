@@ -40,7 +40,15 @@
     "matic_wallet": "ts-node ./scripts/matic/account",
     "transfer_erc20_wallet": "ts-node ./scripts/matic/transfer",
     "eth_doj_wallet": "ts-node ./scripts/eth_doj_wallet",
-    "dojima_wallet": "ts-node ./scripts/dojima_wallet"
+    "dojima_wallet": "ts-node ./scripts/dojima_wallet",
+    "sol_balance": "ts-node __tests__/solana/balance.ts",
+    "sol_airdrop": "ts-node __tests__/solana/airdrop.ts",
+    "sol_transfer": "ts-node __tests__/solana/transfer.ts",
+    "sol_fee": "ts-node __tests__/solana/fee.ts",
+    "sol_tx_data": "ts-node __tests__/solana/tx_data.ts",
+    "sol_txs": "ts-node __tests__/solana/txs.ts",
+    "sol_add_pool": "ts-node __tests__/solana/add_pool.ts",
+    "sol_swap": "ts-node __tests__/solana/swap.ts"
   },
   "repository": {
     "type": "git",
@@ -64,6 +72,7 @@
     "@ethereumjs/block": "^3.6.2",
     "@polkadot/api": "^9.9.1",
     "@polkadot/extension-dapp": "^0.42.7",
+    "@project-serum/anchor": "^0.23.0",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
     "@solana/web3.js": "^1.41.4",
     "@truffle/hdwallet-provider": "^2.1.2",
