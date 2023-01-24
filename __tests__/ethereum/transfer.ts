@@ -6,7 +6,8 @@ async function checkEth() {
     const ethClient = new EthChain({
         phrase,
         network: Network.Testnet,
-        rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
+        // rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
+        rpcUrl: 'https://eth-test.h4s.dojima.network/',
         // infuraApiKey: 'f37faaf5ddeb4e589d6f26300ed673a6',
     })
     const hash = await ethClient.transfer({

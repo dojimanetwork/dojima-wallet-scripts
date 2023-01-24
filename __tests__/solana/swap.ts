@@ -19,6 +19,8 @@ async function checkSolana() {
     console.log('AR Swap tx hash : ', arswapHash)
     // const ethswapHash = await solClient.swap(2,'ETH.ETH', inboundAddress, '0x0577e1E35C4f30cA8379269B7Fd85cBCE7F084f4')
     // console.log('ETH Swap tx hash : ', ethswapHash)
+    // const dotswapHash = await solClient.swap(3,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
+    // console.log('DOT Swap tx hash : ', dotswapHash)
 }
 
 (async () => {
