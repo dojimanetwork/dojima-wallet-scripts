@@ -20,9 +20,9 @@ export type ArTxParams = {
 }
 
 export type OuterDataResult = {
-    timestamp: number;
+    timestamp: string;
     transaction_hash: string;
-    block: number;
+    block: string;
     from: string;
     to: string;
     value: string;
@@ -32,9 +32,9 @@ export type OuterDataResult = {
 }
 
 export type InnerDataResult = {
-    timestamp: number;
+    timestamp: string;
     transaction_hash: string;
-    block: number;
+    block: string;
     from: string;
     to: string;
     value: string;
