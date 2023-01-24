@@ -287,7 +287,6 @@ class SolanaClient implements SolanaChainClient {
     async addLiquidityPool(
         amount: number,
         inboundAddress: string,
-        programId: string,
         dojAddress?: string
     ) {
         const toAmount = baseToLamports(amount, SOL_DECIMAL)
@@ -303,8 +302,7 @@ class SolanaClient implements SolanaChainClient {
         amount: number,
         token: SwapAssetList,
         inboundAddress: string,
-        recipient: string,
-        programId: string
+        recipient: string
     ) {
         const toAmount = baseToLamports(amount, SOL_DECIMAL)
         const memo = `SWAP:${token}:${recipient}`
