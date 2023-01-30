@@ -11,7 +11,7 @@ async function checkSolana() {
         endpoint: 'https://sol-test.h4s.dojima.network:8899'
         // endpoint: 'http://127.0.0.1:8899'
     });
-    const data = await solClient.getTransactionData("4pvZPkkfEbnXAjzJ9HKVmb7JGMbUBGxaiE52SeFgQ1mnNUBfK9Q2ukTqXyS7mfFje4chv3hnM4nAoG2UfheqDEYk");
+    const data = await solClient.getTransactionData("357nyGWmJJGYP5wL4RqP8YqmstpXpmsTzpTtPHvN64SDBjmQmSEAi5iBJveUMn4NVbpsLf1NJRcxbGsGChF9K3vi");
     console.log("Tx data : ", data);
 }
 

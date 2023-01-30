@@ -12,12 +12,12 @@ async function checkEth() {
     })
     const inboundAddress = await ethClient.getEthereumInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
-    // const d11kswapHash = await ethClient.swap(0.01,'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
-    // console.log('Swap tx hash : ', d11kswapHash)
-    // const arswapHash = await ethClient.swap(5,'AR.AR', inboundAddress, '7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4')
-    // console.log('Swap tx hash : ', arswapHash)
-    // const arswapHash = await ethClient.swap(2,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
-    // console.log('Swap tx hash : ', arswapHash)
+    const d11kswapHash = await ethClient.swap(0.01,'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
+    console.log('D11K Swap tx hash : ', d11kswapHash)
+    const arswapHash = await ethClient.swap(5,'AR.AR', inboundAddress, '7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4')
+    console.log('AR Swap tx hash : ', arswapHash)
+    const dotswapHash = await ethClient.swap(2,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
+    console.log('DOT Swap tx hash : ', dotswapHash)
     const solswapHash = await ethClient.swap(3,'SOL.SOL', inboundAddress, 'DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS')
     console.log('SOL Swap tx hash : ', solswapHash)
 }

@@ -22,10 +22,14 @@ async function checkPolka() {
     console.log("Tx hash : ", hash);
     const inboundAddress = await polkaClient.getPolkadotInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
+    const batchTxHash = await polkaClient.polkaBatchTxsToHermes(2, inboundAddress, 'memo:NOOP:NOVAULT')
+    console.log('Batch Tx hash :: ', batchTxHash);
     const LPDefaultGasFee = await polkaClient.getDefaultLiquidityPoolGasFee();
     console.log('Liquidity pool default gas fee :: ', LPDefaultGasFee)
-    const liquidityPoolHash = await polkaClient.addLiquidityPool(5, inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
+    const liquidityPoolHash = await polkaClient.addLiquidityPool(2, inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
     console.log('Liquidity pool hash : ', liquidityPoolHash)
+    const liquidityPoolHash1 = await polkaClient.addLiquidityPool(5, inboundAddress)
+    console.log('Liquidity pool hash : ', liquidityPoolHash1)
     const d11kswapHash = await polkaClient.swap(1,'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
     console.log('Swap tx hash : ', d11kswapHash)
     const arswapHash = await polkaClient.swap(5,'AR.AR', inboundAddress, '7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4')

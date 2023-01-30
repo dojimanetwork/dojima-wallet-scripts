@@ -10,7 +10,7 @@ async function checkEth() {
         rpcUrl: 'https://eth-test.h4s.dojima.network/',
         // infuraApiKey: 'f37faaf5ddeb4e589d6f26300ed673a6',
     })
-    const txData = await ethClient.getTransactionData('0xc58f2e93b39f869bfb13871027834ef29d301acd9d472c26b444b48e7501c9ab')
+    const txData = await ethClient.getTransactionData('0x563121d2d51ef2e4743a5374adb4d252654c8ac351ad6018611fdf12d8e431e7')
     console.log(txData)
 }
 

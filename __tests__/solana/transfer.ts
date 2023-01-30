@@ -12,7 +12,7 @@ async function checkSolana() {
         // endpoint: 'http://127.0.0.1:8899'
     });
     const hash = await solClient.transfer({
-        amount: 0.0001,
+        amount: 0.1,
         recipient: 'G9GtD3uJDdpURr9eKogWUQmYqYfYSoqEpESMtzBPVQ1n'
     });
     console.log("Tx hash : ", hash);

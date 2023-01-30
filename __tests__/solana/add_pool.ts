@@ -14,10 +14,9 @@ async function checkSolana() {
     const inboundAddress = await solClient.getSolanaInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
     const liquidityPoolHash = await solClient.addLiquidityPool(
-        1,
+        10,
         inboundAddress,
-        '2dkwKCkTQz4xXxyjcvhUYdSb5fb3Bw15ra95o94WkyVo'
-        // 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km'              // optional
+        'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km'              // optional
     )
     console.log('Liquidity pool hash : ', liquidityPoolHash)
 }
