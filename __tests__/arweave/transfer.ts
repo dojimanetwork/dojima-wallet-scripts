@@ -1,11 +1,11 @@
 import {ArweaveClient} from "../../src/core/arweave";
-import {Network} from "@d11k-ts/client";
+import {Network} from "../../src/core/client";
 
 async function checkArweave() {
     const phrase =
         "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
 
-    /** for testnet pass
+    /** for DojTestnet pass
      config : {
             host: "ar-test.h4s.dojima.network",
             protocol: "https",
@@ -14,7 +14,7 @@ async function checkArweave() {
      */
     const arClient = new ArweaveClient({
         phrase,
-        network: Network.Testnet,
+        network: Network.DojTestnet,
         config: {
             host: "ar-test.h4s.dojima.network",
             protocol: "https",
