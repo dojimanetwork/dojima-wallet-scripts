@@ -103,6 +103,7 @@ class Client extends BaseChainClient implements CosmosClient, ChainClient {
             case Network.Stagenet:
                 return 'https://cosmos.bigdipper.live'
             case Network.Testnet:
+            case Network.DojTestnet:
                 return 'https://explorer.theta-testnet.polypore.xyz'
         }
     }
