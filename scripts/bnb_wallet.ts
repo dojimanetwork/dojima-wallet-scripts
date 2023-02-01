@@ -6,7 +6,7 @@ import {
     assetToBase,
     baseToAsset
 } from "@d11k-ts/utils";
-import {BncStagenetClient} from "../src/core/binance/stagenet/stagenet-client";
+import {BnbDojTestnetClient} from "../src/core/binance/doj-testnet/doj-testnet-client";
 
 async function checkBnb() {
     const phrase =
@@ -40,7 +40,7 @@ async function checkBnb() {
     const hash = await bnbClient.transfer({amount, recipient: 'tbnb1a7h84x4zur6ewqaj6fym9hej8xljkzwe82vgsu'});
     console.log("Tx hash : ", hash);
 
-    const bnbInst = new BncStagenetClient(phrase, 'https://bnb-test.h4s.dojima.network')
+    const bnbInst = new BnbDojTestnetClient('https://bnb-test.h4s.dojima.network')
     const balStage = await bnbInst.getBalance('tbnb1a7h84x4zur6ewqaj6fym9hej8xljkzwe82vgsu')
     console.log("Balance :: ", balStage)
     const txHash = await bnbInst.transfer(

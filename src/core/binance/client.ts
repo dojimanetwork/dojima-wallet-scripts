@@ -4,31 +4,29 @@ import { SignedSend } from '@binance-chain/javascript-sdk/lib/types'
 import {
     Balance,
     BaseChainClient,
-    FeeType,
+    ChainClient,
+    ChainClientParams,
     Fees,
+    FeeType,
     Network,
+    singleFee,
     Tx,
     TxHash,
     TxHistoryParams,
     TxParams,
     TxsPage,
-    ChainClient,
-    ChainClientParams,
-    singleFee,
-} from '@d11k-ts/client'
+} from '../client'
 import {
     Address,
-    Asset,
+    Asset, assetAmount,
     AssetBNB,
-    BaseAmount,
-    Chain,
-    assetAmount,
     assetFromString,
-    assetToBase,
-    assetToString,
+    assetToBase, assetToString,
+    BaseAmount,
     baseAmount,
     baseToAsset,
-} from '@d11k-ts/utils'
+    Chain, InboundAddressResult, SwapAssetList,
+} from '../utils'
 import axios from 'axios'
 
 import {
@@ -39,7 +37,9 @@ import {
     TransferFee,
     TxPage as BinanceTxPage,
 } from './types/binance'
-import { getPrefix, isAccount, isTransferFee, parseTx } from './util'
+import {getPrefix, isAccount, isTransferFee, parseTx} from './util'
+import {BnbDojTestnetClient} from "./doj-testnet";
+import {BNB_DECIMAL} from "./types";
 
 type PrivKey = string
 
@@ -57,6 +57,10 @@ export type MultiSendParams = {
     walletIndex?: number
     transactions: MultiTransfer[]
     memo?: string
+}
+
+export type DojBnbClientParams = {
+    dojClientUrl?: string
 }
 
 /**
@@ -79,7 +83,7 @@ export interface BinanceClient {
  */
 class BinanceBeaconClient extends BaseChainClient implements BinanceClient, ChainClient {
     private bncClient: BncClient
-
+    protected dojTestnetUrl = "";
     /**
      * Constructor
      *
@@ -97,11 +101,19 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
                         [Network.Mainnet]: "44'/931'/0'/0/",
                         [Network.Stagenet]: "44'/931'/0'/0/",
                         [Network.Testnet]: "44'/931'/0'/0/",
+                        [Network.DojTestnet]: "44'/931'/0'/0/",
                     },
-                }: ChainClientParams) {
+                    dojClientUrl = ''
+                }: ChainClientParams & DojBnbClientParams) {
         super(Chain.Binance, { network, rootDerivationPaths, phrase })
         this.bncClient = new BncClient(this.getClientUrl())
         this.bncClient.chooseNetwork(this.getNetwork())
+        if ((network === Network.DojTestnet) && (dojClientUrl === '')) {
+            throw Error(`'dojClientUrl' params can't be empty for 'dojtestnet'`)
+        }
+        if(network === Network.DojTestnet) {
+            this.dojTestnetUrl = dojClientUrl
+        }
     }
 
     /**
@@ -120,12 +132,13 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * Remove this once @binance-chain has stagenet support.
      * @returns {Network}
      */
-    getNetwork(): Network.Mainnet | Network.Testnet {
+    getNetwork(): Network.Mainnet | Network.Testnet  {
         switch (super.getNetwork()) {
             case Network.Mainnet:
             case Network.Stagenet:
                 return Network.Mainnet
             case Network.Testnet:
+            case Network.DojTestnet:
                 return Network.Testnet
         }
     }
@@ -255,18 +268,27 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {Balance[]} The balance of the address.
      */
     async getBalance(address: Address, assets?: Asset[]): Promise<Balance[]> {
-        const balances: BinanceBalance[] = await this.bncClient.getBalance(address)
+        if(this.network === Network.DojTestnet) {
+            const dojTestnetInst = new BnbDojTestnetClient(`${this.dojTestnetUrl}`)
+            const balance = await dojTestnetInst.getBalance(address)
+            return [{
+                asset: AssetBNB,
+                amount: assetToBase(assetAmount(balance.toString(), BNB_DECIMAL)),
+            }]
+        } else {
+            const balances: BinanceBalance[] = await this.bncClient.getBalance(address)
 
-        return balances
-            .map((balance) => {
-                return {
-                    asset: assetFromString(`${Chain.Binance}.${balance.symbol}`) || AssetBNB,
-                    amount: assetToBase(assetAmount(balance.free, 8)),
-                }
-            })
-            .filter(
-                (balance) => !assets || assets.filter((asset) => assetToString(balance.asset) === assetToString(asset)).length,
-            )
+            return balances
+                .map((balance) => {
+                    return {
+                        asset: assetFromString(`${Chain.Binance}.${balance.symbol}`) || AssetBNB,
+                        amount: assetToBase(assetAmount(balance.free, BNB_DECIMAL)),
+                    }
+                })
+                .filter(
+                    (balance) => !assets || assets.filter((asset) => assetToString(balance.asset) === assetToString(asset)).length,
+                )
+        }
     }
 
     /**
@@ -391,18 +413,28 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {TxHash} The transaction hash.
      */
     async transfer({ walletIndex, asset, amount, recipient, memo }: TxParams): Promise<TxHash> {
-        await this.bncClient.initChain()
-        await this.bncClient.setPrivateKey(this.getPrivateKey(walletIndex || 0))
+        if(this.network === Network.DojTestnet) {
+            const dojTestnetInst = new BnbDojTestnetClient(`${this.dojTestnetUrl}`)
+            return await dojTestnetInst.transfer(
+                recipient,
+                baseToAsset(amount).amount().toNumber(),
+                this.getAddress(),
+                memo
+            )
+        } else {
+            await this.bncClient.initChain()
+            await this.bncClient.setPrivateKey(this.getPrivateKey(walletIndex || 0))
 
-        const transferResult = await this.bncClient.transfer(
-            this.getAddress(walletIndex),
-            recipient,
-            baseToAsset(amount).amount().toString(),
-            asset ? asset.symbol : AssetBNB.symbol,
-            memo,
-        )
+            const transferResult = await this.bncClient.transfer(
+                this.getAddress(walletIndex),
+                recipient,
+                baseToAsset(amount).amount().toString(),
+                asset ? asset.symbol : AssetBNB.symbol,
+                memo,
+            )
 
-        return transferResult.result.map((txResult: { hash?: TxHash }) => txResult?.hash ?? '')[0]
+            return transferResult.result.map((txResult: { hash?: TxHash }) => txResult?.hash ?? '')[0]
+        }
     }
 
     /**
@@ -425,19 +457,30 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {Fees} The current fee.
      */
     async getFees(): Promise<Fees> {
-        let singleTxFee: BaseAmount | undefined = undefined
-        try {
-            singleTxFee = baseAmount(await this.getFeeRateFromHermeschain())
-        } catch (error) {
-            console.log(error)
-            console.warn(`Error pulling rates from hermeschain, will try alternate`)
-        }
-        if (!singleTxFee) {
-            const transferFee = await this.getTransferFee()
-            singleTxFee = baseAmount(transferFee.fixed_fee_params.fee)
-        }
+        if(this.network === Network.DojTestnet) {
+            const fee = baseAmount(0)
 
-        return singleFee(FeeType.FlatFee, singleTxFee)
+            return {
+                type: 'base' as FeeType,
+                average: fee,
+                fast: fee,
+                fastest: fee,
+            } as Fees
+        } else {
+            let singleTxFee: BaseAmount | undefined = undefined
+            try {
+                singleTxFee = baseAmount(await this.getFeeRateFromHermeschain())
+            } catch (error) {
+                console.log(error)
+                console.warn(`Error pulling rates from hermeschain, will try alternate`)
+            }
+            if (!singleTxFee) {
+                const transferFee = await this.getTransferFee()
+                singleTxFee = baseAmount(transferFee.fixed_fee_params.fee)
+            }
+
+            return singleFee(FeeType.FlatFee, singleTxFee)
+        }
     }
 
     /**
@@ -446,15 +489,26 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {Fees} The current fee for multi-send transaction.
      */
     async getMultiSendFees(): Promise<Fees> {
-        const transferFee = await this.getTransferFee()
-        const multiTxFee = baseAmount(transferFee.multi_transfer_fee)
+        if(this.network === Network.DojTestnet) {
+            const fee = baseAmount(0)
 
-        return {
-            type: 'base' as FeeType,
-            average: multiTxFee,
-            fast: multiTxFee,
-            fastest: multiTxFee,
-        } as Fees
+            return {
+                type: 'base' as FeeType,
+                average: fee,
+                fast: fee,
+                fastest: fee,
+            } as Fees
+        } else {
+            const transferFee = await this.getTransferFee()
+            const multiTxFee = baseAmount(transferFee.multi_transfer_fee)
+
+            return {
+                type: 'base' as FeeType,
+                average: multiTxFee,
+                fast: multiTxFee,
+                fastest: multiTxFee,
+            } as Fees
+        }
     }
 
     /**
@@ -463,24 +517,107 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {SingleAndMultiFees} The current fee for both single and multi-send transaction.
      */
     async getSingleAndMultiFees(): Promise<{ single: Fees; multi: Fees }> {
-        const transferFee = await this.getTransferFee()
-        const singleTxFee = baseAmount(transferFee.fixed_fee_params.fee)
-        const multiTxFee = baseAmount(transferFee.multi_transfer_fee)
+        if(this.network === Network.DojTestnet) {
+            const fee = baseAmount(0)
+            return {
+                single: {
+                    type: 'base' as FeeType,
+                    fast: fee,
+                    fastest: fee,
+                    average: fee,
+                } as Fees,
+                multi: {
+                    type: 'base' as FeeType,
+                    average: fee,
+                    fast: fee,
+                    fastest: fee,
+                } as Fees,
+            }
+        } else {
+            const transferFee = await this.getTransferFee()
+            const singleTxFee = baseAmount(transferFee.fixed_fee_params.fee)
+            const multiTxFee = baseAmount(transferFee.multi_transfer_fee)
 
-        return {
-            single: {
-                type: 'base' as FeeType,
-                fast: singleTxFee,
-                fastest: singleTxFee,
-                average: singleTxFee,
-            } as Fees,
-            multi: {
-                type: 'base' as FeeType,
-                average: multiTxFee,
-                fast: multiTxFee,
-                fastest: multiTxFee,
-            } as Fees,
+            return {
+                single: {
+                    type: 'base' as FeeType,
+                    fast: singleTxFee,
+                    fastest: singleTxFee,
+                    average: singleTxFee,
+                } as Fees,
+                multi: {
+                    type: 'base' as FeeType,
+                    average: multiTxFee,
+                    fast: multiTxFee,
+                    fastest: multiTxFee,
+                } as Fees,
+            }
         }
+    }
+
+    async getInboundObject(): Promise<InboundAddressResult> {
+        const response = await axios.get('https://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
+        if (response.status !== 200) {
+            throw new Error(
+                `Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`
+            );
+        }
+
+        const data: Array<InboundAddressResult> = response.data;
+        const inboundObj: InboundAddressResult = data.find(res => res.chain === 'BNB')
+        return inboundObj
+    }
+
+    async getBinanceInboundAddress(): Promise<string> {
+        const inboundObj = await this.getInboundObject()
+        return inboundObj.address
+    }
+
+    async getDefaultLiquidityPoolGasFee(): Promise<number> {
+        const inboundObj = await this.getInboundObject()
+
+        const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, BNB_DECIMAL);
+
+        return gasFee;
+    }
+
+    async poolAddOrSwap(amount: number, inboundAddress: string, memo: string): Promise<string> {
+        if(this.network === Network.DojTestnet) {
+            const dojTestnetInst = new BnbDojTestnetClient(`${this.dojTestnetUrl}`)
+            return await dojTestnetInst.transfer(
+                inboundAddress,
+                amount,
+                this.getAddress(),
+                memo
+            )
+        } else {
+            await this.bncClient.initChain()
+            await this.bncClient.setPrivateKey(this.getPrivateKey( 0))
+
+            const transferResult = await this.bncClient.transfer(
+                this.getAddress(),
+                inboundAddress,
+                amount.toString(),
+                AssetBNB.symbol,
+                memo,
+            )
+
+            return transferResult.result.map((txResult: { hash?: TxHash }) => txResult?.hash ?? '')[0]
+        }
+    }
+
+    async addLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
+        const memo = dojAddress ?
+            `ADD:BNB.BNB:${dojAddress}`
+            :
+            `ADD:BNB.BNB`
+        return await this.poolAddOrSwap(amount, inboundAddress, memo)
+    }
+
+    async swap(amount: number, token: SwapAssetList, inboundAddress: string, recipient: string): Promise<string> {
+        const memo = `SWAP:${token}:${recipient}`
+
+        return await this.poolAddOrSwap(amount, inboundAddress, memo)
     }
 }
 
