@@ -1,5 +1,5 @@
 import {SolanaClient} from "../../src/core/solana";
-import {Network} from "@d11k-ts/client";
+import {Network} from "../../src/core/client";
 
 async function checkSolana() {
 
@@ -7,7 +7,7 @@ async function checkSolana() {
 
     const solClient = new SolanaClient({
         phrase,
-        network: Network.Testnet,
+        network: Network.DojTestnet,
         endpoint: 'https://sol-test.h4s.dojima.network:8899'
         // endpoint: 'http://127.0.0.1:8899'
     });
@@ -17,6 +17,8 @@ async function checkSolana() {
     // console.log('DOJ Swap tx hash : ', d11kswapHash)
     const arswapHash = await solClient.swap(5,'AR.AR', inboundAddress, '7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4')
     console.log('AR Swap tx hash : ', arswapHash)
+    const bnbswapHash = await solClient.swap(3,'BNB.BNB', inboundAddress, 'tbnb1a7h84x4zur6ewqaj6fym9hej8xljkzwe82vgsu')
+    console.log('BNB Swap tx hash : ', bnbswapHash)
     // const ethswapHash = await solClient.swap(2,'ETH.ETH', inboundAddress, '0x0577e1E35C4f30cA8379269B7Fd85cBCE7F084f4')
     // console.log('ETH Swap tx hash : ', ethswapHash)
     // const dotswapHash = await solClient.swap(3,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')

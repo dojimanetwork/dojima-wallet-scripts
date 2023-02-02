@@ -1,5 +1,5 @@
 import {SolanaClient} from "../../src/core/solana";
-import {Network} from "@d11k-ts/client";
+import {Network} from "../../src/core/client";
 
 async function checkSolana() {
 
@@ -7,7 +7,7 @@ async function checkSolana() {
 
     const solClient = new SolanaClient({
         phrase,
-        network: Network.Stagenet,
+        network: Network.DojTestnet,
         endpoint: 'https://sol-test.h4s.dojima.network:8899'
         // endpoint: 'http://127.0.0.1:8899'
     });

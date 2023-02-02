@@ -1,5 +1,5 @@
 import {SolanaClient} from "../../src/core/solana";
-import {Network} from "@d11k-ts/client";
+import {Network} from "../../src/core/client";
 
 async function checkSolana() {
 
@@ -7,11 +7,11 @@ async function checkSolana() {
 
     const solClient = new SolanaClient({
         phrase,
-        network: Network.Stagenet,
+        network: Network.DojTestnet,
         endpoint: 'https://sol-test.h4s.dojima.network:8899'
         // endpoint: 'http://127.0.0.1:8899'
     });
-    const data = await solClient.getTransactionData("357nyGWmJJGYP5wL4RqP8YqmstpXpmsTzpTtPHvN64SDBjmQmSEAi5iBJveUMn4NVbpsLf1NJRcxbGsGChF9K3vi");
+    const data = await solClient.getTransactionData("CrPPpZTUUH6VxfD6TdvVQWB55aqkWmwxCNTJBuZvbV86BAcnKK8KUUHqpZU9AwPHns3pcivxzeSAz1T4ErXQpt1");
     console.log("Tx data : ", data);
 }
 

@@ -1,15 +1,11 @@
-import {ChainClientParams, Network} from "@d11k-ts/client"
+import {ChainClientParams, Network} from "../client"
 import * as web3 from "@solana/web3.js";
 import * as bip39 from "bip39";
 import {derivePath} from "ed25519-hd-key";
 import {GasfeeResult, SolTxData, SolTxParams, SolTxs, SolTxsHistoryParams} from "./types";
-import {validatePhrase} from "@d11k-ts/crypto";
+import {validatePhrase} from "../crypto";
 import {baseToLamports, IDL, lamportsToBase, SOL_DECIMAL} from "./utils";
-import {
-    Program,
-    Provider,
-    Wallet
-} from "@project-serum/anchor";
+import {Program, Provider, Wallet} from "@project-serum/anchor";
 import {InboundAddressResult, SwapAssetList} from "../utils";
 import axios from "axios";
 
@@ -27,7 +23,7 @@ export type ChainEndpointParams = {
     endpoint?: string
 }
 
-export const defaultSolEndpoint = web3.clusterApiUrl('mainnet-beta')
+export const defaultSolEndpoint = 'mainnet-beta'
 
 class SolanaClient implements SolanaChainClient {
     protected network: Network;
@@ -48,10 +44,14 @@ class SolanaClient implements SolanaChainClient {
         }
         this.network = network
         this.cluster = this.getCluster()
-        if ((this.network !== Network.Mainnet) && endpoint === defaultSolEndpoint) {
-            throw Error(`'config' params can't be empty for 'testnet' or 'stagenet'`)
+        if ((this.network === Network.DojTestnet) && endpoint === defaultSolEndpoint) {
+            throw Error(`'endpoint' params can't be empty for 'doj-testnet'`)
         }
-        this.connection = new web3.Connection(endpoint, 'confirmed')
+        if(this.network === Network.DojTestnet) {
+            this.connection = new web3.Connection(endpoint, 'confirmed')
+        } else {
+            this.connection = new web3.Connection(web3.clusterApiUrl(this.cluster), 'confirmed')
+        }
     }
 
     getCluster(): web3.Cluster {
