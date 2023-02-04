@@ -1,10 +1,9 @@
 import Web3 from "web3";
-import {Network} from "../client";
+import {ChainClientParams, Network} from "../client";
 import * as ethers from "ethers";
 import BigNumber from "bignumber.js";
 import {DojTransferParams, DojTxData, GasfeeResult} from "./types";
-import {ChainClientParams} from "@d11k-ts/client";
-import {validatePhrase} from "@d11k-ts/crypto";
+import {validatePhrase} from "../crypto";
 import {defaultDojInfuraRpcUrl, defaultInfuraApiKey} from "./const";
 
 export type DojRpcParams = {
@@ -35,12 +34,12 @@ export default class DojimaChain {
         if ((this.network !== Network.Mainnet) && rpcUrl === defaultDojInfuraRpcUrl) {
             throw Error(`'rpcUrl' param can't be empty for 'testnet' or 'stagenet'`)
         }
-        if(this.network === Network.Testnet || this.network === Network.Stagenet) {
-            this.rpcUrl = rpcUrl;
-            this.web3 = new Web3(this.rpcUrl);
-        } else {
+        if(this.network === Network.Mainnet) {
             this.rpcUrl = `${rpcUrl}${infuraApiKey}`;
             this.web3 = new Web3(new Web3.providers.HttpProvider(this.rpcUrl));
+        } else {
+            this.rpcUrl = rpcUrl;
+            this.web3 = new Web3(this.rpcUrl);
         }
         this.account = ethers.Wallet.fromMnemonic(this.phrase);
     }

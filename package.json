@@ -57,6 +57,10 @@
     "bnb_txs": "ts-node __tests__/binance/txs.ts",
     "bnb_add_pool": "ts-node __tests__/binance/add_pool.ts",
     "bnb_swap": "ts-node __tests__/binance/swap.ts",
+    "doj_balance": "ts-node __tests__/dojima/balance.ts",
+    "doj_transfer": "ts-node __tests__/dojima/transfer.ts",
+    "doj_tx_data": "ts-node __tests__/dojima/tx_data.ts",
+    "doj_fee": "ts-node __tests__/dojima/fee.ts",
     "dot_balance": "ts-node __tests__/polkadot/balance.ts",
     "dot_transfer": "ts-node __tests__/polkadot/transfer.ts",
     "dot_dummy_tx": "ts-node __tests__/polkadot/dummy_tx.ts",
@@ -77,7 +81,8 @@
     "sol_tx_data": "ts-node __tests__/solana/tx_data.ts",
     "sol_txs": "ts-node __tests__/solana/txs.ts",
     "sol_add_pool": "ts-node __tests__/solana/add_pool.ts",
-    "sol_swap": "ts-node __tests__/solana/swap.ts"
+    "sol_swap": "ts-node __tests__/solana/swap.ts",
+    "bot_provider": "ts-node __tests__/dojima_bot/provider.ts"
   },
   "repository": {
     "type": "git",
