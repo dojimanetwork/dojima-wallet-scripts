@@ -66,6 +66,7 @@
     "eth_balance": "ts-node __tests__/ethereum/balance.ts",
     "eth_transfer": "ts-node __tests__/ethereum/transfer.ts",
     "eth_tx_data": "ts-node __tests__/ethereum/tx_data.ts",
+    "eth_txs": "ts-node __tests__/ethereum/txs.ts",
     "eth_fee": "ts-node __tests__/ethereum/fee.ts",
     "eth_add_pool": "ts-node __tests__/ethereum/add_pool.ts",
     "eth_swap": "ts-node __tests__/ethereum/swap.ts",
