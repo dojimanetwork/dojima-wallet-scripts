@@ -1,5 +1,5 @@
 import { cosmosclient, proto } from '@cosmos-client/core'
-import { Asset } from '@d11k-ts/utils'
+import { Asset } from '../utils'
 
 export type MsgCoin = {
     asset: Asset

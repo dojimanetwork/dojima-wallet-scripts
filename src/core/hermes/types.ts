@@ -1,5 +1,5 @@
-import { Network, Tx, TxParams } from '@d11k-ts/client'
-import { Asset, BaseAmount } from '@d11k-ts/utils'
+import { Network, Tx, TxParams } from '../client'
+import { Asset, BaseAmount } from '../utils'
 import BigNumber from 'bignumber.js'
 import Long from 'long'
 
