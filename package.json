@@ -26,6 +26,7 @@
     "binance_live_tokens_data": "ts-node ./scripts/binance_live_tokens_data",
     "coinGecko": "ts-node ./scripts/asset_prices/coingecko",
     "cryptoCompare": "ts-node ./scripts/asset_prices/cryptocompare",
+    "coinMarketCap": "ts-node ./scripts/asset_prices/coinMarketCap.ts",
     "password": "ts-node ./scripts/password_test",
     "binance_connection": "ts-node ./scripts/binance_connections_test",
     "avalanche_Wallet": "ts-node ./scripts/avalanche_wallet",
