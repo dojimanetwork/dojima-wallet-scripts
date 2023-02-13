@@ -44,13 +44,14 @@
     "ar_balance": "ts-node __tests__/arweave/balance.ts",
     "ar_mint": "ts-node __tests__/arweave/mint_ar_tokens.ts",
     "ar_transfer": "ts-node __tests__/arweave/transfer.ts",
+    "ar_dummy_tx": "ts-node __tests__/arweave/dummy_tx.ts",
     "ar_fee": "ts-node __tests__/arweave/fee.ts",
     "ar_tx_data": "ts-node __tests__/arweave/tx_data.ts",
     "ar_txs": "ts-node __tests__/arweave/txs.ts",
     "ar_add_pool": "ts-node __tests__/arweave/add_pool.ts",
     "ar_swap": "ts-node __tests__/arweave/swap.ts",
     "bnb_balance": "ts-node __tests__/binance/balance.ts",
-    "bnb_mint": "ts-node __tests__/binance/dummy_bnb_tokens.ts",
+    "bnb_dummy_tx": "ts-node __tests__/binance/dummy_bnb_tokens.ts",
     "bnb_transfer": "ts-node __tests__/binance/transfer.ts",
     "bnb_fee": "ts-node __tests__/binance/fee.ts",
     "bnb_tx_data": "ts-node __tests__/binance/tx_data.ts",
@@ -97,7 +98,7 @@
     "sol_txs": "ts-node __tests__/solana/txs.ts",
     "sol_add_pool": "ts-node __tests__/solana/add_pool.ts",
     "sol_swap": "ts-node __tests__/solana/swap.ts",
-    "bot_provider": "ts-node __tests__/dojima_bot/provider.ts"
+    "accounts_provider": "ts-node __tests__/dojima_acc/provider.ts"
   },
   "repository": {
     "type": "git",

@@ -160,6 +160,18 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
         return txsResult
     }
 
+    async dummyTx(recipient: string, amount: number): Promise<string> {
+        const tag = new Tag(
+            "memo",
+            `NOOP:NOVAULT`
+        )
+        const rawTx = await this.createTransaction(recipient, amount, tag)
+
+        const txHash = await this.signAndSend(rawTx)
+
+        return txHash
+    }
+
     async getInboundObject(): Promise<InboundAddressResult> {
         const response = await this.arweave.api.get('https://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
         if (response.status !== 200) {

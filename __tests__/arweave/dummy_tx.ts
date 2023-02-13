@@ -27,12 +27,10 @@ async function checkArweave() {
             timeout: 100000,
         }
     });
-    const address = await arClient.getAddress();
-    console.log("Address :: ", address);
-    const bal = await arClient.getBalance(
-        "7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4"
-    );
-    console.log("Balance :: ", bal);
+    const inboundAddress = await arClient.getArweaveInboundAddress();
+    console.log('Inbound Address :: ', inboundAddress)
+    const hash = await arClient.dummyTx(inboundAddress, 2);
+    console.log("Tx hash : ", hash);
 }
 
 (async () => {

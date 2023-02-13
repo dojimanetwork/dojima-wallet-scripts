@@ -14,7 +14,7 @@ async function checkHermes() {
         "taxi act animal room trip column action real abstract kit acoustic rigid army jump drink merit over cupboard flat wasp clown ugly wealth coconut" // dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km
 
     const hermesClient = new HermesSdkClient({phrase, network: Network.DojTestnet});
-    let BNBamount = assetToBase(assetAmount(1800, DOJ_DECIMAL ))
+    let BNBamount = assetToBase(assetAmount(1850, DOJ_DECIMAL ))
     const bnbdepositHash = await hermesClient.deposit({amount: BNBamount, memo: `ADD:BNB.BNB:tbnb1a7h84x4zur6ewqaj6fym9hej8xljkzwe82vgsu`})
     console.log('BNB Deposit tx hash :: ', bnbdepositHash)
 }

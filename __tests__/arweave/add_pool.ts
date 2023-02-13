@@ -15,9 +15,15 @@ async function checkArweave() {
     const arClient = new ArweaveClient({
         phrase,
         network: Network.DojTestnet,
+        // config: {
+        //     host: "ar-test.h4s.dojima.network",
+        //     protocol: "https",
+        //     timeout: 100000,
+        // }
         config: {
-            host: "ar-test.h4s.dojima.network",
-            protocol: "https",
+            host: "localhost",
+            port: "1984",
+            protocol: "http",
             timeout: 100000,
         }
     });

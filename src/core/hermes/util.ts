@@ -28,7 +28,8 @@ export const MAX_TX_COUNT = 100
 
 const DENOM_DOJ_NATIVE = 'doj'
 
-const DEFAULT_EXPLORER_URL = 'https://api-test.h4s.dojima.network'
+// const DEFAULT_EXPLORER_URL = 'https://api-test.h4s.dojima.network'
+const DEFAULT_EXPLORER_URL = 'http://localhost:1317'
 const txUrl = `${DEFAULT_EXPLORER_URL}/tx`
 const addressUrl = `${DEFAULT_EXPLORER_URL}/address`
 export const defaultExplorerUrls: ExplorerUrls = {

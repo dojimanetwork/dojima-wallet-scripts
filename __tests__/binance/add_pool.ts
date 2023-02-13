@@ -8,7 +8,8 @@ async function checkBinance() {
     const bnbClient = new BinanceBeaconClient({
         phrase,
         network: Network.DojTestnet,
-        dojClientUrl: 'https://bnb-test.h4s.dojima.network'
+        // dojClientUrl: 'https://bnb-test.h4s.dojima.network'
+        dojClientUrl: 'http://localhost:26660'
     });
     const inboundAddress = await bnbClient.getBinanceInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
