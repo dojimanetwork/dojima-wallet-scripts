@@ -2,7 +2,7 @@
  * Haskoin API types
  */
 
-import { Address } from '@d11k-ts/utils'
+import { Address } from '../../utils'
 
 export type UtxoData = {
     txid: string

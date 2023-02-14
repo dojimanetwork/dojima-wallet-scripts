@@ -13,9 +13,9 @@ import {
     UTXOClient,
     ChainClientParams,
     checkFeeBounds,
-} from '@d11k-ts/client'
+} from '../client'
 import { getSeed } from '@d11k-ts/crypto'
-import { Address, Asset, AssetBTC, Chain, assetAmount, assetToBase } from '@d11k-ts/utils'
+import { Address, Asset, AssetBTC, Chain, assetAmount, assetToBase } from '../utils'
 import * as Bitcoin from 'bitcoinjs-lib'
 
 import { BTC_DECIMAL, LOWER_FEE_BOUND, UPPER_FEE_BOUND } from './const'
@@ -50,12 +50,14 @@ class BitcoinClient extends UTXOClient {
                     sochainUrl = 'https://chain.so/api/v2',
                     haskoinUrl = {
                         [Network.Testnet]: 'https://haskoin.ninerealms.com/btctest',
+                        [Network.DojTestnet]: "https://api.haskoin.com/btctest",
                         [Network.Mainnet]: 'https://haskoin.ninerealms.com/btc',
                         [Network.Stagenet]: 'https://haskoin.ninerealms.com/btc',
                     },
                     rootDerivationPaths = {
                         [Network.Mainnet]: `84'/0'/0'/0/`, //note this isn't bip44 compliant, but it keeps the wallets generated compatible to pre HD wallets
                         [Network.Testnet]: `84'/1'/0'/0/`,
+                        [Network.DojTestnet]: `84'/1'/0'/0/`,
                         [Network.Stagenet]: `84'/0'/0'/0/`,
                     },
                     phrase = '',
@@ -86,6 +88,7 @@ class BitcoinClient extends UTXOClient {
             case Network.Stagenet:
                 return 'https://blockstream.info'
             case Network.Testnet:
+            case Network.DojTestnet:
                 return 'https://blockstream.info/testnet'
         }
     }
@@ -274,7 +277,7 @@ class BitcoinClient extends UTXOClient {
         return await sochain.getSuggestedTxFee()
     }
 
-    protected calcFee(feeRate: FeeRate, memo?: string): Fee {
+    protected async calcFee(feeRate: FeeRate, memo?: string): Promise<Fee> {
         return Utils.calcFee(feeRate, memo)
     }
 
@@ -291,6 +294,7 @@ class BitcoinClient extends UTXOClient {
 
         // set the default fee rate to `fast`
         const feeRate = params.feeRate || (await this.getFeeRates())[FeeOption.Fast]
+        console.log('Fee rate :: ', feeRate)
         checkFeeBounds(this.feeBounds, feeRate)
 
         /**
@@ -318,9 +322,10 @@ class BitcoinClient extends UTXOClient {
         try {
             return await Utils.haskoinbroadcastTx({ txHex, haskoinUrl })
         } catch (error) {
-            if(error.message === 'Request failed with status code 404') {
-                return await Utils.sochainbroadcastTx({ sochainUrl: this.sochainUrl, txHex, network: this.network })
-            }
+            // if(error.message === 'Request failed with status code 404') {
+            //     return await Utils.sochainbroadcastTx({ sochainUrl: this.sochainUrl, txHex, network: this.network })
+            // }
+            console.warn(error)
         }
     }
 }

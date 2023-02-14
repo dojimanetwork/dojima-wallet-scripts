@@ -1,7 +1,8 @@
-import { BaseChainClient as Client } from './BaseChainClient'
-import { standardFeeRates } from './feeRates'
-import { calcFeesAsync } from './fees'
-import { Fee, FeeRate, FeeRates, Fees, FeesWithRates } from './types'
+import {BaseChainClient as Client} from './BaseChainClient'
+import {standardFeeRates} from './feeRates'
+import {calcFeesAsync} from './fees'
+import {Fee, FeeRate, FeeRates, Fees, FeesWithRates, FeeType} from './types'
+import {baseAmount} from "../utils";
 
 export abstract class UTXOClient extends Client {
     protected abstract getSuggestedFeeRate(): Promise<FeeRate>
@@ -16,8 +17,19 @@ export abstract class UTXOClient extends Client {
     }
 
     async getFees(memo?: string): Promise<Fees> {
-        const { fees } = await this.getFeesWithRates(memo)
-        return fees
+        try {
+            const { fees } = await this.getFeesWithRates(memo)
+            return fees
+        } catch (error) {
+            const fees = await this.getFeeRateFromHermeschain()
+            const feeResult: Fees = {
+                type: FeeType.FlatFee,
+                average: baseAmount(fees),
+                fast: baseAmount(fees),
+                fastest: baseAmount(fees)
+            }
+            return feeResult
+        }
     }
 
     /**
@@ -30,11 +42,11 @@ export abstract class UTXOClient extends Client {
 
     async getFeeRates(): Promise<FeeRates> {
         const feeRate: FeeRate = await (async () => {
-            try {
-                return await this.getFeeRateFromHermeschain()
-            } catch (error) {
-                console.warn(`Rate lookup via Hermeschain failed: ${error}`)
-            }
+            // try {
+            //     return await this.getFeeRateFromHermeschain()
+            // } catch (error) {
+            //     console.warn(`Rate lookup via Hermeschain failed: ${error}`)
+            // }
             return await this.getSuggestedFeeRate()
         })()
 

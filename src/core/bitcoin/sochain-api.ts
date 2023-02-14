@@ -1,5 +1,5 @@
-import { Network, TxHash } from '@d11k-ts/client'
-import {BaseAmount, assetAmount, assetToBase} from '@d11k-ts/utils'
+import { Network, TxHash } from '../client'
+import {BaseAmount, assetAmount, assetToBase} from '../utils'
 import axios from 'axios'
 
 import { BTC_DECIMAL } from './const'
@@ -25,6 +25,7 @@ const toSochainNetwork = (network: Network): string => {
         case Network.Stagenet:
             return 'BTC'
         case Network.Testnet:
+        case Network.DojTestnet:
             return 'BTCTEST'
     }
 }
@@ -175,7 +176,7 @@ export const getConfirmedTxStatus = async ({
     // try to get it from cache
     if (confirmedTxs.includes(txHash)) return true
     // or get status from Sochain
-    const { is_confirmed } = await await getIsTxConfirmed({
+    const { is_confirmed } = await getIsTxConfirmed({
         sochainUrl,
         network,
         hash: txHash,

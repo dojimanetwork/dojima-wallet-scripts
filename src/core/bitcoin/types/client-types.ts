@@ -1,5 +1,5 @@
-import { FeeRate, Network } from '@d11k-ts/client'
-import { Address } from '@d11k-ts/utils'
+import { FeeRate, Network } from '../../client'
+import { Address } from '../../utils'
 
 export type NormalTxParams = { addressTo: Address; amount: number; feeRate: FeeRate }
 export type VaultTxParams = NormalTxParams & { memo: string }

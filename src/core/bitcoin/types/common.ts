@@ -1,4 +1,4 @@
-import { Network } from '@d11k-ts/client'
+import { Network } from '../../client'
 
 export type Witness = {
     value: number

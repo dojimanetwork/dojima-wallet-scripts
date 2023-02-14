@@ -1,4 +1,4 @@
-import { Network, TxHash } from '@d11k-ts/client'
+import { Network, TxHash } from '../../client'
 
 export type AddressParams = {
     sochainUrl: string

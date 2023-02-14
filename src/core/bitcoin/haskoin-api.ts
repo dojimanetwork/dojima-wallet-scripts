@@ -5,8 +5,8 @@
  *
  */
 
-import { Network, TxHash } from '@d11k-ts/client'
-import { BaseAmount, baseAmount, delay } from '@d11k-ts/utils'
+import { Network, TxHash } from '../client'
+import { BaseAmount, baseAmount, delay } from '../utils'
 import axios, { AxiosError, AxiosResponse } from 'axios'
 
 import { BTC_DECIMAL } from './const'
