@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "dojin_transfer": "ts-node __tests__/dojima/dojin_transfer.ts",
     "new_account": "ts-node ./scripts/new_account.ts",
     "bitcoin_js": "ts-node ./scripts/bitcoinjs.ts",
     "btc_wallet": "ts-node ./scripts/btc_wallet.ts",

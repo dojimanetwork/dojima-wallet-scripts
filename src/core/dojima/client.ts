@@ -5,6 +5,8 @@ import BigNumber from "bignumber.js";
 import {DojTransferParams, DojTxData, GasfeeResult} from "./types";
 import {validatePhrase} from "../crypto";
 import {defaultDojInfuraRpcUrl, defaultInfuraApiKey} from "./const";
+import {InboundAddressResult} from "../utils";
+import axios from "axios";
 
 export type DojRpcParams = {
     rpcUrl?: string,
@@ -124,5 +126,30 @@ export default class DojimaChain {
         }
         // const data = await this.web3.eth.getTransactionReceipt(hash);
         // return data
+    }
+
+    async getInboundObject(): Promise<InboundAddressResult> {
+        const response = await axios.get('https://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
+        if (response.status !== 200) {
+            throw new Error(
+                `Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`
+            );
+        }
+
+        const data: Array<InboundAddressResult> = response.data;
+        const inboundObj: InboundAddressResult = data.find(res => res.chain === 'ETH')
+        return inboundObj
+    }
+
+    async dojimaTransfer(amount: number, recipient: string): Promise<string> {
+        const memo = `dojin:${recipient}`
+        const inboundAddress = await this.getInboundObject()
+        const txHash = await this.transfer({
+            amount,
+            recipient: inboundAddress.address,
+            memo
+        })
+
+        return txHash
     }
 }
