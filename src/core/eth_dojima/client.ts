@@ -16,6 +16,14 @@ import {defaultEthInfuraRpcUrl, defaultInfuraApiKey, ETH_DECIMAL} from "./const"
 import {InboundAddressResult, SwapAssetList} from "../utils";
 import axios from "axios";
 import moment from "moment";
+import {
+    calcDoubleSwapOutput,
+    calcDoubleSwapSlip,
+    calcSwapOutput,
+    calcSwapSlip,
+    PoolData,
+    SwapFeeResult
+} from "../swap_utils";
 
 export type EthRpcParams = {
     rpcUrl?: string,
@@ -230,6 +238,30 @@ export default class EthereumChain {
                 throw Error("Something went wrong");
             }
         }
+    }
+
+    getSwapOutput(inputAmount: number, pool: PoolData, toDoj: boolean): number {
+        const input = inputAmount * Math.pow(10, ETH_DECIMAL)
+        return calcSwapOutput(input, pool, toDoj);
+    }
+
+    getDoubleSwapOutput(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
+        const input = inputAmount * Math.pow(10, ETH_DECIMAL)
+        return calcDoubleSwapOutput(input, pool1, pool2)
+    }
+
+    getSwapSlip(inputAmount: number, pool: PoolData, toDoj: boolean): number {
+        const input = inputAmount * Math.pow(10, ETH_DECIMAL)
+        return calcSwapSlip(input, pool, toDoj);
+    }
+
+    getDoubleSwapSlip(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
+        const input = inputAmount * Math.pow(10, ETH_DECIMAL)
+        return calcDoubleSwapSlip(input, pool1, pool2)
+    }
+
+    async getSwapFeesData(): Promise<SwapFeeResult> {
+        return
     }
 
     async getInboundObject(): Promise<InboundAddressResult> {

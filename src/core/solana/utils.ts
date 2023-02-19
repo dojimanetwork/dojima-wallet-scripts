@@ -1,6 +1,8 @@
 import moment from "moment";
 import BigNumber from "bignumber.js";
 import {Dojima} from "./types";
+import {Wallet} from "@project-serum/anchor";
+import * as web3 from "@solana/web3.js"
 
 export const SOL_DECIMAL = 9;
 
@@ -64,4 +66,26 @@ export const convertTimestampToDate = (timestamp: number) => {
 export const convertISOtoUTC = (date: string) => {
     const utcDate = new Date(date).toUTCString();
     return utcDate;
+}
+
+export class SOLNodeWallet implements Wallet {
+  constructor(readonly payer: web3.Keypair) {
+    this.payer = payer
+  }
+
+  async signTransaction(tx: web3.Transaction): Promise<web3.Transaction> {
+    tx.partialSign(this.payer);
+    return tx;
+  }
+
+  async signAllTransactions(txs: web3.Transaction[]): Promise<web3.Transaction[]> {
+    return txs.map((t) => {
+      t.partialSign(this.payer);
+      return t;
+    });
+  }
+
+  get publicKey(): web3.PublicKey {
+    return this.payer.publicKey;
+  }
 }

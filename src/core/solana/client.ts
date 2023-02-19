@@ -4,10 +4,18 @@ import * as bip39 from "bip39";
 import {derivePath} from "ed25519-hd-key";
 import {GasfeeResult, SolTxData, SolTxParams, SolTxs, SolTxsHistoryParams} from "./types";
 import {validatePhrase} from "../crypto";
-import {baseToLamports, IDL, lamportsToBase, SOL_DECIMAL} from "./utils";
-import {Program, Provider, Wallet} from "@project-serum/anchor";
+import {baseToLamports, IDL, lamportsToBase, SOL_DECIMAL, SOLNodeWallet} from "./utils";
+import {Program, Provider} from "@project-serum/anchor";
 import {InboundAddressResult, SwapAssetList} from "../utils";
 import axios from "axios";
+import {
+    calcDoubleSwapOutput,
+    calcDoubleSwapSlip,
+    calcSwapOutput,
+    calcSwapSlip,
+    PoolData,
+    SwapFeeResult
+} from "../swap_utils";
 
 export interface SolanaChainClient {
     getCluster(): web3.Cluster,
@@ -97,7 +105,7 @@ class SolanaClient implements SolanaChainClient {
     async requestSolTokens(faucetEndpoint: string, address: string): Promise<string> {
         const faucetConnection = new web3.Connection(`${faucetEndpoint}`, 'confirmed')
         const pubKey = new web3.PublicKey(address);
-        const amt = baseToLamports(20, SOL_DECIMAL)
+        const amt = baseToLamports(1500, SOL_DECIMAL)
         const requestHash = await faucetConnection.requestAirdrop(pubKey, amt)
         return requestHash
     }
@@ -229,6 +237,30 @@ class SolanaClient implements SolanaChainClient {
         return resultTxs;
     }
 
+    getSwapOutput(inputAmount: number, pool: PoolData, toDoj: boolean): number {
+        const input = inputAmount * Math.pow(10, SOL_DECIMAL)
+        return calcSwapOutput(input, pool, toDoj);
+    }
+
+    getDoubleSwapOutput(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
+        const input = inputAmount * Math.pow(10, SOL_DECIMAL)
+        return calcDoubleSwapOutput(input, pool1, pool2)
+    }
+
+    getSwapSlip(inputAmount: number, pool: PoolData, toDoj: boolean): number {
+        const input = inputAmount * Math.pow(10, SOL_DECIMAL)
+        return calcSwapSlip(input, pool, toDoj);
+    }
+
+    getDoubleSwapSlip(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
+        const input = inputAmount * Math.pow(10, SOL_DECIMAL)
+        return calcDoubleSwapSlip(input, pool1, pool2)
+    }
+
+    async getSwapFeesData(): Promise<SwapFeeResult> {
+        return
+    }
+
     async getInboundObject(): Promise<InboundAddressResult> {
         const response = await axios.get(
             "https://api-test.h4s.dojima.network/hermeschain/inbound_addresses"
@@ -263,7 +295,8 @@ class SolanaClient implements SolanaChainClient {
         const opts: web3.ConfirmOptions = {
             preflightCommitment: 'processed'
         }
-        const provider = new Provider(this.connection, new Wallet((await this.getKeypair())[0]), opts);
+        // const provider = new Provider(this.connection, new Wallet((await this.getKeypair())[0]), opts);
+        const provider = new Provider(this.connection, new SOLNodeWallet((await this.getKeypair())[0]), opts);
         return provider;
     }
 

@@ -13,8 +13,16 @@ import {
 } from "./types";
 import ArweaveTxClient from "./tx-client";
 import {ApiConfig} from "arweave/node/lib/api";
-import {defaultArMainnetConfig, defaultArTestnetConfig} from "./utils";
+import {AR_DECIMAL, defaultArMainnetConfig, defaultArTestnetConfig} from "./utils";
 import {InboundAddressResult, SwapAssetList} from "../utils";
+import {
+    calcDoubleSwapOutput,
+    calcDoubleSwapSlip,
+    calcSwapOutput,
+    calcSwapSlip,
+    PoolData,
+    SwapFeeResult
+} from "../swap_utils";
 
 export interface ArweaveChainClient {
     getAddress(): Promise<string>,
@@ -170,6 +178,30 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
         const txHash = await this.signAndSend(rawTx)
 
         return txHash
+    }
+
+    getSwapOutput(inputAmount: number, pool: PoolData, toDoj: boolean): number {
+        const input = inputAmount * Math.pow(10, AR_DECIMAL)
+        return calcSwapOutput(input, pool, toDoj);
+    }
+
+    getDoubleSwapOutput(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
+        const input = inputAmount * Math.pow(10, AR_DECIMAL)
+        return calcDoubleSwapOutput(input, pool1, pool2)
+    }
+
+    getSwapSlip(inputAmount: number, pool: PoolData, toDoj: boolean): number {
+        const input = inputAmount * Math.pow(10, AR_DECIMAL)
+        return calcSwapSlip(input, pool, toDoj);
+    }
+
+    getDoubleSwapSlip(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
+        const input = inputAmount * Math.pow(10, AR_DECIMAL)
+        return calcDoubleSwapSlip(input, pool1, pool2)
+    }
+
+    async getSwapFeesData(): Promise<SwapFeeResult> {
+        return
     }
 
     async getInboundObject(): Promise<InboundAddressResult> {
