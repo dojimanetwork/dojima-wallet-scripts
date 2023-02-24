@@ -48,6 +48,7 @@ import {
     PoolData,
     SwapFeeResult
 } from "../swap_utils";
+import {getPoolData} from "../../../__tests__/utils";
 
 type PrivKey = string
 
@@ -638,6 +639,11 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
         }
     }
 
+    async withdrawLiquidityPool(amount: number, inboundAddress: string): Promise<string> {
+        const memo = `WITHDRAW:BNB.BNB:10000`
+        return await this.poolAddOrSwap(amount, inboundAddress, memo)
+    }
+
     async addLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
         const memo = dojAddress ?
             `ADD:BNB.BNB:${dojAddress}`
@@ -647,6 +653,10 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
     }
 
     async swap(amount: number, token: SwapAssetList, inboundAddress: string, recipient: string): Promise<string> {
+        const fromPool = await getPoolData('BNB.BNB')
+        const toPool = await getPoolData(token)
+        const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
+        console.log('Swap output : ', swapOutput)
         const memo = `SWAP:${token}:${recipient}`
 
         return await this.poolAddOrSwap(amount, inboundAddress, memo)

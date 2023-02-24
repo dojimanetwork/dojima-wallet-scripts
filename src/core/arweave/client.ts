@@ -23,6 +23,7 @@ import {
     PoolData,
     SwapFeeResult
 } from "../swap_utils";
+import {getPoolData} from "../../../__tests__/utils";
 
 export interface ArweaveChainClient {
     getAddress(): Promise<string>,
@@ -75,7 +76,7 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
 
     /** testnet tokens in winston */
     async mintArTokens(address: string) {
-        const test_ar_amount = 2000000000000;
+        const test_ar_amount = 200000000000000;
 
         // Mint balance in Arlocal for testing
         await this.arweave.api.get(`/mint/${address}/${test_ar_amount}`);
@@ -170,8 +171,8 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
 
     async dummyTx(recipient: string, amount: number): Promise<string> {
         const tag = new Tag(
-            "memo",
-            `NOOP:NOVAULT`
+            this.arweave.utils.stringToB64Url('memo'),
+            this.arweave.utils.stringToB64Url(`NOOP:NOVAULT`)
         )
         const rawTx = await this.createTransaction(recipient, amount, tag)
 
@@ -180,12 +181,12 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
         return txHash
     }
 
-    getSwapOutput(inputAmount: number, pool: PoolData, toDoj: boolean): number {
+    getSwapOutput(inputAmount: number, pool: PoolData, toDoj: boolean) {
         const input = inputAmount * Math.pow(10, AR_DECIMAL)
         return calcSwapOutput(input, pool, toDoj);
     }
 
-    getDoubleSwapOutput(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
+    getDoubleSwapOutput(inputAmount: number, pool1: PoolData, pool2: PoolData) {
         const input = inputAmount * Math.pow(10, AR_DECIMAL)
         return calcDoubleSwapOutput(input, pool1, pool2)
     }
@@ -234,13 +235,13 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
     async addLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
         const tag = dojAddress ?
             new Tag(
-                "memo",
-                `ADD:AR.AR:${dojAddress}`
+                this.arweave.utils.stringToB64Url('memo'),
+                this.arweave.utils.stringToB64Url(`ADD:AR.AR:${dojAddress}`)
             )
             :
             new Tag(
-                "memo",
-                `ADD:AR.AR`
+                this.arweave.utils.stringToB64Url('memo'),
+                this.arweave.utils.stringToB64Url(`ADD:AR.AR`)
             )
 
         const rawTx = await this.createTransaction(inboundAddress, amount, tag)
@@ -251,9 +252,13 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
     }
 
     async swap(amount: number, token: SwapAssetList, inboundAddress: string, recipient: string): Promise<string> {
+        const fromPool = await getPoolData('AR.AR')
+        const toPool = await getPoolData(token)
+        const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
+        console.log('Swap output : ', swapOutput)
         const tag = new Tag(
-            "memo",
-            `SWAP:${token}:${recipient}`
+            this.arweave.utils.stringToB64Url('memo'),
+            this.arweave.utils.stringToB64Url(`SWAP:${token}:${recipient}`)
         )
 
         const rawTx = await this.createTransaction(inboundAddress, amount, tag)

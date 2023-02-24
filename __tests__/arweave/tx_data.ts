@@ -27,7 +27,7 @@ async function checkArweave() {
             timeout: 100000,
         }
     });
-    const data = await arClient.getTransactionData("utosVJ5boOXTlyrMcJbfaNrNZL4R1ld1Pf4apuEFMXQ-u6Q");
+    const data = await arClient.getTransactionData("tjCEVEt4GtG2zY5ClJdB76UNCfTufNMjVtOkJY_1hmM");
     console.log("Tx data : ", data);
 }
 

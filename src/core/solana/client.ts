@@ -16,6 +16,7 @@ import {
     PoolData,
     SwapFeeResult
 } from "../swap_utils";
+import {getPoolData} from "../../../__tests__/utils";
 
 export interface SolanaChainClient {
     getCluster(): web3.Cluster,
@@ -105,7 +106,7 @@ class SolanaClient implements SolanaChainClient {
     async requestSolTokens(faucetEndpoint: string, address: string): Promise<string> {
         const faucetConnection = new web3.Connection(`${faucetEndpoint}`, 'confirmed')
         const pubKey = new web3.PublicKey(address);
-        const amt = baseToLamports(1500, SOL_DECIMAL)
+        const amt = baseToLamports(200, SOL_DECIMAL)
         const requestHash = await faucetConnection.requestAirdrop(pubKey, amt)
         return requestHash
     }
@@ -337,6 +338,10 @@ class SolanaClient implements SolanaChainClient {
         inboundAddress: string,
         recipient: string
     ) {
+        const fromPool = await getPoolData('SOL.SOL')
+        const toPool = await getPoolData(token)
+        const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
+        console.log('Swap output : ', swapOutput)
         const toAmount = baseToLamports(amount, SOL_DECIMAL)
         const memo = `SWAP:${token}:${recipient}`
         const swapHash = await this.solanaBatchTxsToHermes(toAmount, inboundAddress, memo);

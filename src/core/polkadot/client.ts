@@ -16,6 +16,7 @@ import {
     PoolData,
     SwapFeeResult
 } from "../swap_utils";
+import {getPoolData} from "../../../__tests__/utils";
 
 export type ChainProviderParams = {
     provider?: string;
@@ -23,7 +24,7 @@ export type ChainProviderParams = {
 
 export const defaultDotProvider = "wss://rpc.polkadot.io";
 export const testnetDotProvider = "wss://westend-rpc.polkadot.io";
-export const DOT_DECIMAL = 10;
+export const DOT_DECIMAL = 12;
 
 export interface PolkaChainClient {
     createInstance(): Promise<ApiPromise>;
@@ -95,7 +96,7 @@ class PolkadotClient implements PolkaChainClient {
     async getBalance(address: string): Promise<number> {
         const api = await this.createInstance();
         // let balance = (await api.derive.balances.all(address)).availableBalance.toNumber()
-        // balance = balance / Math.pow(10, DOT_DECIMAL)
+        // balance = balance / Math.pow(10, this.getDecimalFromNetwork())
         // return balance
         const { data: balance } = await api.query.system.account(address);
         // const decimals = api.registry.chainDecimals
@@ -105,14 +106,18 @@ class PolkadotClient implements PolkaChainClient {
         // const resultBalance = parseFloat(dm.div.toString() + '.' + dm.mod.toString())
         // return resultBalance
         const baseValue = new BigNumber(`${balance.free}`)
-            .div(10 ** (this.network === Network.Testnet ? 12 : DOT_DECIMAL))
-            .decimalPlaces((this.network === Network.Testnet ? 12 : DOT_DECIMAL));
+            .div(10 ** this.getDecimalFromNetwork())
+            .decimalPlaces(this.getDecimalFromNetwork());
         return baseValue.toNumber();
+    }
+
+    getDecimalFromNetwork() {
+        return this.network === Network.DojTestnet ? 10 : DOT_DECIMAL
     }
 
     async buildTx({ recipient, amount }: PolkaTxParams): Promise<rawTxType> {
         const api = await this.createInstance();
-        const toAmount = amount * Math.pow(10, (this.network === Network.Testnet ? 12 : DOT_DECIMAL));
+        const toAmount = amount * Math.pow(10, this.getDecimalFromNetwork());
         const rawTx: rawTxType = api.tx.balances.transfer(recipient, toAmount);
         return rawTx;
     }
@@ -127,7 +132,7 @@ class PolkadotClient implements PolkaChainClient {
         const rawTx = await this.buildTx({ recipient, amount });
         const paymentInfo = await rawTx.paymentInfo(await this.getAddress());
         const gasFee =
-            paymentInfo.partialFee.toNumber() / Math.pow(10, (this.network === Network.Testnet ? 12 : DOT_DECIMAL));
+            paymentInfo.partialFee.toNumber() / Math.pow(10, this.getDecimalFromNetwork());
         return {
             slow: gasFee,
             average: gasFee,
@@ -135,23 +140,23 @@ class PolkadotClient implements PolkaChainClient {
         };
     }
 
-    getSwapOutput(inputAmount: number, pool: PoolData, toDoj: boolean): number {
-        const input = inputAmount * Math.pow(10, DOT_DECIMAL)
+    getSwapOutput(inputAmount: number, pool: PoolData, toDoj: boolean) {
+        const input = inputAmount * Math.pow(10, this.getDecimalFromNetwork())
         return calcSwapOutput(input, pool, toDoj);
     }
 
-    getDoubleSwapOutput(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
-        const input = inputAmount * Math.pow(10, DOT_DECIMAL)
+    getDoubleSwapOutput(inputAmount: number, pool1: PoolData, pool2: PoolData) {
+        const input = inputAmount * Math.pow(10, this.getDecimalFromNetwork())
         return calcDoubleSwapOutput(input, pool1, pool2)
     }
 
     getSwapSlip(inputAmount: number, pool: PoolData, toDoj: boolean): number {
-        const input = inputAmount * Math.pow(10, DOT_DECIMAL)
+        const input = inputAmount * Math.pow(10, this.getDecimalFromNetwork())
         return calcSwapSlip(input, pool, toDoj);
     }
 
     getDoubleSwapSlip(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
-        const input = inputAmount * Math.pow(10, DOT_DECIMAL)
+        const input = inputAmount * Math.pow(10, this.getDecimalFromNetwork())
         return calcDoubleSwapSlip(input, pool1, pool2)
     }
 
@@ -184,7 +189,7 @@ class PolkadotClient implements PolkaChainClient {
     async getDefaultLiquidityPoolGasFee(): Promise<number> {
         const inboundObj = await this.getInboundObject();
 
-        const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, (this.network === Network.Testnet ? 12 : DOT_DECIMAL));
+        const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, this.getDecimalFromNetwork());
 
         return gasFee;
     }
@@ -205,6 +210,21 @@ class PolkadotClient implements PolkaChainClient {
             .signAndSend(this.mnemonicAccount());
 
         return batchTx.toHex();
+    }
+
+    async withdrawLiquidityPool(
+        amount: number,
+        inboundAddress: string,
+    ): Promise<string> {
+        const memo = `memo:WITHDRAW:DOT.DOT:10000`
+
+        const txHash = await this.polkaBatchTxsToHermes(
+            amount,
+            inboundAddress,
+            memo
+        );
+
+        return txHash;
     }
 
     async addLiquidityPool(
@@ -231,6 +251,10 @@ class PolkadotClient implements PolkaChainClient {
         inboundAddress: string,
         recipient: string
     ): Promise<string> {
+        const fromPool = await getPoolData('DOT.DOT')
+        const toPool = await getPoolData(token)
+        const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
+        console.log('Swap output : ', swapOutput)
         const memo = `memo:SWAP:${token}:${recipient}`;
 
         const txHash = await this.polkaBatchTxsToHermes(

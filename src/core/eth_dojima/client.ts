@@ -24,6 +24,7 @@ import {
     PoolData,
     SwapFeeResult
 } from "../swap_utils";
+import {getPoolData} from "../../../__tests__/utils";
 
 export type EthRpcParams = {
     rpcUrl?: string,
@@ -240,23 +241,23 @@ export default class EthereumChain {
         }
     }
 
-    getSwapOutput(inputAmount: number, pool: PoolData, toDoj: boolean): number {
-        const input = inputAmount * Math.pow(10, ETH_DECIMAL)
+    getSwapOutput(inputAmount: number, pool: PoolData, toDoj: boolean) {
+        const input = inputAmount * Math.pow(10, 8)
         return calcSwapOutput(input, pool, toDoj);
     }
 
-    getDoubleSwapOutput(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
-        const input = inputAmount * Math.pow(10, ETH_DECIMAL)
+    getDoubleSwapOutput(inputAmount: number, pool1: PoolData, pool2: PoolData) {
+        const input = inputAmount * Math.pow(10, 8)
         return calcDoubleSwapOutput(input, pool1, pool2)
     }
 
     getSwapSlip(inputAmount: number, pool: PoolData, toDoj: boolean): number {
-        const input = inputAmount * Math.pow(10, ETH_DECIMAL)
+        const input = inputAmount * Math.pow(10, 8)
         return calcSwapSlip(input, pool, toDoj);
     }
 
     getDoubleSwapSlip(inputAmount: number, pool1: PoolData, pool2: PoolData): number {
-        const input = inputAmount * Math.pow(10, ETH_DECIMAL)
+        const input = inputAmount * Math.pow(10, 8)
         return calcDoubleSwapSlip(input, pool1, pool2)
     }
 
@@ -290,6 +291,21 @@ export default class EthereumChain {
         return gasFee;
     }
 
+    async withdrawLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
+        const memo = dojAddress ?
+            `WITHDRAW:ETH.ETH:0xd526d5f47f863eff32b99bc4f9e77ddb4bd2929b:5000:${dojAddress}:5000`
+            :
+            `WITHDRAW:ETH.ETH:0xd526d5f47f863eff32b99bc4f9e77ddb4bd2929b:10000`
+
+        const txHash = await this.transfer({
+            amount,
+            recipient: inboundAddress,
+            memo
+        })
+
+        return txHash
+    }
+
     async addLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
         const memo = dojAddress ?
             `ADD:ETH.ETH:${dojAddress}`
@@ -306,6 +322,10 @@ export default class EthereumChain {
     }
 
     async swap(amount: number, token: SwapAssetList, inboundAddress: string, recipient: string): Promise<string> {
+        const fromPool = await getPoolData('ETH.ETH')
+        const toPool = await getPoolData(token)
+        const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
+        console.log('Swap output : ', swapOutput)
         const memo = `SWAP:${token}:${recipient}`
 
         const txHash = await this.transfer({
