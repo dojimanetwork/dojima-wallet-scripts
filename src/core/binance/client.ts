@@ -48,7 +48,7 @@ import {
     PoolData,
     SwapFeeResult
 } from "../swap_utils";
-import {getPoolData} from "../../../__tests__/utils";
+import {getPoolData} from "../pool_utils";
 
 type PrivKey = string
 

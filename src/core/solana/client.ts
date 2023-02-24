@@ -16,7 +16,7 @@ import {
     PoolData,
     SwapFeeResult
 } from "../swap_utils";
-import {getPoolData} from "../../../__tests__/utils";
+import {getPoolData} from "../pool_utils";
 
 export interface SolanaChainClient {
     getCluster(): web3.Cluster,
