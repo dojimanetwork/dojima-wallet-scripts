@@ -14,7 +14,7 @@ async function checkHermes() {
         "taxi act animal room trip column action real abstract kit acoustic rigid army jump drink merit over cupboard flat wasp clown ugly wealth coconut" // dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km
 
     const hermesClient = new HermesSdkClient({phrase, network: Network.DojTestnet});
-    let SOLamount = assetToBase(assetAmount(150, DOJ_DECIMAL ))
+    let SOLamount = assetToBase(assetAmount(700, DOJ_DECIMAL ))
     const soldepositHash = await hermesClient.deposit({amount: SOLamount, memo: `ADD:SOL.SOL:DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS`})
     console.log('SOL Deposit tx hash :: ', soldepositHash)
 }

@@ -30,14 +30,14 @@ async function checkArweave() {
     const inboundAddress = await arClient.getArweaveInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
     // const bnbswapHash = await arClient.swap(5,'BNB.BNB', inboundAddress, 'tbnb1a7h84x4zur6ewqaj6fym9hej8xljkzwe82vgsu')
-    // console.log('BNB Swap tx hash : ', bnbswapHash)   //    40    41.399484387422   36.399484387422
+    // console.log('BNB Swap tx hash : ', bnbswapHash)
     // const d11kswapHash = await arClient.swap(0.1,'D11K.DOJ', inboundAddress, 'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km')
     // console.log('D11K Swap tx hash : ', d11kswapHash)
-    // const dotswapHash = await arClient.swap(5,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
+    // const dotswapHash = await arClient.swap(1,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
     // console.log('DOT Swap tx hash : ', dotswapHash)
     const ethswapHash = await arClient.swap(5,'ETH.ETH', inboundAddress, '0x0577e1E35C4f30cA8379269B7Fd85cBCE7F084f4')
-    console.log('ETH Swap tx hash : ', ethswapHash)  // 45.398968774844
-    // const solswapHash = await arClient.swap(3,'SOL.SOL', inboundAddress, 'DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS')
+    console.log('ETH Swap tx hash : ', ethswapHash)
+    // const solswapHash = await arClient.swap(1,'SOL.SOL', inboundAddress, 'DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS')
     // console.log('SOL Swap tx hash : ', solswapHash)
 }
 

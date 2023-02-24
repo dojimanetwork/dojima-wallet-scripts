@@ -19,12 +19,12 @@ async function checkEth() {
     // console.log('D11K Swap tx hash : ', d11kswapHash)
     // const arswapHash = await ethClient.swap(5,'AR.AR', inboundAddress, '7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4')
     // console.log('AR Swap tx hash : ', arswapHash)
-    // const bnbswapHash = await ethClient.swap(3,'BNB.BNB', inboundAddress, 'tbnb1a7h84x4zur6ewqaj6fym9hej8xljkzwe82vgsu')
-    // console.log('BNB Swap tx hash : ', bnbswapHash)  // 4712.366482869645   4709.366482869645   4710.511353559645
-    // const dotswapHash = await ethClient.swap(2,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
-    // console.log('DOT Swap tx hash : ', dotswapHash)  // 4710.511353559645   4708.511353559645  4708.933339769645
-    const solswapHash = await ethClient.swap(3,'SOL.SOL', inboundAddress, 'DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS')
-    console.log('SOL Swap tx hash : ', solswapHash)  // 4708.933339769645  4705.933339769645  4706.706368109644
+    const bnbswapHash = await ethClient.swap(1,'BNB.BNB', inboundAddress, 'tbnb1a7h84x4zur6ewqaj6fym9hej8xljkzwe82vgsu')
+    console.log('BNB Swap tx hash : ', bnbswapHash)
+    // const dotswapHash = await ethClient.swap(0.1,'DOT.DOT', inboundAddress, '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH')
+    // console.log('DOT Swap tx hash : ', dotswapHash)
+    // const solswapHash = await ethClient.swap(0.1,'SOL.SOL', inboundAddress, 'DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS')
+    // console.log('SOL Swap tx hash : ', solswapHash)
 }
 
 (async () => {

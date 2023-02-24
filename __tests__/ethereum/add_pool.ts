@@ -16,11 +16,17 @@ async function checkEth() {
     const inboundAddress = await ethClient.getEthereumInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
     const liquidityPoolHash = await ethClient.addLiquidityPool(
-        10,
+        50,
         inboundAddress,
         'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km'          // optional
     )
     console.log('Liquidity pool hash : ', liquidityPoolHash)
+    // const liquidityPoolHash = await ethClient.withdrawLiquidityPool(
+    //     1,
+    //     inboundAddress,
+    //     'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km'          // optional
+    // )
+    // console.log('Liquidity pool hash : ', liquidityPoolHash)
 }
 
 (async () => {

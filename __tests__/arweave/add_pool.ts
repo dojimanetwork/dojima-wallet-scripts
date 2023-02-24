@@ -30,7 +30,7 @@ async function checkArweave() {
     const inboundAddress = await arClient.getArweaveInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
     const liquidityPoolHash = await arClient.addLiquidityPool(
-        10,
+        50,
         inboundAddress,
         'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km'      // optional
     )

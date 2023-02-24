@@ -14,11 +14,16 @@ async function checkBinance() {
     const inboundAddress = await bnbClient.getBinanceInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
     const liquidityPoolHash = await bnbClient.addLiquidityPool(
-        10,
+        50,
         inboundAddress,
         'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km'      // optional
     )
     console.log('Liquidity pool hash : ', liquidityPoolHash)
+    // const liquidityPoolHash = await bnbClient.withdrawLiquidityPool(
+    //     1,
+    //     inboundAddress
+    // )
+    // console.log('Liquidity pool hash : ', liquidityPoolHash)
 }
 
 (async () => {
