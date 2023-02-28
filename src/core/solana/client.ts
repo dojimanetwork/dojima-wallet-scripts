@@ -106,7 +106,7 @@ class SolanaClient implements SolanaChainClient {
     async requestSolTokens(faucetEndpoint: string, address: string): Promise<string> {
         const faucetConnection = new web3.Connection(`${faucetEndpoint}`, 'confirmed')
         const pubKey = new web3.PublicKey(address);
-        const amt = baseToLamports(200, SOL_DECIMAL)
+        const amt = baseToLamports(50, SOL_DECIMAL)
         const requestHash = await faucetConnection.requestAirdrop(pubKey, amt)
         return requestHash
     }
@@ -316,6 +316,14 @@ class SolanaClient implements SolanaChainClient {
         });
         // await this.connection.confirmTransaction(swapHash);
         return swapHash;
+    }
+
+    async dummyTx(recipient: string, amount: number): Promise<string> {
+        const toAmount = baseToLamports(amount, SOL_DECIMAL)
+        const memo = `NOOP:NOVAULT`
+        const poolHash = await this.solanaBatchTxsToHermes(toAmount, recipient, memo);
+        // await this.connection.confirmTransaction(swapHash);
+        return poolHash;
     }
 
     async addLiquidityPool(

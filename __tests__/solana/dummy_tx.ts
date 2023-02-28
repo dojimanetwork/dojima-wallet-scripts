@@ -11,13 +11,13 @@ async function checkSolana() {
         endpoint: 'https://sol-test.h4s.dojima.network:8899'
         // endpoint: 'http://127.0.0.1:8899'
     });
-    const address = await solClient.getAddress();
-    console.log("Address :: ", address);
-    const bal = await solClient.getBalance(
-        "DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS"
-        // "82iP5jLLyiuTHbQRrSwUgZ6sKycT2mjbNkncgpm7Duvg"
-    );
-    console.log("Balance :: ", bal);
+    const inboundAddress = await solClient.getSolanaInboundAddress();
+    console.log('Inbound Address :: ', inboundAddress)
+    const liquidityPoolHash = await solClient.dummyTx(
+        inboundAddress,
+        51.354460333
+    )
+    console.log('Liquidity pool hash : ', liquidityPoolHash)
 }
 
 (async () => {

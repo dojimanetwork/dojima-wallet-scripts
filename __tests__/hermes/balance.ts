@@ -19,6 +19,7 @@ async function checkHermes() {
         // 'dojima1agwwyxg98x0smujpxnl63t45uua3yj4qrv5j58',
         // 'dojima1jdkd8n8h3s8mc4vctzvmxwndtcumejvrn00xln',
         "dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km",
+        // "dojima1nh4y3gqxsn7ymm9t45zwsz3h8p9tm7pev8my62",  // bond address
         [AssetDOJNative]
     );
     // console.log(bal)

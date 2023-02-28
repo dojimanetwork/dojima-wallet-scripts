@@ -8,15 +8,16 @@ async function checkSolana() {
     const solClient = new SolanaClient({
         phrase,
         network: Network.DojTestnet,
-        // endpoint: 'https://sol-test.h4s.dojima.network:8899'
-        endpoint: 'http://127.0.0.1:8899'
+        endpoint: 'https://sol-test.h4s.dojima.network:8899'
+        // endpoint: 'http://127.0.0.1:8899'
     });
     const address = await solClient.getAddress();
     console.log("Address :: ", address);
     const requestAirdrop = await solClient.requestSolTokens(
-        // 'https://sol-test.h4s.dojima.network:8899',
-        'http://127.0.0.1:8899',
+        'https://sol-test.h4s.dojima.network:8899',
+        // 'http://127.0.0.1:8899',
         address
+        // '82iP5jLLyiuTHbQRrSwUgZ6sKycT2mjbNkncgpm7Duvg'
     )
     console.log("Airdrop hash :: ", requestAirdrop)
     const bal = await solClient.getBalance(

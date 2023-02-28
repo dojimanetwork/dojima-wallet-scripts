@@ -14,7 +14,7 @@ async function checkHermes() {
         "taxi act animal room trip column action real abstract kit acoustic rigid army jump drink merit over cupboard flat wasp clown ugly wealth coconut" // dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km
 
     const hermesClient = new HermesSdkClient({phrase, network: Network.DojTestnet});
-    let ARamount = assetToBase(assetAmount(60, DOJ_DECIMAL ))
+    let ARamount = assetToBase(assetAmount(10, DOJ_DECIMAL ))
     const ardepositHash = await hermesClient.deposit({amount: ARamount, memo: `SWAP:AR.AR:7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4`})
     console.log('AR Swap tx hash :: ', ardepositHash)
 }

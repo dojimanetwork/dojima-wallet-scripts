@@ -8,13 +8,13 @@ async function checkPolka() {
     const polkaClient = new PolkadotClient({
         phrase,
         network: Network.DojTestnet,
-        // provider: 'wss://dotws-test.h4s.dojima.network:9944'
-        provider: 'ws://localhost:9944'
+        provider: 'wss://dotws-test.h4s.dojima.network:9944'
+        // provider: 'ws://localhost:9944'
     });
     const inboundAddress = await polkaClient.getPolkadotInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
     const liquidityPoolHash = await polkaClient.addLiquidityPool(
-        50,
+        100,
         inboundAddress,
         'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km'      // optional
     )

@@ -17,6 +17,9 @@ async function checkHermes() {
     let SOLamount = assetToBase(assetAmount(700, DOJ_DECIMAL ))
     const soldepositHash = await hermesClient.deposit({amount: SOLamount, memo: `ADD:SOL.SOL:DxehLnrWp8iP5ahoG413BD4azVrkgA8Pob4rXco3mpCS`})
     console.log('SOL Deposit tx hash :: ', soldepositHash)
+    // let SOLamount = assetToBase(assetAmount(1, DOJ_DECIMAL ))
+    // const soldepositHash = await hermesClient.deposit({amount: SOLamount, memo: `WITHDRAW:SOL.SOL:10000:SOL.SOL`})
+    // console.log('SOL Deposit tx hash :: ', soldepositHash)
 }
 
 (async () => {

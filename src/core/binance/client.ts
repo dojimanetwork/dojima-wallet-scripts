@@ -639,8 +639,8 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
         }
     }
 
-    async withdrawLiquidityPool(amount: number, inboundAddress: string): Promise<string> {
-        const memo = `WITHDRAW:BNB.BNB:10000`
+    async donateLiquidityPool(amount: number, inboundAddress: string): Promise<string> {
+        const memo = `DONATE:BNB.BNB`
         return await this.poolAddOrSwap(amount, inboundAddress, memo)
     }
 
