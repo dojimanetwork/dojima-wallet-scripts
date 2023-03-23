@@ -17,6 +17,8 @@ async function checkHermes() {
     let ARamount = assetToBase(assetAmount(350, DOJ_DECIMAL ))
     const ardepositHash = await hermesClient.deposit({amount: ARamount, memo: `ADD:AR.AR:7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4`})
     console.log('AR Deposit tx hash :: ', ardepositHash)
+    // const ardepositHash = await hermesClient.deposit({amount: ARamount, memo: `-:AR.AR:10000`})
+    // console.log('AR Withdraw tx hash :: ', ardepositHash)
 }
 
 (async () => {
