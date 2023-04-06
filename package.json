@@ -89,6 +89,8 @@
     "h4s_tx_data": "ts-node __tests__/hermes/tx_data.ts",
     "h4s_txs": "ts-node __tests__/hermes/txs.ts",
     "h4s_ar_add_pool": "ts-node __tests__/hermes/add_ar_pool.ts",
+    "h4s_set_version": "ts-node __tests__/hermes/set_version.ts",
+    "h4s_set_ip_address": "ts-node __tests__/hermes/set_ip_address.ts",
     "h4s_bnb_add_pool": "ts-node __tests__/hermes/add_bnb_pool.ts",
     "h4s_dot_add_pool": "ts-node __tests__/hermes/add_dot_pool.ts",
     "h4s_eth_add_pool": "ts-node __tests__/hermes/add_eth_pool.ts",

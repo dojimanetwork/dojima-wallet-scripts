@@ -43,6 +43,8 @@ import {
     HermeschainConstantsResponse,
     TxData,
     TxOfflineParams,
+    VersionParam,
+    IpAddressParam,
 } from './types'
 import { TxResult } from './messages'
 import {
@@ -60,8 +62,12 @@ import {
     getPrefix,
     registerDepositCodecs,
     registerSendCodecs,
+    buildSetVersionTx,
+    registerSetVersionCodecs,
+    buildSetIpAddressTx,
+    registerSetIpAddrCodecs,
 } from './util'
-import {proto} from "@cosmos-client/core";
+import { proto } from "@cosmos-client/core";
 
 /**
  * Interface for custom Hermeschain client
@@ -96,46 +102,46 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
      * @throws {"Invalid phrase"} Thrown if the given phase is invalid.
      */
     constructor({
-                    network = Network.Mainnet,
-                    phrase,
-                    clientUrl = {
-                        [Network.DojTestnet]: {
-                            node: 'https://api-test.h4s.dojima.network',
-                            rpc: 'https://rpc-test.h4s.dojima.network',
-                            // node: 'http://localhost:1317',
-                            // rpc: 'http://localhost:26657',
-                        },
-                        [Network.Testnet]: {
-                            node: 'https://api-test.h4s.dojima.network',
-                            rpc: 'https://rpc-test.h4s.dojima.network',
-                        },
-                        [Network.Stagenet]: {
-                            node: 'https://api-test.h4s.dojima.network',
-                            rpc: 'https://rpc-test.h4s.dojima.network',
-                        },
-                        [Network.Mainnet]: {
-                            // node: 'http://localhost:1317',
-                            // rpc: 'http://localhost:26657',
-                            node: '',
-                            rpc: '',
-                        },
-                    },
-                    explorerUrls = defaultExplorerUrls,
-                    rootDerivationPaths = {
-                        [Network.Mainnet]: "44'/931'/0'/0/",
-                        [Network.Stagenet]: "44'/931'/0'/0/",
-                        [Network.Testnet]: "44'/931'/0'/0/",
-                        [Network.DojTestnet]: "44'/931'/0'/0/",
-                    },
-                    chainIds = {
-                        [Network.Mainnet]: 'hermeschain',
-                        [Network.Stagenet]: 'hermeschain',
-                        [Network.Testnet]: 'hermes-testnet',
-                        [Network.DojTestnet]: 'hermes-testnet',
-                        // [Network.Testnet]: 'hermeschain',
-                        // [Network.DojTestnet]: 'hermeschain',
-                    },
-                }: ChainClientParams & HermeschainClientParams) {
+        network = Network.Mainnet,
+        phrase,
+        clientUrl = {
+            [Network.DojTestnet]: {
+                // node: 'https://api-test.h4s.dojima.network',
+                // rpc: 'https://rpc-test.h4s.dojima.network',
+                node: 'http://localhost:1317',
+                rpc: 'http://localhost:26657',
+            },
+            [Network.Testnet]: {
+                node: 'https://api-test.h4s.dojima.network',
+                rpc: 'https://rpc-test.h4s.dojima.network',
+            },
+            [Network.Stagenet]: {
+                node: 'https://api-test.h4s.dojima.network',
+                rpc: 'https://rpc-test.h4s.dojima.network',
+            },
+            [Network.Mainnet]: {
+                node: 'http://localhost:1317',
+                rpc: 'http://localhost:26657',
+                // node: '',
+                // rpc: '',
+            },
+        },
+        explorerUrls = defaultExplorerUrls,
+        rootDerivationPaths = {
+            [Network.Mainnet]: "44'/931'/0'/0/",
+            [Network.Stagenet]: "44'/931'/0'/0/",
+            [Network.Testnet]: "44'/931'/0'/0/",
+            [Network.DojTestnet]: "44'/931'/0'/0/",
+        },
+        chainIds = {
+            [Network.Mainnet]: 'hermeschain',
+            [Network.Stagenet]: 'hermeschain',
+            // [Network.Testnet]: 'hermes-testnet',
+            // [Network.DojTestnet]: 'hermes-testnet',
+            [Network.Testnet]: 'hermeschain',
+            [Network.DojTestnet]: 'hermeschain',
+        },
+    }: ChainClientParams & HermeschainClientParams) {
         super(Chain.Cosmos, { network, rootDerivationPaths, phrase })
         this.clientUrl = clientUrl
         this.explorerUrls = explorerUrls
@@ -143,6 +149,8 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
 
         registerSendCodecs()
         registerDepositCodecs()
+        registerSetVersionCodecs()
+        registerSetIpAddrCodecs()
 
         this.cosmosClient = new CosmosSDKClient({
             server: this.getClientUrl().node,
@@ -462,12 +470,12 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
      * @throws {"Invalid transaction hash"} Thrown by missing tx hash
      */
     async deposit({
-                      walletIndex = 0,
-                      asset = AssetDOJNative,
-                      amount,
-                      memo,
-                      gasLimit = new BigNumber(DEPOSIT_GAS_LIMIT_VALUE),
-                  }: DepositParam): Promise<TxHash> {
+        walletIndex = 0,
+        asset = AssetDOJNative,
+        amount,
+        memo,
+        gasLimit = new BigNumber(DEPOSIT_GAS_LIMIT_VALUE),
+    }: DepositParam): Promise<TxHash> {
         const balances = await this.getBalance(this.getAddress(walletIndex))
         const dojBalance: BaseAmount =
             balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DOJ_DECIMAL)
@@ -539,13 +547,13 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
      * @throws {"Invalid transaction hash"} Thrown by missing tx hash
      */
     async transfer({
-                       walletIndex = 0,
-                       asset = AssetDOJNative,
-                       amount,
-                       recipient,
-                       memo,
-                       gasLimit = new BigNumber(DEFAULT_GAS_LIMIT_VALUE),
-                   }: TxParams & { gasLimit?: BigNumber }): Promise<TxHash> {
+        walletIndex = 0,
+        asset = AssetDOJNative,
+        amount,
+        recipient,
+        memo,
+        gasLimit = new BigNumber(DEFAULT_GAS_LIMIT_VALUE),
+    }: TxParams & { gasLimit?: BigNumber }): Promise<TxHash> {
         const balances = await this.getBalance(this.getAddress(walletIndex), [asset])
         const dojBalance: BaseAmount =
             balances.filter(({ asset }) => isAssetDOJNative(asset))[0]?.amount ?? baseAmount(0, DOJ_DECIMAL)
@@ -608,17 +616,17 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
      * @returns {string} The signed transaction bytes.
      */
     async transferOffline({
-                              walletIndex = 0,
-                              asset = AssetDOJNative,
-                              amount,
-                              recipient,
-                              memo,
-                              fromDojBalance: from_doj_balance,
-                              fromAssetBalance: from_asset_balance = baseAmount(0, DOJ_DECIMAL),
-                              fromAccountNumber = Long.ZERO,
-                              fromSequence = Long.ZERO,
-                              gasLimit = new BigNumber(DEFAULT_GAS_LIMIT_VALUE),
-                          }: TxOfflineParams): Promise<string> {
+        walletIndex = 0,
+        asset = AssetDOJNative,
+        amount,
+        recipient,
+        memo,
+        fromDojBalance: from_doj_balance,
+        fromAssetBalance: from_asset_balance = baseAmount(0, DOJ_DECIMAL),
+        fromAccountNumber = Long.ZERO,
+        fromSequence = Long.ZERO,
+        gasLimit = new BigNumber(DEFAULT_GAS_LIMIT_VALUE),
+    }: TxOfflineParams): Promise<string> {
         const fee = (await this.getFees()).average
 
         if (isAssetDOJNative(asset)) {
@@ -678,6 +686,104 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
             return getDefaultFees()
         }
     }
+
+    /**
+     * Transaction with MsgSetVersionTx.
+     *
+     * @param {VersionParam} params The transaction options.
+     * @returns {TxHash} The transaction hash.
+     *
+     * @throws {"insufficient funds"} Thrown if the wallet has insufficient funds.
+     * @throws {"Invalid transaction hash"} Thrown by missing tx hash
+     */
+    async setVersion({
+        walletIndex = 0,
+        version,
+        gasLimit = new BigNumber(DEPOSIT_GAS_LIMIT_VALUE),
+    }: VersionParam): Promise<TxHash> {
+        const privKey = this.getPrivateKey(walletIndex)
+        const signerPubkey = privKey.pubKey()
+
+        const fromAddress = this.getAddress(walletIndex)
+        const fromAddressAcc = cosmosclient.AccAddress.fromString(fromAddress)
+
+        const setVersionTxBody = await buildSetVersionTx({
+            msgSetVersionTx: {
+                signer: fromAddressAcc,
+                version: version,
+            },
+            nodeUrl: this.getClientUrl().node,
+            chainId: this.getChainId(),
+        })
+
+        const account = await this.getCosmosClient().getAccount(fromAddressAcc)
+        const { account_number: accountNumber } = account
+        if (!accountNumber) throw Error(`Deposit failed - could not get account number ${accountNumber}`)
+
+        const txBuilder = buildUnsignedTx({
+            cosmosSdk: this.getCosmosClient().sdk,
+            txBody: setVersionTxBody,
+            signerPubkey: cosmosclient.codec.instanceToProtoAny(signerPubkey),
+            sequence: account.sequence || Long.ZERO,
+            gasLimit: Long.fromString(gasLimit.toFixed(0)),
+        })
+
+        const txHash = await this.getCosmosClient().signAndBroadcast(txBuilder, privKey, accountNumber)
+
+        if (!txHash) throw Error(`Invalid transaction hash: ${txHash}`)
+
+        return txHash
+    }
+
+    /**
+     * Transaction with MsgSetIpAddressTx.
+     *
+     * @param {IpAddressParam} params The transaction options.
+     * @returns {TxHash} The transaction hash.
+     *
+     * @throws {"insufficient funds"} Thrown if the wallet has insufficient funds.
+     * @throws {"Invalid transaction hash"} Thrown by missing tx hash
+     */
+     async setIpAddress({
+        walletIndex = 0,
+        ipAddress,
+        gasLimit = new BigNumber(DEPOSIT_GAS_LIMIT_VALUE),
+    }: IpAddressParam): Promise<TxHash> {
+        const privKey = this.getPrivateKey(walletIndex)
+        const signerPubkey = privKey.pubKey()
+
+        const fromAddress = this.getAddress(walletIndex)
+        const fromAddressAcc = cosmosclient.AccAddress.fromString(fromAddress)
+
+        const setIpAddressTxBody = await buildSetIpAddressTx({
+            msgSetIpAddressTx: {
+                signer: fromAddressAcc,
+                ipAddress: ipAddress,
+            },
+            nodeUrl: this.getClientUrl().node,
+            chainId: this.getChainId(),
+        })
+
+        const account = await this.getCosmosClient().getAccount(fromAddressAcc)
+        const { account_number: accountNumber } = account
+        if (!accountNumber) throw Error(`Deposit failed - could not get account number ${accountNumber}`)
+
+        const txBuilder = buildUnsignedTx({
+            cosmosSdk: this.getCosmosClient().sdk,
+            txBody: setIpAddressTxBody,
+            signerPubkey: cosmosclient.codec.instanceToProtoAny(signerPubkey),
+            sequence: account.sequence || Long.ZERO,
+            gasLimit: Long.fromString(gasLimit.toFixed(0)),
+        })
+
+        const txHash = await this.getCosmosClient().signAndBroadcast(txBuilder, privKey, accountNumber)
+
+        if (!txHash) throw Error(`Invalid transaction hash: ${txHash}`)
+
+        return txHash
+    }
+
 }
+
 
 export { HermesSdkClient }
