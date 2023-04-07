@@ -35,6 +35,18 @@ export type DepositParam = {
     gasLimit?: BigNumber
 }
 
+export type VersionParam = {
+    walletIndex?: number
+    version: string
+    gasLimit?: BigNumber
+}
+
+export type IpAddressParam = {
+    walletIndex?: number
+    ipAddress: string
+    gasLimit?: BigNumber
+}
+
 export type TxData = Pick<Tx, 'from' | 'to' | 'type'>
 
 export type TxOfflineParams = TxParams & {

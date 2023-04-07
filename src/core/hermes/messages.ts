@@ -18,6 +18,24 @@ export class MsgNativeTx {
     }
 }
 
+export class MsgSetVersionTx {
+    version: string
+    signer: cosmosclient.AccAddress
+    constructor(signer: cosmosclient.AccAddress, version: string) {
+        this.signer = signer
+        this.version = version
+    }
+}
+
+export class MsgSetIpAddressTx {
+    ipAddress: string
+    signer: cosmosclient.AccAddress
+    constructor(signer: cosmosclient.AccAddress, ipAddress: string) {
+        this.signer = signer
+        this.ipAddress = ipAddress
+    }
+}
+
 /**
  * This creates MsgNativeTx from json.
  *
