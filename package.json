@@ -85,6 +85,7 @@
     "eth_swap": "ts-node __tests__/ethereum/swap.ts",
     "h4s_balance": "ts-node __tests__/hermes/balance.ts",
     "h4s_transfer": "ts-node __tests__/hermes/transfer.ts",
+    "h4s_set_node_pubkeys": "ts-node __tests__/hermes/set_node_pubkeys.ts",
     "h4s_fee": "ts-node __tests__/hermes/fee.ts",
     "h4s_tx_data": "ts-node __tests__/hermes/tx_data.ts",
     "h4s_txs": "ts-node __tests__/hermes/txs.ts",
@@ -122,6 +123,8 @@
   "homepage": "https://github.com/dojimanetwork/dojima-wallet-scripts#readme",
   "dependencies": {
     "@binance-chain/javascript-sdk": "^4.2.0",
+    "@cosmjs/proto-signing": "^0.30.1",
+    "@cosmjs/stargate": "^0.30.1",
     "@cosmos-client/core": "^0.45.13",
     "@d11k-ts/client": "^0.1.1",
     "@d11k-ts/cosmos": "^0.1.0",
@@ -134,7 +137,7 @@
     "@polkadot/extension-dapp": "^0.42.7",
     "@project-serum/anchor": "^0.23.0",
     "@project-serum/sol-wallet-adapter": "^0.2.6",
-    "@solana/web3.js": "^1.41.4",
+    "@solana/web3.js": "^1.75.0",
     "@truffle/hdwallet-provider": "^2.1.2",
     "@xchainjs/xchain-avax": "^0.1.0-alpha3",
     "@xchainjs/xchain-binance": "^5.5.0",
@@ -154,7 +157,7 @@
     "bech32-buffer": "^0.2.1",
     "bignumber.js": "^9.0.2",
     "bip32": "^2.0.5",
-    "bip39": "^3.0.4",
+    "bip39": "^3.1.0",
     "bitcoinjs-lib": "5.2.0",
     "bn.js": "^5.2.0",
     "coinselect": "^3.1.12",
@@ -162,7 +165,7 @@
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.0",
     "ecpair": "^2.0.1",
-    "ed25519-hd-key": "^1.2.0",
+    "ed25519-hd-key": "^1.3.0",
     "eth-sig-util": "^3.0.1",
     "ethereumjs-block": "^2.2.0",
     "ethereumjs-tx": "^2.1.2",
@@ -178,6 +181,7 @@
     "node-fetch": "^2.6.6",
     "pbjs": "^0.0.14",
     "pbts": "^2.0.2",
+    "protobufjs-cli": "^1.1.1",
     "tiny-secp256k1": "^2.2.0",
     "ts-node": "^10.4.0",
     "tweetnacl": "^1.0.3",
@@ -197,6 +201,6 @@
     "@types/node": "^14.14.31",
     "@types/uuid": "^8.3.1",
     "@types/web3": "1.0.19",
-    "protobufjs": "^7.1.2"
+    "protobufjs": "^7.2.3"
   }
 }

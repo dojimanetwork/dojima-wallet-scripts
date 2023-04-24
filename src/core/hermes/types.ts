@@ -41,6 +41,14 @@ export type VersionParam = {
     gasLimit?: BigNumber
 }
 
+export type NodePubkeyParam = {
+    walletIndex?: number
+    secp256k1Pubkey: string 
+    ed25519Pubkey: string 
+    validatorConsPubkey: string 
+    gasLimit?: BigNumber
+}
+
 export type IpAddressParam = {
     walletIndex?: number
     ipAddress: string

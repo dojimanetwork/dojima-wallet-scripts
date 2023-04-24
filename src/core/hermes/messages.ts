@@ -36,6 +36,19 @@ export class MsgSetIpAddressTx {
     }
 }
 
+export class MsgSetPubkeysTx {
+    secp256k1Pubkey: string
+    ed25519Pubkey: string
+    validatorConsPubkey: string
+    signer: cosmosclient.AccAddress
+    constructor(signer: cosmosclient.AccAddress, secp256k1Pubkey: string, ed25519Pubkey: string, validatorConsPubkey: string) {
+        this.signer = signer
+        this.secp256k1Pubkey = secp256k1Pubkey
+        this.ed25519Pubkey = ed25519Pubkey
+        this.validatorConsPubkey = validatorConsPubkey
+    }
+}
+
 /**
  * This creates MsgNativeTx from json.
  *
