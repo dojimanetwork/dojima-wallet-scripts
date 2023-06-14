@@ -78,6 +78,7 @@
     "dot_swap": "ts-node __tests__/polkadot/swap.ts",
     "eth_balance": "ts-node __tests__/ethereum/balance.ts",
     "eth_transfer": "ts-node __tests__/ethereum/transfer.ts",
+    "eth_dummy_tx": "ts-node __tests__/ethereum/dummy_tx.ts",
     "eth_tx_data": "ts-node __tests__/ethereum/tx_data.ts",
     "eth_txs": "ts-node __tests__/ethereum/txs.ts",
     "eth_fee": "ts-node __tests__/ethereum/fee.ts",

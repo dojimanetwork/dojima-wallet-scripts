@@ -132,6 +132,16 @@ export default class EthereumChain {
         return transactionResult.transactionHash;
     }
 
+    async dummyTx(recipient: string, amount: number): Promise<string> {
+        const memo = `NOOP:NOVAULT`
+        const poolHash = await this.transfer({
+            recipient,
+            amount,
+            memo
+        });
+        return poolHash;
+    }
+
     async getTransactionData(hash: string): Promise<EthTxData> {
         const data = await this.web3.eth.getTransaction(hash);
         if (data) {

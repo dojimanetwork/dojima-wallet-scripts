@@ -6,8 +6,8 @@ async function checkEth() {
     const ethClient = new EthereumChain({
         phrase,
         network: Network.DojTestnet,
-        // rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
-        rpcUrl: 'https://eth-test.h4s.dojima.network/',
+        rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
+        // rpcUrl: 'https://eth-test.h4s.dojima.network/',
         // rpcUrl: 'http://localhost:9545'
         // network: Network.Testnet,
         // rpcUrl: 'https://goerli.infura.io/v3/',
@@ -17,6 +17,8 @@ async function checkEth() {
     console.log(address)
     const balance = await ethClient.getBalance(address)
     console.log(balance)
+    const inboundbalance = await ethClient.getBalance("0xd526d5f47f863eff32b99bc4f9e77ddb4bd2929b")
+    console.log(inboundbalance)
 }
 
 (async () => {

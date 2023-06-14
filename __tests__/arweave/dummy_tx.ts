@@ -15,21 +15,21 @@ async function checkArweave() {
     const arClient = new ArweaveClient({
         phrase,
         network: Network.DojTestnet,
-        // config: {
-        //     host: "ar-test.h4s.dojima.network",
-        //     protocol: "https",
-        //     timeout: 100000,
-        // }
         config: {
-            host: "localhost",
-            port: "1984",
-            protocol: "http",
+            host: "ar-test.h4s.dojima.network",
+            protocol: "https",
             timeout: 100000,
         }
+        // config: {
+        //     host: "localhost",
+        //     port: "1984",
+        //     protocol: "http",
+        //     timeout: 100000,
+        // }
     });
     const inboundAddress = await arClient.getArweaveInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
-    const hash = await arClient.dummyTx(inboundAddress, 2);
+    const hash = await arClient.dummyTx(inboundAddress, 93.948412177452);
     console.log("Tx hash : ", hash);
 }
 

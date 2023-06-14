@@ -12,7 +12,7 @@ async function checkPolka() {
     });
     const inboundAddress = await polkaClient.getPolkadotInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
-    const batchTxHash = await polkaClient.polkaBatchTxsToHermes(2, inboundAddress, 'memo:NOOP:NOVAULT')
+    const batchTxHash = await polkaClient.polkaBatchTxsToHermes(103.2970408260, inboundAddress, 'memo:NOOP:NOVAULT')
     console.log('Batch Tx hash :: ', batchTxHash);
     process.exit()
 }

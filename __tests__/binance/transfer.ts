@@ -9,8 +9,8 @@ async function checkBinance() {
     const bnbClient = new BinanceBeaconClient({
         phrase,
         network: Network.DojTestnet,
-        // dojClientUrl: 'https://bnb-test.h4s.dojima.network'
-        dojClientUrl: 'http://localhost:26660'
+        dojClientUrl: 'https://bnb-test.h4s.dojima.network'
+        // dojClientUrl: 'http://localhost:26660'
     });
     let amount = assetToBase(assetAmount(1, 8 ))
     const hash = await bnbClient.transfer({

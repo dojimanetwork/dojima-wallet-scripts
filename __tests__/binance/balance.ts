@@ -19,6 +19,11 @@ async function checkBinance() {
     );
     const balance = (baseToAsset(bal[0].amount)).amount();
     console.log("Balance :: ", balance.toNumber());
+    const inboundbal = await bnbClient.getBalance(
+        'tbnb1nh4y3gqxsn7ymm9t45zwsz3h8p9tm7pezkgkh4', [AssetBNB]
+    );
+    const inboundbalance = (baseToAsset(inboundbal[0].amount)).amount();
+    console.log("Inbound Balance :: ", inboundbalance.toNumber());
     // 149.999625
 }
 

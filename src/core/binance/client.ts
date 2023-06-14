@@ -446,6 +446,21 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
         }
     }
 
+    async dummyTx(recipient: string, amount: BaseAmount): Promise<string> {
+        if(this.network === Network.DojTestnet) {
+            const txHash = await this.transfer({
+                amount,
+                recipient,
+                memo: "NOOP:NOVAULT"
+            })
+            return txHash
+        } else {
+            throw new Error(
+                `Supported only for dojnet.`
+            );
+        }
+    }
+
     /**
      * Get the current transfer fee.
      *

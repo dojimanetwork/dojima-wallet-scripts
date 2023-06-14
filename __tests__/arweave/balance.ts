@@ -33,6 +33,10 @@ async function checkArweave() {
         "7zzxJgYHgDlaURc3xt3wvLITPp6I8oIpYj_yg_xirb4"
     );
     console.log("Balance :: ", bal);
+    const inboundBal = await arClient.getBalance(
+        "2txTDSdb_RjG12uHZlVsB5jrfPzqxtzScKTtPef2KZ0"
+    );
+    console.log("Inbound Balance :: ", inboundBal);
 }
 
 (async () => {

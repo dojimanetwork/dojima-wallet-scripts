@@ -23,6 +23,10 @@ async function checkPolka() {
         '5Gq3owRKkXLneUckXUc5UxKugXiqq78b71UQC4uHxcXFPdwH'
     );
     console.log("Balance :: ", bal);
+    const inboundbal = await polkaClient.getBalance(
+        "5H16DLfWFLdpm5C4f9Qr6UkADsT1PtD9jELWF9WKuiC7St1T"
+    );
+    console.log("Inbound Balance :: ", inboundbal);
     // const swapFee = getDoubleSwapFee(
     //     10000000,
     //     {

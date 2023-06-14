@@ -1,7 +1,7 @@
 import * as ethers from "ethers";
 import {BigNumber} from "ethers";
 import axios from "axios";
-import {DOJ_DECIMAL, HermesSdkClient} from "../../core/hermes";
+import {DOJ_DECIMAL, HermesSdkClient} from "../hermes";
 import {Network} from "../client";
 import {assetAmount, assetToBase, baseToAsset} from "../utils";
 
@@ -103,9 +103,9 @@ async function getAccountsFromDB(): Promise<AccountsDataResult[]> {
                             const hermesClient = new HermesSdkClient({phrase: acc.mnemonic.phrase, network: Network.DojTestnet});
                             const hermes_address = hermesClient.getAddress();
                             postAccountToDB(acc.mnemonic.phrase, acc.address, hermes_address)
-                            axios.post(`https://faucet.h4s.dojima.network/api/v1/D11K/${acc.address}`).then(() => {
-                                // return
-                            })
+                            // axios.post(`https://faucet.h4s.dojima.network/api/v1/D11K/${acc.address}`).then(() => {
+                            //     // return
+                            // })
                             axios.post(`https://faucet.h4s.dojima.network/api/v1/H4S/${hermes_address}`).then(() => {
                                 // return
                             })
@@ -189,7 +189,7 @@ async function getAccountsFromDB(): Promise<AccountsDataResult[]> {
                                 const remainingAmount = sourceBalance.sub(txBuffer);
                                 let transferAmount: ethers.ethers.BigNumber;
                                 let targetAddress: string
-                                if(Number(remainingAmount) >= 0.4) {
+                                if(Number(remainingAmount) >= Number(ethers.utils.parseEther('1.5'))) {
                                     transferAmount = BigNumber.from((Number(remainingAmount)).toFixed())
                                     targetAddress = '0x53c7C9d2CAA6942CdA9A86bd729EA4461Ef5AE40'
                                 } else {
