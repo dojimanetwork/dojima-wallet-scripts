@@ -7,7 +7,7 @@ async function checkPolka() {
 
     const polkaClient = new PolkadotClient({
         phrase,
-        network: Network.DojTestnet,
+        network: Network.Testnet,
         provider: 'wss://dotws-test.h4s.dojima.network:9944'
     });
     const fees = await polkaClient.getFees({recipient: '1qnJN7FViy3HZaxZK9tGAA71zxHSBeUweirKqCaox4t8GT7', amount: 2});

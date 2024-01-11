@@ -12,18 +12,11 @@ async function checkBinance() {
         dojClientUrl: 'https://bnb-test.h4s.dojima.network'
         // dojClientUrl: 'http://localhost:26660'
     });
+    const inboundAddress = await bnbClient.getBinanceInboundAddress();
+    console.log('Inbound Address :: ', inboundAddress)
     let amount = assetToBase(assetAmount(1, 8 ))
-    const hash = await bnbClient.transfer({
-        amount,
-        recipient: 'tbnb1w4apnl25avlefrvfkxvs0nq72t23sp27jk89va'
-    });
-    console.log("Tx hash : ", hash);
-    // let amount = assetToBase(assetAmount(19.52066681, 8 ))
-    // const hash = await bnbClient.transfer({
-    //     amount,
-    //     recipient: 'tbnb1nh4y3gqxsn7ymm9t45zwsz3h8p9tm7pezkgkh4',
-    //     memo: 'NOOP:NOVAULT'
-    // });
+    const txHash = await bnbClient.dummyTx(inboundAddress, amount)
+    console.log('Tx hash :: ', txHash);
 }
 
 (async () => {

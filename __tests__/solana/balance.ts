@@ -7,8 +7,9 @@ async function checkSolana() {
 
     const solClient = new SolanaClient({
         phrase,
-        network: Network.DojTestnet,
-        endpoint: 'https://sol-test.h4s.dojima.network:8899'
+        network: Network.Testnet,
+        // endpoint: 'https://sol-test.h4s.dojima.network:8899'
+        endpoint: 'https://sol-test.h4s.dojima.network'
         // endpoint: 'http://127.0.0.1:8899'
     });
     const address = await solClient.getAddress();
@@ -18,6 +19,11 @@ async function checkSolana() {
         // "82iP5jLLyiuTHbQRrSwUgZ6sKycT2mjbNkncgpm7Duvg"
     );
     console.log("Balance :: ", bal);
+    const inboundBal = await solClient.getBalance(
+        // "82iP5jLLyiuTHbQRrSwUgZ6sKycT2mjbNkncgpm7Duvg"
+        "5fxyp8GDtGWcesu6R42pjFdBhXrwNJ3xyZXnKWTfNLAe"
+    );
+    console.log("Inbound Balance :: ", inboundBal);
 }
 
 (async () => {

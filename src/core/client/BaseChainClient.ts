@@ -22,9 +22,8 @@ import {
 // const TESTNET_THORNODE_API_BASE = 'https://testnet.thornode.thorchain.info/thorchain'
 const MAINNET_HERMESNODE_API_BASE = ''
 const STAGENET_HERMESNODE_API_BASE = ''
-const TESTNET_HERMESNODE_API_BASE = ''
-const DOJTESTNET_HERMESNODE_API_BASE = 'https://api-test.h4s.dojima.network/hermeschain'
-// const DOJTESTNET_HERMESNODE_API_BASE = 'http://localhost:1317/hermeschain'
+const TESTNET_HERMESNODE_API_BASE = 'https://api-test.h4s.dojima.network/hermeschain'
+// const TESTNET_HERMESNODE_API_BASE = 'http://localhost:1317/hermeschain'
 
 export abstract class BaseChainClient implements ChainClient {
     protected chain: Chain
@@ -45,7 +44,7 @@ export abstract class BaseChainClient implements ChainClient {
      */
     constructor(chain: Chain, params: ChainClientParams) {
         this.chain = chain
-        this.network = params.network || Network.DojTestnet
+        this.network = params.network
         this.feeBounds = params.feeBounds || { lower: 1, upper: Infinity }
         // Fire off a warning in the console to indicate that stagenet and real assets are being used.
         if (this.network === Network.Stagenet) console.warn('WARNING: This is using stagenet! Real assets are being used!')
@@ -106,8 +105,6 @@ export abstract class BaseChainClient implements ChainClient {
                     return STAGENET_HERMESNODE_API_BASE
                 case Network.Testnet:
                     return TESTNET_HERMESNODE_API_BASE
-                case Network.DojTestnet:
-                    return DOJTESTNET_HERMESNODE_API_BASE
             }
         })()
         return (await axios.get(url + endpoint)).data

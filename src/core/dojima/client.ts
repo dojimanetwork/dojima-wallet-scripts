@@ -44,6 +44,7 @@ export default class DojimaChain {
             this.web3 = new Web3(this.rpcUrl);
         }
         this.account = ethers.Wallet.fromMnemonic(this.phrase);
+        // this.account = new ethers.Wallet(this.phrase);
     }
 
     getAddress(): string {
@@ -141,12 +142,33 @@ export default class DojimaChain {
         return inboundObj
     }
 
+    async getDojimaInboundAddress(): Promise<string> {
+        // const inboundObj = await this.getInboundObject()
+        // return inboundObj.address
+        return '0xd526d5f47f863eff32b99bc4f9e77ddb4bd2929b';
+    }
+
     async dojimaTransfer(amount: number, recipient: string): Promise<string> {
         const memo = `dojin:${recipient}`
         const inboundAddress = await this.getInboundObject()
         const txHash = await this.transfer({
             amount,
             recipient: inboundAddress.address,
+            memo
+        })
+
+        return txHash
+    }
+
+    async addLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
+        const memo = dojAddress ?
+            `ADD:DOJ.DOJ:${dojAddress}`
+            :
+            `ADD:DOJ.DOJ`
+
+        const txHash = await this.transfer({
+            amount,
+            recipient: inboundAddress,
             memo
         })
 

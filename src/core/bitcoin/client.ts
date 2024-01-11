@@ -47,17 +47,15 @@ class BitcoinClient extends UTXOClient {
                         lower: LOWER_FEE_BOUND,
                         upper: UPPER_FEE_BOUND,
                     },
-                    sochainUrl = 'https://chain.so/api/v2',
+                    sochainUrl = 'http://localhost:18443/',
                     haskoinUrl = {
-                        [Network.Testnet]: 'https://haskoin.ninerealms.com/btctest',
-                        [Network.DojTestnet]: "https://api.haskoin.com/btctest",
-                        [Network.Mainnet]: 'https://haskoin.ninerealms.com/btc',
+                        [Network.Testnet]: "https://api.haskoin.com/btctest",
+                        [Network.Mainnet]: 'http://localhost:18443//btc',
                         [Network.Stagenet]: 'https://haskoin.ninerealms.com/btc',
                     },
                     rootDerivationPaths = {
                         [Network.Mainnet]: `84'/0'/0'/0/`, //note this isn't bip44 compliant, but it keeps the wallets generated compatible to pre HD wallets
                         [Network.Testnet]: `84'/1'/0'/0/`,
-                        [Network.DojTestnet]: `84'/1'/0'/0/`,
                         [Network.Stagenet]: `84'/0'/0'/0/`,
                     },
                     phrase = '',
@@ -88,7 +86,6 @@ class BitcoinClient extends UTXOClient {
             case Network.Stagenet:
                 return 'https://blockstream.info'
             case Network.Testnet:
-            case Network.DojTestnet:
                 return 'https://blockstream.info/testnet'
         }
     }

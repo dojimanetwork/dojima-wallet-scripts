@@ -7,9 +7,10 @@ async function checkSolana() {
 
     const solClient = new SolanaClient({
         phrase,
-        network: Network.DojTestnet,
+        network: Network.Testnet,
         // endpoint: 'https://sol-test.h4s.dojima.network:8899'
-        endpoint: 'http://127.0.0.1:8899'
+        endpoint: 'https://sol-test.h4s.dojima.network'
+        // endpoint: 'http://127.0.0.1:8899'
     });
     const hash = await solClient.transfer({
         amount: 1,

@@ -25,7 +25,6 @@ const toSochainNetwork = (network: Network): string => {
         case Network.Stagenet:
             return 'BTC'
         case Network.Testnet:
-        case Network.DojTestnet:
             return 'BTCTEST'
     }
 }

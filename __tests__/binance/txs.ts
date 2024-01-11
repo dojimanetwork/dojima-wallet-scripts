@@ -1,4 +1,4 @@
-import {Network} from "../../src/core/client";
+// import {Network} from "../../src/core/client";
 import {BinanceBeaconClient} from "../../src/core/binance";
 
 async function checkBinance() {
@@ -7,9 +7,10 @@ async function checkBinance() {
 
     const bnbClient = new BinanceBeaconClient({
         phrase,
-        network: Network.Testnet
+        // network: Network.Testnet,
+        // dojClientUrl: 'https://bnb-test.h4s.dojima.network'
     });
-    const txs = await bnbClient.getTransactions({address: "tbnb1w4apnl25avlefrvfkxvs0nq72t23sp27jk89va"});
+    const txs = await bnbClient.getTransactions({address: "bnb10af52w77pkehgxhnwgeca50q2t2354q4xamz5y"});
     console.log("Txs : ", txs);
 }
 

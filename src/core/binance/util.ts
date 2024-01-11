@@ -3,7 +3,7 @@ import { AssetBNB, assetAmount, assetFromString, assetToBase, baseAmount } from 
 
 import { Account, DexFees, Fee, TransferFee, Tx as BinanceTx, TxType as BinanceTxType } from './types/binance'
 import { Transfer, TransferEvent } from './types/binance-ws'
-import { DerivePath } from './types/common'
+import { DerivePath } from './types'
 import {BNB_DECIMAL} from "./types";
 
 /**
@@ -135,7 +135,6 @@ export const getPrefix = (network: Network) => {
         case Network.Stagenet:
             return 'bnb'
         case Network.Testnet:
-        case Network.DojTestnet:
             return 'tbnb'
     }
 }

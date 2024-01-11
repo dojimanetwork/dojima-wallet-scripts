@@ -52,13 +52,10 @@ export default class EthereumChain {
             this.phrase = phrase;
         }
         this.network = network;
-        if (this.network === Network.DojTestnet && rpcUrl === defaultEthInfuraRpcUrl) {
-            throw Error(`'rpcUrl' param can't be empty for 'doj-testnet'`);
+        if (this.network === Network.Testnet && rpcUrl === defaultEthInfuraRpcUrl) {
+            throw Error(`'rpcUrl/infuraKey' param can't be empty for 'testnet'`);
         }
-        if ((this.network === Network.Testnet || this.network === Network.Stagenet) && rpcUrl === defaultEthInfuraRpcUrl) {
-            throw Error(`'rpcUrl/infuraKey' param can't be empty for 'testnet' or 'stagenet'`);
-        }
-        if(this.network === Network.DojTestnet) {
+        if(this.network === Network.Testnet) {
             this.rpcUrl = rpcUrl;
             this.web3 = new Web3(this.rpcUrl);
         } else {
@@ -66,9 +63,8 @@ export default class EthereumChain {
             this.web3 = new Web3(new Web3.providers.HttpProvider(this.rpcUrl));
         }
         this.account = ethers.Wallet.fromMnemonic(this.phrase);
-        if(this.network === Network.Testnet || this.network === Network.Stagenet)
-            this.api = 'https://api-goerli.etherscan.io/api'
-        else
+        // this.account = new ethers.Wallet(this.phrase);
+        if(this.network === Network.Mainnet || this.network === Network.Stagenet)
             this.api = 'https://api.etherscan.io/api'
     }
 
@@ -162,7 +158,7 @@ export default class EthereumChain {
     }
 
     async getTransactionsHistory(params: EthTxHistoryParams) {
-        if(this.network === Network.DojTestnet)
+        if(this.network === Network.Testnet)
             return null
         else {
             let requestUrl = `${this.api}?module=account&action=txlist`;

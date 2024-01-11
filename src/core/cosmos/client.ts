@@ -17,8 +17,8 @@ import { Address, Asset, AssetAtom, BaseAmount, Chain, assetToString, baseAmount
 import BigNumber from 'bignumber.js'
 
 import { COSMOS_DECIMAL, DEFAULT_FEE, DEFAULT_GAS_LIMIT } from './const'
-import { CosmosSDKClient } from './cosmos/sdk-client'
-import { TxOfflineParams } from './cosmos/types'
+import { CosmosSDKClient } from './cosmos'
+import { TxOfflineParams } from './cosmos'
 import { ChainIds, ClientUrls, CosmosClientParams } from './types'
 import {
     getAsset,
@@ -103,7 +103,6 @@ class Client extends BaseChainClient implements CosmosClient, ChainClient {
             case Network.Stagenet:
                 return 'https://cosmos.bigdipper.live'
             case Network.Testnet:
-            case Network.DojTestnet:
                 return 'https://explorer.theta-testnet.polypore.xyz'
         }
     }

@@ -53,13 +53,15 @@ class SolanaClient implements SolanaChainClient {
         }
         this.network = network
         this.cluster = this.getCluster()
-        if ((this.network === Network.DojTestnet) && endpoint === defaultSolEndpoint) {
-            throw Error(`'endpoint' params can't be empty for 'doj-testnet'`)
+        if (this.network === Network.Testnet && endpoint === defaultSolEndpoint) {
+            throw Error(`'endpoint' params can't be empty for 'testnet'`)
         }
-        if(this.network === Network.DojTestnet) {
+        if(this.network === Network.Testnet) {
             this.connection = new web3.Connection(endpoint, 'confirmed')
         } else {
-            this.connection = new web3.Connection(web3.clusterApiUrl(this.cluster), 'confirmed')
+            // this.connection = new web3.Connection(web3.clusterApiUrl(this.cluster), 'confirmed')
+            // this.connection = new web3.Connection('https://api.mainnet-beta.solana.com', 'confirmed')
+            this.connection = new web3.Connection('https://solana-mainnet.g.alchemy.com/v2/GRyJOApwSFYywXEVFY4wiOgSLGMTv8qV', 'confirmed')
         }
     }
 

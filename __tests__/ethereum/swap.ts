@@ -5,7 +5,7 @@ async function checkEth() {
     const phrase = "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
     const ethClient = new EthereumChain({
         phrase,
-        network: Network.DojTestnet,
+        network: Network.Testnet,
         // rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
         rpcUrl: 'https://eth-test.h4s.dojima.network/',
         // rpcUrl: 'http://localhost:9545'

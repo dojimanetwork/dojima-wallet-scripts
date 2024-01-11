@@ -110,17 +110,19 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
                         [Network.Mainnet]: "44'/931'/0'/0/",
                         [Network.Stagenet]: "44'/931'/0'/0/",
                         [Network.Testnet]: "44'/931'/0'/0/",
-                        [Network.DojTestnet]: "44'/931'/0'/0/",
                     },
                     dojClientUrl = ''
                 }: ChainClientParams & DojBnbClientParams) {
         super(Chain.Binance, { network, rootDerivationPaths, phrase })
         this.bncClient = new BncClient(this.getClientUrl())
         this.bncClient.chooseNetwork(this.getNetwork())
-        if ((network === Network.DojTestnet) && (dojClientUrl === '')) {
-            throw Error(`'dojClientUrl' params can't be empty for 'dojtestnet'`)
+        if (
+            network === Network.Testnet &&
+            dojClientUrl === ""
+        ) {
+            throw Error(`'dojClientUrl' params can't be empty for 'testnet'`);
         }
-        if(network === Network.DojTestnet) {
+        if(network === Network.Testnet) {
             this.dojTestnetUrl = dojClientUrl
         }
     }
@@ -147,7 +149,6 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
             case Network.Stagenet:
                 return Network.Mainnet
             case Network.Testnet:
-            case Network.DojTestnet:
                 return Network.Testnet
         }
     }
@@ -277,7 +278,7 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {Balance[]} The balance of the address.
      */
     async getBalance(address: Address, assets?: Asset[]): Promise<Balance[]> {
-        if(this.network === Network.DojTestnet) {
+        if(this.network === Network.Testnet) {
             const dojTestnetInst = new BnbDojTestnetClient(`${this.dojTestnetUrl}`)
             const balance = await dojTestnetInst.getBalance(address)
             return [{
@@ -422,7 +423,7 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {TxHash} The transaction hash.
      */
     async transfer({ walletIndex, asset, amount, recipient, memo }: TxParams): Promise<TxHash> {
-        if(this.network === Network.DojTestnet) {
+        if(this.network === Network.Testnet) {
             const dojTestnetInst = new BnbDojTestnetClient(`${this.dojTestnetUrl}`)
             return await dojTestnetInst.transfer(
                 recipient,
@@ -447,7 +448,7 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
     }
 
     async dummyTx(recipient: string, amount: BaseAmount): Promise<string> {
-        if(this.network === Network.DojTestnet) {
+        if(this.network === Network.Testnet) {
             const txHash = await this.transfer({
                 amount,
                 recipient,
@@ -481,7 +482,7 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {Fees} The current fee.
      */
     async getFees(): Promise<Fees> {
-        if(this.network === Network.DojTestnet) {
+        if(this.network === Network.Testnet) {
             const fee = baseAmount(0)
 
             return {
@@ -513,7 +514,7 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {Fees} The current fee for multi-send transaction.
      */
     async getMultiSendFees(): Promise<Fees> {
-        if(this.network === Network.DojTestnet) {
+        if(this.network === Network.Testnet) {
             const fee = baseAmount(0)
 
             return {
@@ -541,7 +542,7 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {SingleAndMultiFees} The current fee for both single and multi-send transaction.
      */
     async getSingleAndMultiFees(): Promise<{ single: Fees; multi: Fees }> {
-        if(this.network === Network.DojTestnet) {
+        if(this.network === Network.Testnet) {
             const fee = baseAmount(0)
             return {
                 single: {
@@ -630,7 +631,7 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
     }
 
     async poolAddOrSwap(amount: number, inboundAddress: string, memo: string): Promise<string> {
-        if(this.network === Network.DojTestnet) {
+        if(this.network === Network.Testnet) {
             const dojTestnetInst = new BnbDojTestnetClient(`${this.dojTestnetUrl}`)
             return await dojTestnetInst.transfer(
                 inboundAddress,

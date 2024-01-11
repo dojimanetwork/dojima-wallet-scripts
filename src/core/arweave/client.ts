@@ -13,7 +13,7 @@ import {
 } from "./types";
 import ArweaveTxClient from "./tx-client";
 import {ApiConfig} from "arweave/node/lib/api";
-import {AR_DECIMAL, defaultArMainnetConfig, defaultArTestnetConfig} from "./utils";
+import {AR_DECIMAL, defaultArMainnetConfig} from "./utils";
 import {InboundAddressResult, SwapAssetList} from "../utils";
 import {
     calcDoubleSwapOutput,
@@ -59,11 +59,14 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
         }
         this.network = network
         this.apiConfig = config
-        if ((this.network === Network.Testnet) || (this.network === Network.Stagenet)) {
-            this.apiConfig = defaultArTestnetConfig
-        }
-        if ((this.network === Network.DojTestnet) && this.apiConfig === defaultArMainnetConfig) {
-            throw Error(`'config' params can't be empty for 'dojtestnet'`)
+        // if ((this.network === Network.Testnet) || (this.network === Network.Stagenet)) {
+        //     this.apiConfig = defaultArTestnetConfig
+        // }
+        if (
+          this.network === Network.Testnet &&
+          this.apiConfig === defaultArMainnetConfig
+        ) {
+          throw Error(`'config' params can't be empty for 'testnet'`);
         }
         this.arweave = Arweave.init(this.apiConfig)
     }
@@ -76,7 +79,7 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
 
     /** testnet tokens in winston */
     async mintArTokens(address: string) {
-        const test_ar_amount = 100000000000000;
+        const test_ar_amount = 200000000000000;
 
         // Mint balance in Arlocal for testing
         await this.arweave.api.get(`/mint/${address}/${test_ar_amount}`);

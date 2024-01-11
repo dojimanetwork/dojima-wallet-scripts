@@ -5,8 +5,9 @@ async function checkDojima() {
     const phrase = "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
     const dojClient = new DojimaChain({
         phrase,
-        network: Network.DojTestnet,
-        rpcUrl: 'https://api-test.d11k.dojima.network:8545/',
+        network: Network.Testnet,
+        // rpcUrl: 'https://api-test.d11k.dojima.network:8545/',
+        rpcUrl: 'https://api-test.d11k.dojima.network/',
     })
     const hash = await dojClient.dojimaTransfer(
         1,

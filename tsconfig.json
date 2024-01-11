@@ -12,6 +12,7 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "skipLibCheck": true,
-    "lib": ["es2017", "es7", "es6", "dom"]
+    "downlevelIteration": true,
+    "lib": ["es2017", "es7", "es6", "dom", "es2019"]
   }
 }

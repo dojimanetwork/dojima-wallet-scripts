@@ -7,7 +7,7 @@ async function checkBinance() {
 
     const bnbClient = new BinanceBeaconClient({
         phrase,
-        network: Network.DojTestnet,
+        network: Network.Testnet,
         dojClientUrl: 'https://bnb-test.h4s.dojima.network'
         // dojClientUrl: 'http://localhost:26660'
     });

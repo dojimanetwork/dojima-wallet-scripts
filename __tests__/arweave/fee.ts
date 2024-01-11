@@ -14,7 +14,7 @@ async function checkArweave() {
      */
     const arClient = new ArweaveClient({
         phrase,
-        network: Network.DojTestnet,
+        network: Network.Testnet,
         config: {
             host: "ar-test.h4s.dojima.network",
             protocol: "https",

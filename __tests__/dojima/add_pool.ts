@@ -1,22 +1,20 @@
-import EthereumChain from "../../src/core/eth_dojima/client";
 import {Network} from "../../src/core/client";
+import DojimaChain from "../../src/core/dojima/client";
 
-async function checkEth() {
-    const phrase = "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
-    const ethClient = new EthereumChain({
+async function checkDoj() {
+    // const phrase = "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
+    const phrase = 'da047afc0824231a870876cb89321de362e922a23b8e4cf068473347246dd954';
+    const dojClient = new DojimaChain({
         phrase,
         network: Network.Testnet,
-        // rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
-        rpcUrl: 'https://eth-test.h4s.dojima.network/',
-        // rpcUrl: 'http://localhost:9545'
-        // network: Network.Testnet,
-        // rpcUrl: 'https://goerli.infura.io/v3/',
+        // rpcUrl: 'https://api-test.d11k.dojima.network/',
+        rpcUrl: "http://127.0.0.1:8545",
         // infuraApiKey: 'f37faaf5ddeb4e589d6f26300ed673a6',
     })
-    const inboundAddress = await ethClient.getEthereumInboundAddress();
+    const inboundAddress = await dojClient.getDojimaInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
-    const liquidityPoolHash = await ethClient.addLiquidityPool(
-        10,
+    const liquidityPoolHash = await dojClient.addLiquidityPool(
+        100,
         inboundAddress,
         'dojima15ca4lmfe9u6cc5x0cmqmw2wkvh6l4xdpr908km'          // optional
     )
@@ -30,5 +28,5 @@ async function checkEth() {
 }
 
 (async () => {
-    await checkEth();
+    await checkDoj();
 })();

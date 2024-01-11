@@ -14,7 +14,7 @@ async function checkArweave() {
      */
     const arClient = new ArweaveClient({
         phrase,
-        network: Network.DojTestnet,
+        network: Network.Testnet,
         config: {
             host: "ar-test.h4s.dojima.network",
             protocol: "https",
@@ -29,7 +29,7 @@ async function checkArweave() {
     });
     const inboundAddress = await arClient.getArweaveInboundAddress();
     console.log('Inbound Address :: ', inboundAddress)
-    const hash = await arClient.dummyTx(inboundAddress, 93.948412177452);
+    const hash = await arClient.dummyTx(inboundAddress, 91.570767380666);
     console.log("Tx hash : ", hash);
 }
 

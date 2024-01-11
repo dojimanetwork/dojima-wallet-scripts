@@ -6,11 +6,10 @@ async function checkEth() {
     const ethClient = new EthereumChain({
         phrase,
         // DojTestnet doesn't provide txs list
-        // network: Network.DojTestnet,
-        // rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
-        // rpcUrl: 'https://eth-test.h4s.dojima.network/',
         network: Network.Testnet,
-        rpcUrl: 'https://goerli.infura.io/v3/',
+        // rpcUrl: 'https://eth-test.h4s.dojima.network:9545/',
+        rpcUrl: 'https://eth-test.h4s.dojima.network/',
+        // rpcUrl: 'https://goerli.infura.io/v3/',
         infuraApiKey: 'f37faaf5ddeb4e589d6f26300ed673a6',
     })
     const txs = await ethClient.getTransactionsHistory({
