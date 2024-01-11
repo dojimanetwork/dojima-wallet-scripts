@@ -12,7 +12,7 @@ import {
     TransactionHistoryResult
 } from "./types";
 import {validatePhrase} from "../crypto";
-import {defaultEthInfuraRpcUrl, defaultInfuraApiKey, ETH_DECIMAL} from "./const";
+import {defaultEthInfuraRpcUrl, ETH_DECIMAL} from "./const";
 import {InboundAddressResult, SwapAssetList} from "../utils";
 import axios from "axios";
 import moment from "moment";
@@ -43,7 +43,7 @@ export default class EthereumChain {
                     phrase,
                     network = Network.Mainnet,
                     rpcUrl = defaultEthInfuraRpcUrl,
-                    infuraApiKey = defaultInfuraApiKey,
+                    infuraApiKey = "",
                 }: ChainClientParams & EthRpcParams) {
         if (phrase) {
             if (!validatePhrase(phrase)) {
@@ -53,7 +53,10 @@ export default class EthereumChain {
         }
         this.network = network;
         if (this.network === Network.Testnet && rpcUrl === defaultEthInfuraRpcUrl) {
-            throw Error(`'rpcUrl/infuraKey' param can't be empty for 'testnet'`);
+            throw Error(`rpcUrl param can't be empty for 'testnet'`);
+        }
+        if (this.network === Network.Mainnet && infuraApiKey === "") {
+            throw Error(`infuraApiKey can't be empty for mainnet`);
         }
         if(this.network === Network.Testnet) {
             this.rpcUrl = rpcUrl;

@@ -287,17 +287,31 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
             }]
         } else {
             const balances: BinanceBalance[] = await this.bncClient.getBalance(address)
-
-            return balances
-                .map((balance) => {
-                    return {
-                        asset: assetFromString(`${Chain.Binance}.${balance.symbol}`) || AssetBNB,
-                        amount: assetToBase(assetAmount(balance.free, BNB_DECIMAL)),
-                    }
-                })
-                .filter(
-                    (balance) => !assets || assets.filter((asset) => assetToString(balance.asset) === assetToString(asset)).length,
-                )
+            if (balances.length > 0) {
+                return balances
+                    .map((balance) => {
+                        return {
+                            asset:
+                                assetFromString(`${Chain.Binance}.${balance.symbol}`) ||
+                                AssetBNB,
+                            amount: assetToBase(assetAmount(balance.free, BNB_DECIMAL)),
+                        };
+                    })
+                    .filter(
+                        (balance) =>
+                            !assets ||
+                            assets.filter(
+                                (asset) => assetToString(balance.asset) === assetToString(asset)
+                            ).length
+                    );
+            } else {
+                return [
+                    {
+                        asset: AssetBNB,
+                        amount: assetToBase(assetAmount("0", BNB_DECIMAL)),
+                    },
+                ];
+            }
         }
     }
 
@@ -345,13 +359,18 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {TxsPage} The transaction history.
      */
     async getTransactions(params?: TxHistoryParams): Promise<TxsPage> {
-        return await this.searchTransactions({
-            address: params && params.address,
-            limit: params && params.limit?.toString(),
-            offset: params && params.offset?.toString(),
-            startTime: params && params.startTime && params.startTime.getTime().toString(),
-            txAsset: params && params.asset,
-        })
+        if (this.network === "mainnet") {
+            return await this.searchTransactions({
+                address: params && params.address,
+                limit: params && params.limit?.toString(),
+                offset: params && params.offset?.toString(),
+                startTime:
+                    params && params.startTime && params.startTime.getTime().toString(),
+                txAsset: params && params.asset,
+            });
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -361,28 +380,34 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {Tx} The transaction details of the given transaction id.
      */
     async getTransactionData(txId: string): Promise<Tx> {
-        const txResult: TransactionResult = (await axios.get(`${this.getClientUrl()}/api/v1/tx/${txId}?format=json`)).data
-        const blockHeight = txResult.height
+        if (this.network === "mainnet") {
+            const txResult: TransactionResult = (
+                await axios.get(`${this.getClientUrl()}/api/v1/tx/${txId}?format=json`)
+            ).data;
+            const blockHeight = txResult.height;
 
-        let address = ''
-        const msgs = txResult.tx.value.msg
-        if (msgs.length) {
-            const msg = msgs[0].value as SignedSend
-            if (msg.inputs && msg.inputs.length) {
-                address = msg.inputs[0].address
-            } else if (msg.outputs && msg.outputs.length) {
-                address = msg.outputs[0].address
+            let address = "";
+            const msgs = txResult.tx.value.msg;
+            if (msgs.length) {
+                const msg = msgs[0].value as SignedSend;
+                if (msg.inputs && msg.inputs.length) {
+                    address = msg.inputs[0].address;
+                } else if (msg.outputs && msg.outputs.length) {
+                    address = msg.outputs[0].address;
+                }
             }
+
+            const txHistory = await this.searchTransactions({ address, blockHeight });
+            const [transaction] = txHistory.txs.filter((tx) => tx.hash === txId);
+
+            if (!transaction) {
+                throw new Error("transaction not found");
+            }
+
+            return transaction;
+        } else {
+            return null;
         }
-
-        const txHistory = await this.searchTransactions({ address, blockHeight })
-        const [transaction] = txHistory.txs.filter((tx) => tx.hash === txId)
-
-        if (!transaction) {
-            throw new Error('transaction not found')
-        }
-
-        return transaction
     }
 
     /**

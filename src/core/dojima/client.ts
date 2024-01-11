@@ -4,7 +4,7 @@ import * as ethers from "ethers";
 import BigNumber from "bignumber.js";
 import {DojTransferParams, DojTxData, GasfeeResult} from "./types";
 import {validatePhrase} from "../crypto";
-import {defaultDojInfuraRpcUrl, defaultInfuraApiKey} from "./const";
+import {defaultDojInfuraRpcUrl} from "./const";
 import {InboundAddressResult} from "../utils";
 import axios from "axios";
 
@@ -24,7 +24,6 @@ export default class DojimaChain {
                     phrase,
                     network = Network.Mainnet,
                     rpcUrl = defaultDojInfuraRpcUrl,
-                    infuraApiKey = defaultInfuraApiKey,
                 }: ChainClientParams & DojRpcParams) {
         if (phrase) {
             if (!validatePhrase(phrase)) {
@@ -37,7 +36,7 @@ export default class DojimaChain {
             throw Error(`'rpcUrl' param can't be empty for 'testnet' or 'stagenet'`)
         }
         if(this.network === Network.Mainnet) {
-            this.rpcUrl = `${rpcUrl}${infuraApiKey}`;
+            this.rpcUrl = rpcUrl;
             this.web3 = new Web3(new Web3.providers.HttpProvider(this.rpcUrl));
         } else {
             this.rpcUrl = rpcUrl;
