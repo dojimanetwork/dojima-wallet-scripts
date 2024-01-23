@@ -359,7 +359,7 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {TxsPage} The transaction history.
      */
     async getTransactions(params?: TxHistoryParams): Promise<TxsPage> {
-        if (this.network === "mainnet") {
+        if (this.network === Network.Mainnet || this.network === Network.Stagenet) {
             return await this.searchTransactions({
                 address: params && params.address,
                 limit: params && params.limit?.toString(),
@@ -380,7 +380,7 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
      * @returns {Tx} The transaction details of the given transaction id.
      */
     async getTransactionData(txId: string): Promise<Tx> {
-        if (this.network === "mainnet") {
+        if (this.network === Network.Mainnet || this.network === Network.Stagenet) {
             const txResult: TransactionResult = (
                 await axios.get(`${this.getClientUrl()}/api/v1/tx/${txId}?format=json`)
             ).data;

@@ -109,14 +109,14 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
         phrase,
         clientUrl = {
             [Network.Testnet]: {
-                node: 'https://api-test.h4s.dojima.network',
-                rpc: 'https://rpc-test.h4s.dojima.network',
-                // node: 'http://localhost:1317',
-                // rpc: 'http://localhost:26657',
+                // node: 'https://api-test.h4s.dojima.network',
+                // rpc: 'https://rpc-test.h4s.dojima.network',
+                node: 'http://localhost:1317',
+                rpc: 'http://localhost:26657',
             },
             [Network.Stagenet]: {
-                node: 'https://api-test.h4s.dojima.network',
-                rpc: 'https://rpc-test.h4s.dojima.network',
+                node: '',
+                rpc: '',
             },
             [Network.Mainnet]: {
                 node: 'http://localhost:1317',
@@ -129,13 +129,13 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
         rootDerivationPaths = {
             [Network.Mainnet]: "44'/931'/0'/0/",
             [Network.Stagenet]: "44'/931'/0'/0/",
-            [Network.Testnet]: "44'/931'/0'/0/",
+            [Network.Testnet]: "44'/1001'/0'/0/",
         },
         chainIds = {
             [Network.Mainnet]: 'hermeschain',
             [Network.Stagenet]: 'hermeschain',
-            [Network.Testnet]: 'hermes-testnet',
-            // [Network.Testnet]: 'hermeschain',
+            // [Network.Testnet]: 'hermes-testnet',
+            [Network.Testnet]: 'hermeschain',
         },
     }: ChainClientParams & HermeschainClientParams) {
         super(Chain.Cosmos, { network, rootDerivationPaths, phrase })
