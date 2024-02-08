@@ -7,7 +7,7 @@ async function checkDojima() {
         phrase,
         network: Network.Testnet,
         // rpcUrl: 'https://api-test.d11k.dojima.network:8545/',
-        rpcUrl: 'https://api-test.d11k.dojima.network/',
+        rpcUrl: 'https://api-dev.d11k.dojima.network/',
         // rpcUrl: "http://127.0.0.1:8545",
         // infuraApiKey: 'f37faaf5ddeb4e589d6f26300ed673a6',
     })

@@ -2,8 +2,8 @@ import axios from "axios";
 import {NodeAddressObject} from "./types";
 
 export async function getNodeProviderDetails(nodeAddress: string) {
-    // const apiUrl = `https://api-test.h4s.dojima.network/hermeschain/node/${nodeAddress}`;
-    const apiUrl = `http://localhost:1317/hermeschain/node/${nodeAddress}`;
+    const apiUrl = `https://api-dev.h4s.dojima.network/hermeschain/node/${nodeAddress}`;
+    // const apiUrl = `http://localhost:1317/hermeschain/node/${nodeAddress}`;
     try {
         const response = await axios.get(apiUrl);
 

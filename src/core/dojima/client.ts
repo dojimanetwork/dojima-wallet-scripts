@@ -129,7 +129,7 @@ export default class DojimaChain {
     }
 
     async getInboundObject(): Promise<InboundAddressResult> {
-        const response = await axios.get('https://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
+        const response = await axios.get('https://api-dev.h4s.dojima.network/hermeschain/inbound_addresses')
         if (response.status !== 200) {
             throw new Error(
                 `Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`
@@ -137,14 +137,13 @@ export default class DojimaChain {
         }
 
         const data: Array<InboundAddressResult> = response.data;
-        const inboundObj: InboundAddressResult = data.find(res => res.chain === 'ETH')
+        const inboundObj: InboundAddressResult = data.find(res => res.chain === 'DOJ')
         return inboundObj
     }
 
     async getDojimaInboundAddress(): Promise<string> {
-        // const inboundObj = await this.getInboundObject()
-        // return inboundObj.address
-        return '0xd526d5f47f863eff32b99bc4f9e77ddb4bd2929b';
+        const inboundObj = await this.getInboundObject()
+        return inboundObj.address
     }
 
     async dojimaTransfer(amount: number, recipient: string): Promise<string> {
