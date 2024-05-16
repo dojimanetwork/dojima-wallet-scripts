@@ -100,3 +100,14 @@ export type SimulateResponse = {
         gas_used: string
     }
 }
+
+export type RegisterDOJContractProposal = {
+    title: string
+    description: string
+    register_contract: RegisterContract
+}
+
+export type RegisterContract = {
+    chainName: string
+    contract: string
+}

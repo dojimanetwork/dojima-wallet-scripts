@@ -17,7 +17,7 @@ import * as bech32Buffer from 'bech32-buffer'
 import Long from 'long'
 
 import { ChainId, ExplorerUrls, NodeInfoResponse, TxData } from './types'
-import { MsgNativeTx, MsgSetIpAddressTx, MsgSetPubkeysTx, MsgSetVersionTx } from './messages'
+import {MsgNativeTx, MsgSetIpAddressTx, MsgSetPubkeysTx, MsgSetVersionTx, MsgSubmitProposal} from './messages'
 import types from './proto/MsgCompiled'
 
 export const DOJ_DECIMAL = 8
@@ -28,8 +28,8 @@ export const MAX_TX_COUNT = 100
 
 const DENOM_DOJ_NATIVE = 'doj'
 
-const DEFAULT_EXPLORER_URL = 'https://api-dev.h4s.dojima.network'
-// const DEFAULT_EXPLORER_URL = 'http://localhost:1317'
+// const DEFAULT_EXPLORER_URL = 'https://api-dev.h4s.dojima.network'
+const DEFAULT_EXPLORER_URL = 'http://localhost:1317'
 const txUrl = `${DEFAULT_EXPLORER_URL}/tx`
 const addressUrl = `${DEFAULT_EXPLORER_URL}/address`
 export const defaultExplorerUrls: ExplorerUrls = {
@@ -354,35 +354,58 @@ export const buildDepositTx = async ({
  *
  * @throws {"Invalid client url"} Thrown if the client url is an invalid one.
  */
- export const buildSetVersionTx = async ({
+export const buildSetVersionTx = async ({
     msgSetVersionTx,
     nodeUrl,
     chainId,
 }: {
-msgSetVersionTx: MsgSetVersionTx
-nodeUrl: string
-chainId: ChainId
+    msgSetVersionTx: MsgSetVersionTx
+    nodeUrl: string
+    chainId: ChainId
+}) : Promise<proto.cosmos.tx.v1beta1.TxBody> => {
+    const networkChainId = await getChainId(nodeUrl)
+    if (!networkChainId || chainId !== networkChainId) {
+    throw new Error(`Invalid network (asked: ${chainId} / returned: ${networkChainId}`)
+    }
+
+    const signerAddr = msgSetVersionTx.signer.toString()
+    const signerDecoded = bech32Buffer.decode(signerAddr)
+
+    const msgSetVersionObj = {
+    version: msgSetVersionTx.version,
+    signer: signerDecoded.data,
+    }
+
+    const versionMsg = types.types.MsgSetVersion.fromObject(msgSetVersionObj)
+
+    return new proto.cosmos.tx.v1beta1.TxBody({
+        messages: [cosmosclient.codec.instanceToProtoAny(versionMsg)],
+    })
+}
+export const buildMsgSubmitProposalTx = async ({
+    proposal,
+    nodeUrl,
+    chainId,
+}: {
+    proposal: MsgSubmitProposal,
+    nodeUrl: string
+    chainId: ChainId
 }): Promise<proto.cosmos.tx.v1beta1.TxBody> => {
-const networkChainId = await getChainId(nodeUrl)
-if (!networkChainId || chainId !== networkChainId) {
-throw new Error(`Invalid network (asked: ${chainId} / returned: ${networkChainId}`)
+      const networkChainId = await getChainId(nodeUrl)
+      if (!networkChainId || chainId !== networkChainId) {
+          throw new Error(`Invalid network (asked: ${chainId} / returned: ${networkChainId}`)
+      }
+
+      const msg = new proto.cosmos.gov.v1beta1.MsgSubmitProposal({
+          content: proposal.content,
+          initial_deposit: proposal.initial_deposit,
+          proposer: proposal.proposer.toString(),
+      })
+
+    return new proto.cosmos.tx.v1beta1.TxBody({
+        messages: [cosmosclient.codec.instanceToProtoAny(msg)],
+    })
 }
-
-const signerAddr = msgSetVersionTx.signer.toString()
-const signerDecoded = bech32Buffer.decode(signerAddr)
-
-const msgSetVersionObj = {
-version: msgSetVersionTx.version,
-signer: signerDecoded.data,
-}
-
-const versionMsg = types.types.MsgSetVersion.fromObject(msgSetVersionObj)
-
-return new proto.cosmos.tx.v1beta1.TxBody({
-messages: [cosmosclient.codec.instanceToProtoAny(versionMsg)],
-})
-}
-
 /**
  * Structure a MsgSetIpAddress
  *
@@ -394,33 +417,33 @@ messages: [cosmosclient.codec.instanceToProtoAny(versionMsg)],
  *
  * @throws {"Invalid client url"} Thrown if the client url is an invalid one.
  */
- export const buildSetIpAddressTx = async ({
+export const buildSetIpAddressTx = async ({
     msgSetIpAddressTx,
     nodeUrl,
     chainId,
 }: {
-msgSetIpAddressTx: MsgSetIpAddressTx
-nodeUrl: string
-chainId: ChainId
-}): Promise<proto.cosmos.tx.v1beta1.TxBody> => {
-const networkChainId = await getChainId(nodeUrl)
-if (!networkChainId || chainId !== networkChainId) {
-throw new Error(`Invalid network (asked: ${chainId} / returned: ${networkChainId}`)
-}
+    msgSetIpAddressTx: MsgSetIpAddressTx
+    nodeUrl: string
+    chainId: ChainId
+    }): Promise<proto.cosmos.tx.v1beta1.TxBody> => {
+    const networkChainId = await getChainId(nodeUrl)
+    if (!networkChainId || chainId !== networkChainId) {
+        throw new Error(`Invalid network (asked: ${chainId} / returned: ${networkChainId}`)
+    }
 
-const signerAddr = msgSetIpAddressTx.signer.toString()
-const signerDecoded = bech32Buffer.decode(signerAddr)
+    const signerAddr = msgSetIpAddressTx.signer.toString()
+    const signerDecoded = bech32Buffer.decode(signerAddr)
 
-const msgSetIpAddressObj = {
-ipAddress: msgSetIpAddressTx.ipAddress,
-signer: signerDecoded.data,
-}
+    const msgSetIpAddressObj = {
+        ipAddress: msgSetIpAddressTx.ipAddress,
+        signer: signerDecoded.data,
+    }
 
-const ipAddressMsg = types.types.MsgSetIPAddress.fromObject(msgSetIpAddressObj)
+    const ipAddressMsg = types.types.MsgSetIPAddress.fromObject(msgSetIpAddressObj)
 
-return new proto.cosmos.tx.v1beta1.TxBody({
-messages: [cosmosclient.codec.instanceToProtoAny(ipAddressMsg)],
-})
+    return new proto.cosmos.tx.v1beta1.TxBody({
+        messages: [cosmosclient.codec.instanceToProtoAny(ipAddressMsg)],
+    })
 }
 
 /**
@@ -439,31 +462,31 @@ messages: [cosmosclient.codec.instanceToProtoAny(ipAddressMsg)],
     nodeUrl,
     chainId,
 }: {
-msgSetNodePubkeysTx: MsgSetPubkeysTx
-nodeUrl: string
-chainId: ChainId
+    msgSetNodePubkeysTx: MsgSetPubkeysTx
+    nodeUrl: string
+    chainId: ChainId
 }): Promise<proto.cosmos.tx.v1beta1.TxBody> => {
-const networkChainId = await getChainId(nodeUrl)
-if (!networkChainId || chainId !== networkChainId) {
-throw new Error(`Invalid network (asked: ${chainId} / returned: ${networkChainId}`)
-}
+    const networkChainId = await getChainId(nodeUrl)
+    if (!networkChainId || chainId !== networkChainId) {
+    throw new Error(`Invalid network (asked: ${chainId} / returned: ${networkChainId}`)
+    }
 
-const signerAddr = msgSetNodePubkeysTx.signer.toString()
-const signerDecoded = bech32Buffer.decode(signerAddr)
+    const signerAddr = msgSetNodePubkeysTx.signer.toString()
+    const signerDecoded = bech32Buffer.decode(signerAddr)
 
-const msgSetNodePubkeysObj = {
-    pubKeySetSet: {
-        secp256k1: msgSetNodePubkeysTx.secp256k1Pubkey,
-        ed25519: msgSetNodePubkeysTx.ed25519Pubkey,
-    },
-    validatorConsPubKey: msgSetNodePubkeysTx.validatorConsPubkey,
-    signer: signerDecoded.data,
-}
+    const msgSetNodePubkeysObj = {
+        pubKeySetSet: {
+            secp256k1: msgSetNodePubkeysTx.secp256k1Pubkey,
+            ed25519: msgSetNodePubkeysTx.ed25519Pubkey,
+        },
+        validatorConsPubKey: msgSetNodePubkeysTx.validatorConsPubkey,
+        signer: signerDecoded.data,
+    }
 
-const nodePubkeysMsg = types.types.MsgSetNodeKeys.fromObject(msgSetNodePubkeysObj)
-return new proto.cosmos.tx.v1beta1.TxBody({
-messages: [cosmosclient.codec.instanceToProtoAny(nodePubkeysMsg)],
-})
+    const nodePubkeysMsg = types.types.MsgSetNodeKeys.fromObject(msgSetNodePubkeysObj)
+    return new proto.cosmos.tx.v1beta1.TxBody({
+        messages: [cosmosclient.codec.instanceToProtoAny(nodePubkeysMsg)],
+    })
 }
 
 /**
