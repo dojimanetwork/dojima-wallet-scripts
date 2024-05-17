@@ -22,8 +22,8 @@ import {
 // const TESTNET_THORNODE_API_BASE = 'https://testnet.thornode.thorchain.info/thorchain'
 const MAINNET_HERMESNODE_API_BASE = ''
 const STAGENET_HERMESNODE_API_BASE = ''
-const TESTNET_HERMESNODE_API_BASE = 'https://api-test.h4s.dojima.network/hermeschain'
-// const TESTNET_HERMESNODE_API_BASE = 'http://localhost:1317/hermeschain'
+// const TESTNET_HERMESNODE_API_BASE = 'https://api-test.h4s.dojima.network/hermeschain'
+const TESTNET_HERMESNODE_API_BASE = 'http://localhost:1317/hermeschain'
 
 export abstract class BaseChainClient implements ChainClient {
     protected chain: Chain
