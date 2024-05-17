@@ -6,6 +6,21 @@ export type MsgCoin = {
     amount: string
 }
 
+export class MsgSubmitProposal {
+    content: {
+        type: string
+        value: any
+    }
+    initial_deposit: MsgCoin[]
+    proposer: cosmosclient.AccAddress
+
+    constructor(content: { type: string, value: any }, initial_deposit: MsgCoin[], proposer: cosmosclient.AccAddress) {
+        this.content = content
+        this.initial_deposit = initial_deposit
+        this.proposer = proposer
+    }
+}
+
 export class MsgNativeTx {
     coins: MsgCoin[]
     memo: string
@@ -57,6 +72,10 @@ export class MsgSetPubkeysTx {
  */
 export const msgNativeTxFromJson = (value: { coins: MsgCoin[]; memo: string; signer: string }): MsgNativeTx => {
     return new MsgNativeTx(value.coins, value.memo, cosmosclient.AccAddress.fromString(value.signer))
+}
+
+export const msgSubmitProposalFromJson = (value: { content: { type: string; value: any }; initial_deposit: MsgCoin[]; proposer: string }): MsgSubmitProposal => {
+    return new MsgSubmitProposal(value.content, value.initial_deposit, cosmosclient.AccAddress.fromString(value.proposer))
 }
 
 export type AminoWrapping<T> = {
