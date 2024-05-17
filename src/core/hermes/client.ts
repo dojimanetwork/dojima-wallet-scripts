@@ -69,6 +69,7 @@ import {
     registerSetIpAddrCodecs,
     buildSetPubkeysTx,
     registerSetNodePubkeysCodecs,
+    buildSubmitProposal,
 } from './util'
 
 /**
@@ -838,6 +839,50 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
 
         if (!txHash) throw Error(`Invalid transaction hash: ${txHash}`)
 
+        return txHash
+    }
+
+    async submitProposal({
+        walletIndex = 0,
+        proposal,
+        amount,
+        gasLimit = new BigNumber(DEPOSIT_GAS_LIMIT_VALUE),
+    }: {
+        walletIndex?: number,
+        proposal: RegisterDOJContractProposal,
+        amount: BaseAmount,
+        gasLimit?: BigNumber 
+    }): Promise<TxHash> {
+        const privKey = this.getPrivateKey(walletIndex)
+        const signerPubkey = privKey.pubKey()
+    
+        const fromAddress = this.getAddress(walletIndex)
+        const fromAddressAcc = cosmosclient.AccAddress.fromString(fromAddress)
+    
+        const denom = getDenom(AssetDOJNative);
+        const buildSubmitProposalTxBody = await buildSubmitProposal({
+            amount,
+            denom,
+            from: fromAddress,
+            proposal
+        })
+    
+        const account = await this.getCosmosClient().getAccount(fromAddressAcc)
+        const { account_number: accountNumber } = account
+        if (!accountNumber) throw Error(`Deposit failed - could not get account number ${accountNumber}`)
+    
+        const txBuilder = buildUnsignedTx({
+            cosmosSdk: this.getCosmosClient().sdk,
+            txBody: buildSubmitProposalTxBody,
+            signerPubkey: cosmosclient.codec.instanceToProtoAny(signerPubkey),
+            sequence: account.sequence || Long.ZERO,
+            gasLimit: Long.fromString(gasLimit.toFixed(0)),
+        })
+    
+        const txHash = await this.getCosmosClient().signAndBroadcast(txBuilder, privKey, accountNumber)
+    
+        if (!txHash) throw Error(`Invalid transaction hash: ${txHash}`)
+    
         return txHash
     }
 

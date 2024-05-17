@@ -1,4 +1,5 @@
 import { cosmosclient, proto, rest } from '@cosmos-client/core'
+import { Any } from "cosmjs-types/google/protobuf/any";
 import { Balance, FeeType, Fees, Network, TxHash, TxType, singleFee } from '../client'
 import { CosmosSDKClient, TxLog } from '../cosmos'
 import {
@@ -19,6 +20,17 @@ import Long from 'long'
 import { ChainId, ExplorerUrls, NodeInfoResponse, TxData } from './types'
 import {MsgNativeTx, MsgSetIpAddressTx, MsgSetPubkeysTx, MsgSetVersionTx, MsgSubmitProposal} from './messages'
 import types from './proto/MsgCompiled'
+
+export type RegisterDOJContractProposal = {
+  title: string;
+  description: string;
+  register_contract: RegisterContract;
+};
+
+export type RegisterContract = {
+  chainName: string;
+  contract: string;
+};
 
 export const DOJ_DECIMAL = 8
 export const DEFAULT_GAS_ADJUSTMENT = 2
@@ -342,6 +354,68 @@ export const buildDepositTx = async ({
         memo: msgNativeTx.memo,
     })
 }
+
+/**
+ * Structure a SubmitProposal
+ *
+ */
+export const buildSubmitProposal = async ({
+  from,
+  amount,
+  denom,
+  proposal,
+}: {
+  from: string;
+  amount: BaseAmount;
+  denom: string;
+  proposal: RegisterDOJContractProposal;
+}): Promise<proto.cosmos.tx.v1beta1.TxBody> => {
+  const depositAmount = [
+    {
+      amount: amount.amount().toFixed(0),
+      denom,
+    },
+  ];
+
+  const proposalContent = {
+    title: proposal.title,
+    description: proposal.description,
+    register_contract: {
+      chain: proposal.register_contract.chainName,
+      doj_contract_address: proposal.register_contract.contract,
+    },
+  };
+
+  const encodedContent = Any.fromPartial({
+    typeUrl: "/dojima.chain.RegisterDOJContractProposal",
+    value: new TextEncoder().encode(JSON.stringify(proposalContent)), // Encode the proposal content as Uint8Array
+  });
+  // build tx
+  const msgProposal = new proto.cosmos.gov.v1beta1.MsgSubmitProposal({
+    // content: null,
+    // initial_deposit: [],
+    // proposer: fromAddress,
+    //   content: {
+    //     typeUrl: "/dojima.chain.RegisterDOJContractProposal",
+    //     value: {
+    //       title: proposal.title,
+    //       description: proposal.description,
+    //       register_contract: {
+    //         chain: proposal.register_contract.chainName,
+    //         doj_contract_address: proposal.register_contract.contract,
+    //       },
+    //     },
+    //   },
+    content: encodedContent,
+    initial_deposit: depositAmount, // adjust deposit amount and denom as needed
+    proposer: from,
+  });
+
+  return new proto.cosmos.tx.v1beta1.TxBody({
+    messages: [cosmosclient.codec.instanceToProtoAny(msgProposal)],
+  });
+};
+
 
 /**
  * Structure a MsgSetVersion
