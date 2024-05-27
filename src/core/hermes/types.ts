@@ -22,7 +22,8 @@ export type ChainId = string
 export type ChainIds = Record<Network, ChainId>
 
 export type HermeschainClientParams = {
-    clientUrl?: ClientUrl
+    apiUrl?: string
+    rpcUrl?: string
     explorerUrls?: ExplorerUrls
     chainIds?: ChainIds
 }

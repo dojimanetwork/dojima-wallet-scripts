@@ -23,7 +23,7 @@ import {
     PoolData,
     SwapFeeResult
 } from "../swap_utils";
-import {getPoolData} from "../pool_utils";
+// import {getPoolData} from "../pool_utils";
 
 export interface ArweaveChainClient {
     getAddress(): Promise<string>,
@@ -208,8 +208,8 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
         return
     }
 
-    async getInboundObject(): Promise<InboundAddressResult> {
-        const response = await this.arweave.api.get('https://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
+    async getInboundObject(url: string): Promise<InboundAddressResult> {
+        const response = await this.arweave.api.get(`${url}hermeschain/inbound_addresses`)
         if (response.status !== 200) {
             throw new Error(
                 `Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`
@@ -221,25 +221,25 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
         return inboundObj
     }
 
-    async getArweaveInboundAddress(): Promise<string> {
-        const inboundObj = await this.getInboundObject()
+    async getArweaveInboundAddress(url: string): Promise<string> {
+        const inboundObj = await this.getInboundObject(url)
         return inboundObj.address
     }
 
-    async getDefaultLiquidityPoolGasFee(): Promise<number> {
-        const inboundObj = await this.getInboundObject()
+    // async getDefaultLiquidityPoolGasFee(): Promise<number> {
+    //     const inboundObj = await this.getInboundObject()
 
-        /** Convert from Winston to Ar. (1 Ar = 10^12) */
-        const arGasFee = this.arweave.ar.winstonToAr(inboundObj.gas_rate);
+    //     /** Convert from Winston to Ar. (1 Ar = 10^12) */
+    //     const arGasFee = this.arweave.ar.winstonToAr(inboundObj.gas_rate);
 
-        return Number(arGasFee);
-    }
+    //     return Number(arGasFee);
+    // }
 
-    async addLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
-        const tag = dojAddress ?
+    async addLiquidityPool(amount: number, inboundAddress: string, hermesAddress?: string): Promise<string> {
+        const tag = hermesAddress ?
             new Tag(
                 this.arweave.utils.stringToB64Url('memo'),
-                this.arweave.utils.stringToB64Url(`ADD:AR.AR:${dojAddress}`)
+                this.arweave.utils.stringToB64Url(`ADD:AR.AR:${hermesAddress}`)
             )
             :
             new Tag(
@@ -255,10 +255,10 @@ class ArweaveClient extends ArweaveTxClient implements ArweaveChainClient {
     }
 
     async swap(amount: number, token: SwapAssetList, inboundAddress: string, recipient: string): Promise<string> {
-        const fromPool = await getPoolData('AR.AR')
-        const toPool = await getPoolData(token)
-        const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
-        console.log('Swap output : ', swapOutput)
+        // const fromPool = await getPoolData('AR.AR')
+        // const toPool = await getPoolData(token)
+        // const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
+        // console.log('Swap output : ', swapOutput)
         const tag = new Tag(
             this.arweave.utils.stringToB64Url('memo'),
             this.arweave.utils.stringToB64Url(`SWAP:${token}:${recipient}`)

@@ -226,10 +226,10 @@ class PolkadotClient implements PolkaChainClient {
     async addLiquidityPool(
         amount: number,
         inboundAddress: string,
-        dojAddress?: string
+        hermesAddress?: string
     ): Promise<string> {
-        const memo = dojAddress
-            ? `memo:ADD:DOT.DOT:${dojAddress}`
+        const memo = hermesAddress
+            ? `memo:ADD:DOT.DOT:${hermesAddress}`
             : `memo:ADD:DOT.DOT`;
 
         const txHash = await this.polkaBatchTxsToHermes(

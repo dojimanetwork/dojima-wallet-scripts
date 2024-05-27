@@ -685,9 +685,9 @@ class BinanceBeaconClient extends BaseChainClient implements BinanceClient, Chai
         return await this.poolAddOrSwap(amount, inboundAddress, memo)
     }
 
-    async addLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
-        const memo = dojAddress ?
-            `ADD:BNB.BNB:${dojAddress}`
+    async addLiquidityPool(amount: number, inboundAddress: string, hermesAddress?: string): Promise<string> {
+        const memo = hermesAddress ?
+            `ADD:BNB.BNB:${hermesAddress}`
             :
             `ADD:BNB.BNB`
         return await this.poolAddOrSwap(amount, inboundAddress, memo)

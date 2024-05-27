@@ -16,7 +16,7 @@ import {
     PoolData,
     SwapFeeResult
 } from "../swap_utils";
-import {getPoolData} from "../pool_utils";
+// import {getPoolData} from "../pool_utils";
 
 export interface SolanaChainClient {
     getCluster(): web3.Cluster,
@@ -282,9 +282,9 @@ class SolanaClient implements SolanaChainClient {
         return
     }
 
-    async getInboundObject(): Promise<InboundAddressResult> {
+    async getInboundObject(url: string): Promise<InboundAddressResult> {
         const response = await axios.get(
-            "https://api-test.h4s.dojima.network/hermeschain/inbound_addresses"
+            `${url}hermeschain/inbound_addresses`
         );
         if (response.status !== 200) {
             throw new Error(
@@ -299,18 +299,18 @@ class SolanaClient implements SolanaChainClient {
         return inboundObj;
     }
 
-    async getSolanaInboundAddress(): Promise<string> {
-        const inboundObj = await this.getInboundObject();
+    async getSolanaInboundAddress(url: string): Promise<string> {
+        const inboundObj = await this.getInboundObject(url);
         return inboundObj.address;
     }
 
-    async getDefaultLiquidityPoolGasFee(): Promise<number> {
-        const inboundObj = await this.getInboundObject();
+    // async getDefaultLiquidityPoolGasFee(): Promise<number> {
+    //     const inboundObj = await this.getInboundObject();
 
-        const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, SOL_DECIMAL);
+    //     const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, SOL_DECIMAL);
 
-        return gasFee;
-    }
+    //     return gasFee;
+    // }
 
     async getProvider() {
         const opts: web3.ConfirmOptions = {
@@ -349,11 +349,11 @@ class SolanaClient implements SolanaChainClient {
     async addLiquidityPool(
         amount: number,
         inboundAddress: string,
-        dojAddress?: string
+        hermesAddress?: string
     ) {
         const toAmount = baseToLamports(amount, SOL_DECIMAL)
-        const memo = dojAddress
-            ? `ADD:SOL.SOL:${dojAddress}`
+        const memo = hermesAddress
+            ? `ADD:SOL.SOL:${hermesAddress}`
             : `ADD:SOL.SOL`;
         const poolHash = await this.solanaBatchTxsToHermes(toAmount, inboundAddress, memo);
         // await this.connection.confirmTransaction(swapHash);
@@ -366,10 +366,10 @@ class SolanaClient implements SolanaChainClient {
         inboundAddress: string,
         recipient: string
     ) {
-        const fromPool = await getPoolData('SOL.SOL')
-        const toPool = await getPoolData(token)
-        const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
-        console.log('Swap output : ', swapOutput)
+        // const fromPool = await getPoolData('SOL.SOL')
+        // const toPool = await getPoolData(token)
+        // const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
+        // console.log('Swap output : ', swapOutput)
         const toAmount = baseToLamports(amount, SOL_DECIMAL)
         const memo = `SWAP:${token}:${recipient}`
         const swapHash = await this.solanaBatchTxsToHermes(toAmount, inboundAddress, memo);

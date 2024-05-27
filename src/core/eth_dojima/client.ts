@@ -24,7 +24,7 @@ import {
     PoolData,
     SwapFeeResult
 } from "../swap_utils";
-import {getPoolData} from "../pool_utils";
+// import {getPoolData} from "../pool_utils";
 
 export type EthRpcParams = {
     rpcUrl?: string,
@@ -274,8 +274,8 @@ export default class EthereumChain {
         return
     }
 
-    async getInboundObject(): Promise<InboundAddressResult> {
-        const response = await axios.get('https://api-test.h4s.dojima.network/hermeschain/inbound_addresses')
+    async getInboundObject(url: string): Promise<InboundAddressResult> {
+        const response = await axios.get(`${url}hermeschain/inbound_addresses`)
         if (response.status !== 200) {
             throw new Error(
                 `Unable to retrieve inbound addresses. Dojima gateway responded with status ${response.status}.`
@@ -287,37 +287,37 @@ export default class EthereumChain {
         return inboundObj
     }
 
-    async getEthereumInboundAddress(): Promise<string> {
-        const inboundObj = await this.getInboundObject()
+    async getEthereumInboundAddress(url: string): Promise<string> {
+        const inboundObj = await this.getInboundObject(url)
         return inboundObj.address
     }
 
-    async getDefaultLiquidityPoolGasFee(): Promise<number> {
-        const inboundObj = await this.getInboundObject()
+    // async getDefaultLiquidityPoolGasFee(): Promise<number> {
+    //     const inboundObj = await this.getInboundObject()
 
-        const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, ETH_DECIMAL);
+    //     const gasFee = Number(inboundObj.gas_rate) / Math.pow(10, ETH_DECIMAL);
 
-        return gasFee;
-    }
+    //     return gasFee;
+    // }
 
-    async withdrawLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
-        const memo = dojAddress ?
-            `WITHDRAW:ETH.ETH:0xd526d5f47f863eff32b99bc4f9e77ddb4bd2929b:5000:${dojAddress}:5000`
-            :
-            `WITHDRAW:ETH.ETH:0xd526d5f47f863eff32b99bc4f9e77ddb4bd2929b:10000`
+    // async withdrawLiquidityPool(amount: number, inboundAddress: string, hermesAddress?: string): Promise<string> {
+    //     const memo = hermesAddress ?
+    //         `WITHDRAW:ETH.ETH:0xd526d5f47f863eff32b99bc4f9e77ddb4bd2929b:5000:${hermesAddress}:5000`
+    //         :
+    //         `WITHDRAW:ETH.ETH:0xd526d5f47f863eff32b99bc4f9e77ddb4bd2929b:10000`
 
-        const txHash = await this.transfer({
-            amount,
-            recipient: inboundAddress,
-            memo
-        })
+    //     const txHash = await this.transfer({
+    //         amount,
+    //         recipient: inboundAddress,
+    //         memo
+    //     })
 
-        return txHash
-    }
+    //     return txHash
+    // }
 
-    async addLiquidityPool(amount: number, inboundAddress: string, dojAddress?: string): Promise<string> {
-        const memo = dojAddress ?
-            `ADD:ETH.ETH:${dojAddress}`
+    async addLiquidityPool(amount: number, inboundAddress: string, hermesAddress?: string): Promise<string> {
+        const memo = hermesAddress ?
+            `ADD:ETH.ETH:${hermesAddress}`
             :
             `ADD:ETH.ETH`
 
@@ -331,10 +331,10 @@ export default class EthereumChain {
     }
 
     async swap(amount: number, token: SwapAssetList, inboundAddress: string, recipient: string): Promise<string> {
-        const fromPool = await getPoolData('ETH.ETH')
-        const toPool = await getPoolData(token)
-        const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
-        console.log('Swap output : ', swapOutput)
+        // const fromPool = await getPoolData('ETH.ETH')
+        // const toPool = await getPoolData(token)
+        // const swapOutput = this.getDoubleSwapOutput(amount, fromPool, toPool)
+        // console.log('Swap output : ', swapOutput)
         const memo = `SWAP:${token}:${recipient}`
 
         const txHash = await this.transfer({

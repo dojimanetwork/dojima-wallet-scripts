@@ -5,7 +5,14 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "dojin_transfer": "ts-node __tests__/dojima/dojin_transfer.ts"
+    "ar-pool": "ts-node __tests__/pools/ar-pool.ts",
+    "doj-pool": "ts-node __tests__/pools/doj-pool.ts",
+    "eth-pool": "ts-node __tests__/pools/eth-pool.ts",
+    "sol-pool": "ts-node __tests__/pools/sol-pool.ts",
+    "ar-swap": "ts-node __tests__/swap/ar-swap.ts",
+    "doj-swap": "ts-node __tests__/swap/doj-swap.ts",
+    "eth-swap": "ts-node __tests__/swap/eth-swap.ts",
+    "sol-swap": "ts-node __tests__/swap/sol-swap.ts"
   },
   "repository": {
     "type": "git",
@@ -28,7 +35,7 @@
     "@d11k-ts/ethereum": "^0.1.0",
     "@d11k-ts/hermes": "^0.1.0",
     "@d11k-ts/utils": "^0.1.1",
-    "@dojimanetwork/dojima-contracts": "^1.0.0",
+    "@dojimanetwork/dojima-contracts": "^0.1.2",
     "@ethereumjs/block": "^3.6.2",
     "@openzeppelin/wizard": "^0.4.1",
     "@polkadot/api": "^9.9.1",

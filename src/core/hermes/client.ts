@@ -53,7 +53,6 @@ import {
     DEFAULT_GAS_LIMIT_VALUE,
     DEPOSIT_GAS_LIMIT_VALUE,
     MAX_TX_COUNT,
-    defaultExplorerUrls,
     getBalance,
     getDefaultFees,
     getDenom,
@@ -69,6 +68,7 @@ import {
     registerSetIpAddrCodecs,
     buildSetPubkeysTx,
     registerSetNodePubkeysCodecs,
+    getDefaultExplorerUrls,
 } from './util'
 import { proto } from "@cosmos-client/core";
 
@@ -93,6 +93,8 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
     private explorerUrls: ExplorerUrls
     private chainIds: ChainIds
     private cosmosClient: CosmosSDKClient
+    private apiUrl: string
+    private rpcUrl: string
 
     /**
      * Constructor
@@ -107,38 +109,37 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
     constructor({
         network = Network.Mainnet,
         phrase,
-        clientUrl = {
-            [Network.Testnet]: {
-                node: 'https://api-dev.h4s.dojima.network',
-                rpc: 'https://rpc-dev.h4s.dojima.network',
-                // node: 'http://localhost:1317',
-                // rpc: 'http://localhost:26657',
-            },
-            [Network.Stagenet]: {
-                node: '',
-                rpc: '',
-            },
-            [Network.Mainnet]: {
-                node: 'http://localhost:1317',
-                rpc: 'http://localhost:26657',
-                // node: '',
-                // rpc: '',
-            },
-        },
-        explorerUrls = defaultExplorerUrls,
+        apiUrl = 'https://api.h4s.dojima.network',
+        rpcUrl = 'https://rpc.h4s.dojima.network',
         rootDerivationPaths = {
-            [Network.Mainnet]: "44'/931'/0'/0/",
+            [Network.Mainnet]: "44'/1401'/0'/0/",
             [Network.Stagenet]: "44'/1401'/0'/0/",
             [Network.Testnet]: "44'/1001'/0'/0/",
         },
         chainIds = {
             [Network.Mainnet]: 'hermeschain',
             [Network.Stagenet]: 'hermeschain',
-            [Network.Testnet]: 'hermes-testnet-v2',
-            // [Network.Testnet]: 'hermeschain',
+            [Network.Testnet]: apiUrl.includes('localhost') ? 'hermes-testnet-v2' : 'hermeschain',
         },
     }: ChainClientParams & HermeschainClientParams) {
         super(Chain.Cosmos, { network, rootDerivationPaths, phrase })
+        this.apiUrl = apiUrl;
+        this.rpcUrl = rpcUrl;
+        const clientUrl = {
+            [Network.Testnet]: {
+                node: this.apiUrl,
+                rpc: this.rpcUrl,
+            },
+            [Network.Stagenet]: {
+                node: this.apiUrl,
+                rpc: this.rpcUrl,
+            },
+            [Network.Mainnet]: {
+                node: this.apiUrl,
+                rpc: this.rpcUrl,
+            },
+        };
+        const explorerUrls = getDefaultExplorerUrls(network, apiUrl)
         this.clientUrl = clientUrl
         this.explorerUrls = explorerUrls
         this.chainIds = chainIds
