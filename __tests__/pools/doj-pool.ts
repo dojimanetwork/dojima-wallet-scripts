@@ -1,6 +1,6 @@
 import { Network } from "../../src/core/client";
 import DojimaChain from "../../src/core/dojima/client";
-import { DOJ_DECIMAL, HermesSdkClient } from "../../src/core/hermes";
+import { DOJ_DECIMAL ,HermesSdkClient } from "../../src/core/hermes";
 import {
   assetAmount,
   AssetDOJNative,
@@ -13,7 +13,8 @@ const hermesAddPoolAmount = 10;
 
 async function addDojimaPool() {
   const phrase =
-    "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
+    // "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
+    "message nut rain immune rifle fall legend floor cradle spin season sting couch age swap seminar melt cable life battle island impose cradle brass";
 
   /** Dojima client */
   const dojClient = new DojimaChain({
@@ -45,7 +46,7 @@ async function addDojimaPool() {
   if (dojBalance > dojAddPoolAmount && h4sBalance > hermesAddPoolAmount) {
     const dojInboundAddress = await dojClient.getDojimaInboundAddress(
       // "https://api-dev.h4s.dojima.network/"
-      "http://localhost:1317"
+      "http://localhost:1317/"
     );
     const dojLiquidityPoolHash = await dojClient.addLiquidityPool(
       dojInboundAddress,

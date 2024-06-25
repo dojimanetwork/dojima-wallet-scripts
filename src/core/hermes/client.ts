@@ -109,17 +109,18 @@ class HermesSdkClient extends BaseChainClient implements HermeschainClient, Chai
     constructor({
         network = Network.Mainnet,
         phrase,
-        apiUrl = 'https://api.h4s.dojima.network',
-        rpcUrl = 'https://rpc.h4s.dojima.network',
+        apiUrl = 'https://api-h4s.dojima.network',
+        rpcUrl = 'https://rpc-h4s.dojima.network',
         rootDerivationPaths = {
-            [Network.Mainnet]: "44'/1401'/0'/0/",
-            [Network.Stagenet]: "44'/1401'/0'/0/",
-            [Network.Testnet]: "44'/1001'/0'/0/",
+            [Network.Mainnet]: "44'/187'/0'/0/",
+            [Network.Stagenet]: "44'/187'/0'/0/",
+            [Network.Testnet]: "44'/184'/0'/0/",
         },
         chainIds = {
-            [Network.Mainnet]: 'hermeschain',
-            [Network.Stagenet]: 'hermeschain',
-            [Network.Testnet]: apiUrl.includes('localhost') ? 'hermes-testnet-v2' : 'hermeschain',
+            [Network.Mainnet]: 'h4s-187-d11k',
+            [Network.Stagenet]: 'h4s-187-d11k',
+            // [Network.Testnet]: 'h4s-184-d11k',
+            [Network.Testnet]: apiUrl.includes('localhost') ? 'hermeschain' : 'h4s-184-d11k',
         },
     }: ChainClientParams & HermeschainClientParams) {
         super(Chain.Cosmos, { network, rootDerivationPaths, phrase })

@@ -12,7 +12,8 @@
     "ar-swap": "ts-node __tests__/swap/ar-swap.ts",
     "doj-swap": "ts-node __tests__/swap/doj-swap.ts",
     "eth-swap": "ts-node __tests__/swap/eth-swap.ts",
-    "sol-swap": "ts-node __tests__/swap/sol-swap.ts"
+    "sol-swap": "ts-node __tests__/swap/sol-swap.ts",
+    "genMsgs": "src/core/hermes/genMsg.sh"
   },
   "repository": {
     "type": "git",
