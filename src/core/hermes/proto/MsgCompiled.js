@@ -143,22 +143,18 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
-                        message.chain = reader.string();
-                        break;
-                    }
-                case 2: {
-                        message.symbol = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.ticker = reader.string();
-                        break;
-                    }
-                case 4: {
-                        message.synth = reader.bool();
-                        break;
-                    }
+                case 1:
+                    message.chain = reader.string();
+                    break;
+                case 2:
+                    message.symbol = reader.string();
+                    break;
+                case 3:
+                    message.ticker = reader.string();
+                    break;
+                case 4:
+                    message.synth = reader.bool();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -271,21 +267,6 @@ $root.common = (function() {
          */
         Asset.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for Asset
-         * @function getTypeUrl
-         * @memberof common.Asset
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        Asset.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/common.Asset";
         };
 
         return Asset;
@@ -405,18 +386,15 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
-                        message.asset = $root.common.Asset.decode(reader, reader.uint32());
-                        break;
-                    }
-                case 2: {
-                        message.amount = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.decimals = reader.int64();
-                        break;
-                    }
+                case 1:
+                    message.asset = $root.common.Asset.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.amount = reader.string();
+                    break;
+                case 3:
+                    message.decimals = reader.int64();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -542,21 +520,6 @@ $root.common = (function() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        /**
-         * Gets the default type url for Coin
-         * @function getTypeUrl
-         * @memberof common.Coin
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        Coin.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/common.Coin";
-        };
-
         return Coin;
     })();
 
@@ -663,14 +626,12 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
-                        message.secp256k1 = reader.string();
-                        break;
-                    }
-                case 2: {
-                        message.ed25519 = reader.string();
-                        break;
-                    }
+                case 1:
+                    message.secp256k1 = reader.string();
+                    break;
+                case 2:
+                    message.ed25519 = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -769,21 +730,6 @@ $root.common = (function() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        /**
-         * Gets the default type url for PubKeySet
-         * @function getTypeUrl
-         * @memberof common.PubKeySet
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        PubKeySet.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/common.PubKeySet";
-        };
-
         return PubKeySet;
     })();
 
@@ -800,6 +746,8 @@ $root.common = (function() {
          * @property {Array.<common.ICoin>|null} [coins] Tx coins
          * @property {Array.<common.ICoin>|null} [gas] Tx gas
          * @property {string|null} [memo] Tx memo
+         * @property {Uint8Array|null} [payload] Tx payload
+         * @property {boolean|null} [isXcMsg] Tx isXcMsg
          */
 
         /**
@@ -876,6 +824,22 @@ $root.common = (function() {
         Tx.prototype.memo = "";
 
         /**
+         * Tx payload.
+         * @member {Uint8Array} payload
+         * @memberof common.Tx
+         * @instance
+         */
+        Tx.prototype.payload = $util.newBuffer([]);
+
+        /**
+         * Tx isXcMsg.
+         * @member {boolean} isXcMsg
+         * @memberof common.Tx
+         * @instance
+         */
+        Tx.prototype.isXcMsg = false;
+
+        /**
          * Creates a new Tx instance using the specified properties.
          * @function create
          * @memberof common.Tx
@@ -915,6 +879,10 @@ $root.common = (function() {
                     $root.common.Coin.encode(message.gas[i], writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
             if (message.memo != null && Object.hasOwnProperty.call(message, "memo"))
                 writer.uint32(/* id 7, wireType 2 =*/58).string(message.memo);
+            if (message.payload != null && Object.hasOwnProperty.call(message, "payload"))
+                writer.uint32(/* id 8, wireType 2 =*/66).bytes(message.payload);
+            if (message.isXcMsg != null && Object.hasOwnProperty.call(message, "isXcMsg"))
+                writer.uint32(/* id 9, wireType 0 =*/72).bool(message.isXcMsg);
             return writer;
         };
 
@@ -949,38 +917,37 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
-                        message.id = reader.string();
-                        break;
-                    }
-                case 2: {
-                        message.chain = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.fromAddress = reader.string();
-                        break;
-                    }
-                case 4: {
-                        message.toAddress = reader.string();
-                        break;
-                    }
-                case 5: {
-                        if (!(message.coins && message.coins.length))
-                            message.coins = [];
-                        message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
-                        break;
-                    }
-                case 6: {
-                        if (!(message.gas && message.gas.length))
-                            message.gas = [];
-                        message.gas.push($root.common.Coin.decode(reader, reader.uint32()));
-                        break;
-                    }
-                case 7: {
-                        message.memo = reader.string();
-                        break;
-                    }
+                case 1:
+                    message.id = reader.string();
+                    break;
+                case 2:
+                    message.chain = reader.string();
+                    break;
+                case 3:
+                    message.fromAddress = reader.string();
+                    break;
+                case 4:
+                    message.toAddress = reader.string();
+                    break;
+                case 5:
+                    if (!(message.coins && message.coins.length))
+                        message.coins = [];
+                    message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
+                    break;
+                case 6:
+                    if (!(message.gas && message.gas.length))
+                        message.gas = [];
+                    message.gas.push($root.common.Coin.decode(reader, reader.uint32()));
+                    break;
+                case 7:
+                    message.memo = reader.string();
+                    break;
+                case 8:
+                    message.payload = reader.bytes();
+                    break;
+                case 9:
+                    message.isXcMsg = reader.bool();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1049,6 +1016,12 @@ $root.common = (function() {
             if (message.memo != null && message.hasOwnProperty("memo"))
                 if (!$util.isString(message.memo))
                     return "memo: string expected";
+            if (message.payload != null && message.hasOwnProperty("payload"))
+                if (!(message.payload && typeof message.payload.length === "number" || $util.isString(message.payload)))
+                    return "payload: buffer expected";
+            if (message.isXcMsg != null && message.hasOwnProperty("isXcMsg"))
+                if (typeof message.isXcMsg !== "boolean")
+                    return "isXcMsg: boolean expected";
             return null;
         };
 
@@ -1094,6 +1067,13 @@ $root.common = (function() {
             }
             if (object.memo != null)
                 message.memo = String(object.memo);
+            if (object.payload != null)
+                if (typeof object.payload === "string")
+                    $util.base64.decode(object.payload, message.payload = $util.newBuffer($util.base64.length(object.payload)), 0);
+                else if (object.payload.length)
+                    message.payload = object.payload;
+            if (object.isXcMsg != null)
+                message.isXcMsg = Boolean(object.isXcMsg);
             return message;
         };
 
@@ -1120,6 +1100,14 @@ $root.common = (function() {
                 object.fromAddress = "";
                 object.toAddress = "";
                 object.memo = "";
+                if (options.bytes === String)
+                    object.payload = "";
+                else {
+                    object.payload = [];
+                    if (options.bytes !== Array)
+                        object.payload = $util.newBuffer(object.payload);
+                }
+                object.isXcMsg = false;
             }
             if (message.id != null && message.hasOwnProperty("id"))
                 object.id = message.id;
@@ -1141,6 +1129,10 @@ $root.common = (function() {
             }
             if (message.memo != null && message.hasOwnProperty("memo"))
                 object.memo = message.memo;
+            if (message.payload != null && message.hasOwnProperty("payload"))
+                object.payload = options.bytes === String ? $util.base64.encode(message.payload, 0, message.payload.length) : options.bytes === Array ? Array.prototype.slice.call(message.payload) : message.payload;
+            if (message.isXcMsg != null && message.hasOwnProperty("isXcMsg"))
+                object.isXcMsg = message.isXcMsg;
             return object;
         };
 
@@ -1153,21 +1145,6 @@ $root.common = (function() {
          */
         Tx.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for Tx
-         * @function getTypeUrl
-         * @memberof common.Tx
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        Tx.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/common.Tx";
         };
 
         return Tx;
@@ -1278,16 +1255,14 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
-                        if (!(message.coins && message.coins.length))
-                            message.coins = [];
-                        message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
-                        break;
-                    }
-                case 2: {
-                        message.poolDeduct = reader.string();
-                        break;
-                    }
+                case 1:
+                    if (!(message.coins && message.coins.length))
+                        message.coins = [];
+                    message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
+                    break;
+                case 2:
+                    message.poolDeduct = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1403,21 +1378,6 @@ $root.common = (function() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        /**
-         * Gets the default type url for Fee
-         * @function getTypeUrl
-         * @memberof common.Fee
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        Fee.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/common.Fee";
-        };
-
         return Fee;
     })();
 
@@ -1524,14 +1484,12 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
-                        message.key = reader.bytes();
-                        break;
-                    }
-                case 2: {
-                        message.value = reader.bytes();
-                        break;
-                    }
+                case 1:
+                    message.key = reader.bytes();
+                    break;
+                case 2:
+                    message.value = reader.bytes();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1591,12 +1549,12 @@ $root.common = (function() {
             if (object.key != null)
                 if (typeof object.key === "string")
                     $util.base64.decode(object.key, message.key = $util.newBuffer($util.base64.length(object.key)), 0);
-                else if (object.key.length >= 0)
+                else if (object.key.length)
                     message.key = object.key;
             if (object.value != null)
                 if (typeof object.value === "string")
                     $util.base64.decode(object.value, message.value = $util.newBuffer($util.base64.length(object.value)), 0);
-                else if (object.value.length >= 0)
+                else if (object.value.length)
                     message.value = object.value;
             return message;
         };
@@ -1646,21 +1604,6 @@ $root.common = (function() {
          */
         KVPair.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for KVPair
-         * @function getTypeUrl
-         * @memberof common.KVPair
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        KVPair.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/common.KVPair";
         };
 
         return KVPair;
@@ -1758,10 +1701,9 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
-                        message.address = reader.bytes();
-                        break;
-                    }
+                case 1:
+                    message.address = reader.bytes();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -1818,7 +1760,7 @@ $root.common = (function() {
             if (object.address != null)
                 if (typeof object.address === "string")
                     $util.base64.decode(object.address, message.address = $util.newBuffer($util.base64.length(object.address)), 0);
-                else if (object.address.length >= 0)
+                else if (object.address.length)
                     message.address = object.address;
             return message;
         };
@@ -1860,22 +1802,886 @@ $root.common = (function() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
+        return DcAddress;
+    })();
+
+    common.DcHash = (function() {
+
         /**
-         * Gets the default type url for DcAddress
-         * @function getTypeUrl
-         * @memberof common.DcAddress
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
+         * Properties of a DcHash.
+         * @memberof common
+         * @interface IDcHash
+         * @property {Array.<Uint8Array>|null} [hash] DcHash hash
          */
-        DcAddress.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/common.DcAddress";
+
+        /**
+         * Constructs a new DcHash.
+         * @memberof common
+         * @classdesc Represents a DcHash.
+         * @implements IDcHash
+         * @constructor
+         * @param {common.IDcHash=} [properties] Properties to set
+         */
+        function DcHash(properties) {
+            this.hash = [];
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * DcHash hash.
+         * @member {Array.<Uint8Array>} hash
+         * @memberof common.DcHash
+         * @instance
+         */
+        DcHash.prototype.hash = $util.emptyArray;
+
+        /**
+         * Creates a new DcHash instance using the specified properties.
+         * @function create
+         * @memberof common.DcHash
+         * @static
+         * @param {common.IDcHash=} [properties] Properties to set
+         * @returns {common.DcHash} DcHash instance
+         */
+        DcHash.create = function create(properties) {
+            return new DcHash(properties);
         };
 
-        return DcAddress;
+        /**
+         * Encodes the specified DcHash message. Does not implicitly {@link common.DcHash.verify|verify} messages.
+         * @function encode
+         * @memberof common.DcHash
+         * @static
+         * @param {common.IDcHash} message DcHash message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        DcHash.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.hash != null && message.hash.length)
+                for (var i = 0; i < message.hash.length; ++i)
+                    writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.hash[i]);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified DcHash message, length delimited. Does not implicitly {@link common.DcHash.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof common.DcHash
+         * @static
+         * @param {common.IDcHash} message DcHash message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        DcHash.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a DcHash message from the specified reader or buffer.
+         * @function decode
+         * @memberof common.DcHash
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {common.DcHash} DcHash
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        DcHash.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.common.DcHash();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    if (!(message.hash && message.hash.length))
+                        message.hash = [];
+                    message.hash.push(reader.bytes());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a DcHash message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof common.DcHash
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {common.DcHash} DcHash
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        DcHash.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a DcHash message.
+         * @function verify
+         * @memberof common.DcHash
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        DcHash.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.hash != null && message.hasOwnProperty("hash")) {
+                if (!Array.isArray(message.hash))
+                    return "hash: array expected";
+                for (var i = 0; i < message.hash.length; ++i)
+                    if (!(message.hash[i] && typeof message.hash[i].length === "number" || $util.isString(message.hash[i])))
+                        return "hash: buffer[] expected";
+            }
+            return null;
+        };
+
+        /**
+         * Creates a DcHash message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof common.DcHash
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {common.DcHash} DcHash
+         */
+        DcHash.fromObject = function fromObject(object) {
+            if (object instanceof $root.common.DcHash)
+                return object;
+            var message = new $root.common.DcHash();
+            if (object.hash) {
+                if (!Array.isArray(object.hash))
+                    throw TypeError(".common.DcHash.hash: array expected");
+                message.hash = [];
+                for (var i = 0; i < object.hash.length; ++i)
+                    if (typeof object.hash[i] === "string")
+                        $util.base64.decode(object.hash[i], message.hash[i] = $util.newBuffer($util.base64.length(object.hash[i])), 0);
+                    else if (object.hash[i].length)
+                        message.hash[i] = object.hash[i];
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a DcHash message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof common.DcHash
+         * @static
+         * @param {common.DcHash} message DcHash
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        DcHash.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.arrays || options.defaults)
+                object.hash = [];
+            if (message.hash && message.hash.length) {
+                object.hash = [];
+                for (var j = 0; j < message.hash.length; ++j)
+                    object.hash[j] = options.bytes === String ? $util.base64.encode(message.hash[j], 0, message.hash[j].length) : options.bytes === Array ? Array.prototype.slice.call(message.hash[j]) : message.hash[j];
+            }
+            return object;
+        };
+
+        /**
+         * Converts this DcHash to JSON.
+         * @function toJSON
+         * @memberof common.DcHash
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        DcHash.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return DcHash;
+    })();
+
+    common.H128 = (function() {
+
+        /**
+         * Properties of a H128.
+         * @memberof common
+         * @interface IH128
+         * @property {number|Long|null} [Hi] H128 Hi
+         * @property {number|Long|null} [Lo] H128 Lo
+         */
+
+        /**
+         * Constructs a new H128.
+         * @memberof common
+         * @classdesc Represents a H128.
+         * @implements IH128
+         * @constructor
+         * @param {common.IH128=} [properties] Properties to set
+         */
+        function H128(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * H128 Hi.
+         * @member {number|Long} Hi
+         * @memberof common.H128
+         * @instance
+         */
+        H128.prototype.Hi = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * H128 Lo.
+         * @member {number|Long} Lo
+         * @memberof common.H128
+         * @instance
+         */
+        H128.prototype.Lo = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+
+        /**
+         * Creates a new H128 instance using the specified properties.
+         * @function create
+         * @memberof common.H128
+         * @static
+         * @param {common.IH128=} [properties] Properties to set
+         * @returns {common.H128} H128 instance
+         */
+        H128.create = function create(properties) {
+            return new H128(properties);
+        };
+
+        /**
+         * Encodes the specified H128 message. Does not implicitly {@link common.H128.verify|verify} messages.
+         * @function encode
+         * @memberof common.H128
+         * @static
+         * @param {common.IH128} message H128 message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        H128.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.Hi != null && Object.hasOwnProperty.call(message, "Hi"))
+                writer.uint32(/* id 1, wireType 0 =*/8).uint64(message.Hi);
+            if (message.Lo != null && Object.hasOwnProperty.call(message, "Lo"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint64(message.Lo);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified H128 message, length delimited. Does not implicitly {@link common.H128.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof common.H128
+         * @static
+         * @param {common.IH128} message H128 message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        H128.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a H128 message from the specified reader or buffer.
+         * @function decode
+         * @memberof common.H128
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {common.H128} H128
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        H128.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.common.H128();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.Hi = reader.uint64();
+                    break;
+                case 2:
+                    message.Lo = reader.uint64();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a H128 message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof common.H128
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {common.H128} H128
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        H128.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a H128 message.
+         * @function verify
+         * @memberof common.H128
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        H128.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.Hi != null && message.hasOwnProperty("Hi"))
+                if (!$util.isInteger(message.Hi) && !(message.Hi && $util.isInteger(message.Hi.low) && $util.isInteger(message.Hi.high)))
+                    return "Hi: integer|Long expected";
+            if (message.Lo != null && message.hasOwnProperty("Lo"))
+                if (!$util.isInteger(message.Lo) && !(message.Lo && $util.isInteger(message.Lo.low) && $util.isInteger(message.Lo.high)))
+                    return "Lo: integer|Long expected";
+            return null;
+        };
+
+        /**
+         * Creates a H128 message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof common.H128
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {common.H128} H128
+         */
+        H128.fromObject = function fromObject(object) {
+            if (object instanceof $root.common.H128)
+                return object;
+            var message = new $root.common.H128();
+            if (object.Hi != null)
+                if ($util.Long)
+                    (message.Hi = $util.Long.fromValue(object.Hi)).unsigned = true;
+                else if (typeof object.Hi === "string")
+                    message.Hi = parseInt(object.Hi, 10);
+                else if (typeof object.Hi === "number")
+                    message.Hi = object.Hi;
+                else if (typeof object.Hi === "object")
+                    message.Hi = new $util.LongBits(object.Hi.low >>> 0, object.Hi.high >>> 0).toNumber(true);
+            if (object.Lo != null)
+                if ($util.Long)
+                    (message.Lo = $util.Long.fromValue(object.Lo)).unsigned = true;
+                else if (typeof object.Lo === "string")
+                    message.Lo = parseInt(object.Lo, 10);
+                else if (typeof object.Lo === "number")
+                    message.Lo = object.Lo;
+                else if (typeof object.Lo === "object")
+                    message.Lo = new $util.LongBits(object.Lo.low >>> 0, object.Lo.high >>> 0).toNumber(true);
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a H128 message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof common.H128
+         * @static
+         * @param {common.H128} message H128
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        H128.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.Hi = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.Hi = options.longs === String ? "0" : 0;
+                if ($util.Long) {
+                    var long = new $util.Long(0, 0, true);
+                    object.Lo = options.longs === String ? long.toString() : options.longs === Number ? long.toNumber() : long;
+                } else
+                    object.Lo = options.longs === String ? "0" : 0;
+            }
+            if (message.Hi != null && message.hasOwnProperty("Hi"))
+                if (typeof message.Hi === "number")
+                    object.Hi = options.longs === String ? String(message.Hi) : message.Hi;
+                else
+                    object.Hi = options.longs === String ? $util.Long.prototype.toString.call(message.Hi) : options.longs === Number ? new $util.LongBits(message.Hi.low >>> 0, message.Hi.high >>> 0).toNumber(true) : message.Hi;
+            if (message.Lo != null && message.hasOwnProperty("Lo"))
+                if (typeof message.Lo === "number")
+                    object.Lo = options.longs === String ? String(message.Lo) : message.Lo;
+                else
+                    object.Lo = options.longs === String ? $util.Long.prototype.toString.call(message.Lo) : options.longs === Number ? new $util.LongBits(message.Lo.low >>> 0, message.Lo.high >>> 0).toNumber(true) : message.Lo;
+            return object;
+        };
+
+        /**
+         * Converts this H128 to JSON.
+         * @function toJSON
+         * @memberof common.H128
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        H128.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return H128;
+    })();
+
+    common.H160 = (function() {
+
+        /**
+         * Properties of a H160.
+         * @memberof common
+         * @interface IH160
+         * @property {common.IH128|null} [Hi] H160 Hi
+         * @property {number|null} [Lo] H160 Lo
+         */
+
+        /**
+         * Constructs a new H160.
+         * @memberof common
+         * @classdesc Represents a H160.
+         * @implements IH160
+         * @constructor
+         * @param {common.IH160=} [properties] Properties to set
+         */
+        function H160(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * H160 Hi.
+         * @member {common.IH128|null|undefined} Hi
+         * @memberof common.H160
+         * @instance
+         */
+        H160.prototype.Hi = null;
+
+        /**
+         * H160 Lo.
+         * @member {number} Lo
+         * @memberof common.H160
+         * @instance
+         */
+        H160.prototype.Lo = 0;
+
+        /**
+         * Creates a new H160 instance using the specified properties.
+         * @function create
+         * @memberof common.H160
+         * @static
+         * @param {common.IH160=} [properties] Properties to set
+         * @returns {common.H160} H160 instance
+         */
+        H160.create = function create(properties) {
+            return new H160(properties);
+        };
+
+        /**
+         * Encodes the specified H160 message. Does not implicitly {@link common.H160.verify|verify} messages.
+         * @function encode
+         * @memberof common.H160
+         * @static
+         * @param {common.IH160} message H160 message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        H160.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.Hi != null && Object.hasOwnProperty.call(message, "Hi"))
+                $root.common.H128.encode(message.Hi, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.Lo != null && Object.hasOwnProperty.call(message, "Lo"))
+                writer.uint32(/* id 2, wireType 0 =*/16).uint32(message.Lo);
+            return writer;
+        };
+
+        /**
+         * Encodes the specified H160 message, length delimited. Does not implicitly {@link common.H160.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof common.H160
+         * @static
+         * @param {common.IH160} message H160 message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        H160.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a H160 message from the specified reader or buffer.
+         * @function decode
+         * @memberof common.H160
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {common.H160} H160
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        H160.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.common.H160();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.Hi = $root.common.H128.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.Lo = reader.uint32();
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a H160 message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof common.H160
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {common.H160} H160
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        H160.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a H160 message.
+         * @function verify
+         * @memberof common.H160
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        H160.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.Hi != null && message.hasOwnProperty("Hi")) {
+                var error = $root.common.H128.verify(message.Hi);
+                if (error)
+                    return "Hi." + error;
+            }
+            if (message.Lo != null && message.hasOwnProperty("Lo"))
+                if (!$util.isInteger(message.Lo))
+                    return "Lo: integer expected";
+            return null;
+        };
+
+        /**
+         * Creates a H160 message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof common.H160
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {common.H160} H160
+         */
+        H160.fromObject = function fromObject(object) {
+            if (object instanceof $root.common.H160)
+                return object;
+            var message = new $root.common.H160();
+            if (object.Hi != null) {
+                if (typeof object.Hi !== "object")
+                    throw TypeError(".common.H160.Hi: object expected");
+                message.Hi = $root.common.H128.fromObject(object.Hi);
+            }
+            if (object.Lo != null)
+                message.Lo = object.Lo >>> 0;
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a H160 message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof common.H160
+         * @static
+         * @param {common.H160} message H160
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        H160.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.Hi = null;
+                object.Lo = 0;
+            }
+            if (message.Hi != null && message.hasOwnProperty("Hi"))
+                object.Hi = $root.common.H128.toObject(message.Hi, options);
+            if (message.Lo != null && message.hasOwnProperty("Lo"))
+                object.Lo = message.Lo;
+            return object;
+        };
+
+        /**
+         * Converts this H160 to JSON.
+         * @function toJSON
+         * @memberof common.H160
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        H160.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return H160;
+    })();
+
+    common.H256 = (function() {
+
+        /**
+         * Properties of a H256.
+         * @memberof common
+         * @interface IH256
+         * @property {common.IH128|null} [Hi] H256 Hi
+         * @property {common.IH128|null} [Lo] H256 Lo
+         */
+
+        /**
+         * Constructs a new H256.
+         * @memberof common
+         * @classdesc Represents a H256.
+         * @implements IH256
+         * @constructor
+         * @param {common.IH256=} [properties] Properties to set
+         */
+        function H256(properties) {
+            if (properties)
+                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                    if (properties[keys[i]] != null)
+                        this[keys[i]] = properties[keys[i]];
+        }
+
+        /**
+         * H256 Hi.
+         * @member {common.IH128|null|undefined} Hi
+         * @memberof common.H256
+         * @instance
+         */
+        H256.prototype.Hi = null;
+
+        /**
+         * H256 Lo.
+         * @member {common.IH128|null|undefined} Lo
+         * @memberof common.H256
+         * @instance
+         */
+        H256.prototype.Lo = null;
+
+        /**
+         * Creates a new H256 instance using the specified properties.
+         * @function create
+         * @memberof common.H256
+         * @static
+         * @param {common.IH256=} [properties] Properties to set
+         * @returns {common.H256} H256 instance
+         */
+        H256.create = function create(properties) {
+            return new H256(properties);
+        };
+
+        /**
+         * Encodes the specified H256 message. Does not implicitly {@link common.H256.verify|verify} messages.
+         * @function encode
+         * @memberof common.H256
+         * @static
+         * @param {common.IH256} message H256 message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        H256.encode = function encode(message, writer) {
+            if (!writer)
+                writer = $Writer.create();
+            if (message.Hi != null && Object.hasOwnProperty.call(message, "Hi"))
+                $root.common.H128.encode(message.Hi, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+            if (message.Lo != null && Object.hasOwnProperty.call(message, "Lo"))
+                $root.common.H128.encode(message.Lo, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
+            return writer;
+        };
+
+        /**
+         * Encodes the specified H256 message, length delimited. Does not implicitly {@link common.H256.verify|verify} messages.
+         * @function encodeDelimited
+         * @memberof common.H256
+         * @static
+         * @param {common.IH256} message H256 message or plain object to encode
+         * @param {$protobuf.Writer} [writer] Writer to encode to
+         * @returns {$protobuf.Writer} Writer
+         */
+        H256.encodeDelimited = function encodeDelimited(message, writer) {
+            return this.encode(message, writer).ldelim();
+        };
+
+        /**
+         * Decodes a H256 message from the specified reader or buffer.
+         * @function decode
+         * @memberof common.H256
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @param {number} [length] Message length if known beforehand
+         * @returns {common.H256} H256
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        H256.decode = function decode(reader, length) {
+            if (!(reader instanceof $Reader))
+                reader = $Reader.create(reader);
+            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.common.H256();
+            while (reader.pos < end) {
+                var tag = reader.uint32();
+                switch (tag >>> 3) {
+                case 1:
+                    message.Hi = $root.common.H128.decode(reader, reader.uint32());
+                    break;
+                case 2:
+                    message.Lo = $root.common.H128.decode(reader, reader.uint32());
+                    break;
+                default:
+                    reader.skipType(tag & 7);
+                    break;
+                }
+            }
+            return message;
+        };
+
+        /**
+         * Decodes a H256 message from the specified reader or buffer, length delimited.
+         * @function decodeDelimited
+         * @memberof common.H256
+         * @static
+         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+         * @returns {common.H256} H256
+         * @throws {Error} If the payload is not a reader or valid buffer
+         * @throws {$protobuf.util.ProtocolError} If required fields are missing
+         */
+        H256.decodeDelimited = function decodeDelimited(reader) {
+            if (!(reader instanceof $Reader))
+                reader = new $Reader(reader);
+            return this.decode(reader, reader.uint32());
+        };
+
+        /**
+         * Verifies a H256 message.
+         * @function verify
+         * @memberof common.H256
+         * @static
+         * @param {Object.<string,*>} message Plain object to verify
+         * @returns {string|null} `null` if valid, otherwise the reason why it is not
+         */
+        H256.verify = function verify(message) {
+            if (typeof message !== "object" || message === null)
+                return "object expected";
+            if (message.Hi != null && message.hasOwnProperty("Hi")) {
+                var error = $root.common.H128.verify(message.Hi);
+                if (error)
+                    return "Hi." + error;
+            }
+            if (message.Lo != null && message.hasOwnProperty("Lo")) {
+                var error = $root.common.H128.verify(message.Lo);
+                if (error)
+                    return "Lo." + error;
+            }
+            return null;
+        };
+
+        /**
+         * Creates a H256 message from a plain object. Also converts values to their respective internal types.
+         * @function fromObject
+         * @memberof common.H256
+         * @static
+         * @param {Object.<string,*>} object Plain object
+         * @returns {common.H256} H256
+         */
+        H256.fromObject = function fromObject(object) {
+            if (object instanceof $root.common.H256)
+                return object;
+            var message = new $root.common.H256();
+            if (object.Hi != null) {
+                if (typeof object.Hi !== "object")
+                    throw TypeError(".common.H256.Hi: object expected");
+                message.Hi = $root.common.H128.fromObject(object.Hi);
+            }
+            if (object.Lo != null) {
+                if (typeof object.Lo !== "object")
+                    throw TypeError(".common.H256.Lo: object expected");
+                message.Lo = $root.common.H128.fromObject(object.Lo);
+            }
+            return message;
+        };
+
+        /**
+         * Creates a plain object from a H256 message. Also converts values to other types if specified.
+         * @function toObject
+         * @memberof common.H256
+         * @static
+         * @param {common.H256} message H256
+         * @param {$protobuf.IConversionOptions} [options] Conversion options
+         * @returns {Object.<string,*>} Plain object
+         */
+        H256.toObject = function toObject(message, options) {
+            if (!options)
+                options = {};
+            var object = {};
+            if (options.defaults) {
+                object.Hi = null;
+                object.Lo = null;
+            }
+            if (message.Hi != null && message.hasOwnProperty("Hi"))
+                object.Hi = $root.common.H128.toObject(message.Hi, options);
+            if (message.Lo != null && message.hasOwnProperty("Lo"))
+                object.Lo = $root.common.H128.toObject(message.Lo, options);
+            return object;
+        };
+
+        /**
+         * Converts this H256 to JSON.
+         * @function toJSON
+         * @memberof common.H256
+         * @instance
+         * @returns {Object.<string,*>} JSON object
+         */
+        H256.prototype.toJSON = function toJSON() {
+            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+        };
+
+        return H256;
     })();
 
     common.Validator = (function() {
@@ -1981,14 +2787,12 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
-                        message.address = reader.bytes();
-                        break;
-                    }
-                case 3: {
-                        message.power = reader.int64();
-                        break;
-                    }
+                case 1:
+                    message.address = reader.bytes();
+                    break;
+                case 3:
+                    message.power = reader.int64();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -2048,7 +2852,7 @@ $root.common = (function() {
             if (object.address != null)
                 if (typeof object.address === "string")
                     $util.base64.decode(object.address, message.address = $util.newBuffer($util.base64.length(object.address)), 0);
-                else if (object.address.length >= 0)
+                else if (object.address.length)
                     message.address = object.address;
             if (object.power != null)
                 if ($util.Long)
@@ -2108,21 +2912,6 @@ $root.common = (function() {
          */
         Validator.prototype.toJSON = function toJSON() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for Validator
-         * @function getTypeUrl
-         * @memberof common.Validator
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        Validator.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/common.Validator";
         };
 
         return Validator;
@@ -2222,12 +3011,11 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
-                        if (!(message.validators && message.validators.length))
-                            message.validators = [];
-                        message.validators.push($root.common.Validator.decode(reader, reader.uint32()));
-                        break;
-                    }
+                case 1:
+                    if (!(message.validators && message.validators.length))
+                        message.validators = [];
+                    message.validators.push($root.common.Validator.decode(reader, reader.uint32()));
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -2334,21 +3122,6 @@ $root.common = (function() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        /**
-         * Gets the default type url for ValidatorsWrapper
-         * @function getTypeUrl
-         * @memberof common.ValidatorsWrapper
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        ValidatorsWrapper.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/common.ValidatorsWrapper";
-        };
-
         return ValidatorsWrapper;
     })();
 
@@ -2444,10 +3217,9 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1: {
-                        message.value = reader.string();
-                        break;
-                    }
+                case 1:
+                    message.value = reader.string();
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -2537,25 +3309,593 @@ $root.common = (function() {
             return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
         };
 
-        /**
-         * Gets the default type url for ProtoUint
-         * @function getTypeUrl
-         * @memberof common.ProtoUint
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        ProtoUint.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/common.ProtoUint";
-        };
-
         return ProtoUint;
     })();
 
     return common;
+})();
+
+$root.hermes = (function() {
+
+    /**
+     * Namespace hermes.
+     * @exports hermes
+     * @namespace
+     */
+    var hermes = {};
+
+    hermes.hermes = (function() {
+
+        /**
+         * Namespace hermes.
+         * @memberof hermes
+         * @namespace
+         */
+        var hermes = {};
+
+        hermes.v1beta1 = (function() {
+
+            /**
+             * Namespace v1beta1.
+             * @memberof hermes.hermes
+             * @namespace
+             */
+            var v1beta1 = {};
+
+            v1beta1.types = (function() {
+
+                /**
+                 * Namespace types.
+                 * @memberof hermes.hermes.v1beta1
+                 * @namespace
+                 */
+                var types = {};
+
+                types.MsgDeposit = (function() {
+
+                    /**
+                     * Properties of a MsgDeposit.
+                     * @memberof hermes.hermes.v1beta1.types
+                     * @interface IMsgDeposit
+                     * @property {Array.<common.ICoin>|null} [coins] MsgDeposit coins
+                     * @property {string|null} [memo] MsgDeposit memo
+                     * @property {Uint8Array|null} [signer] MsgDeposit signer
+                     */
+
+                    /**
+                     * Constructs a new MsgDeposit.
+                     * @memberof hermes.hermes.v1beta1.types
+                     * @classdesc Represents a MsgDeposit.
+                     * @implements IMsgDeposit
+                     * @constructor
+                     * @param {hermes.hermes.v1beta1.types.IMsgDeposit=} [properties] Properties to set
+                     */
+                    function MsgDeposit(properties) {
+                        this.coins = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * MsgDeposit coins.
+                     * @member {Array.<common.ICoin>} coins
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @instance
+                     */
+                    MsgDeposit.prototype.coins = $util.emptyArray;
+
+                    /**
+                     * MsgDeposit memo.
+                     * @member {string} memo
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @instance
+                     */
+                    MsgDeposit.prototype.memo = "";
+
+                    /**
+                     * MsgDeposit signer.
+                     * @member {Uint8Array} signer
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @instance
+                     */
+                    MsgDeposit.prototype.signer = $util.newBuffer([]);
+
+                    /**
+                     * Creates a new MsgDeposit instance using the specified properties.
+                     * @function create
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgDeposit=} [properties] Properties to set
+                     * @returns {hermes.hermes.v1beta1.types.MsgDeposit} MsgDeposit instance
+                     */
+                    MsgDeposit.create = function create(properties) {
+                        return new MsgDeposit(properties);
+                    };
+
+                    /**
+                     * Encodes the specified MsgDeposit message. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgDeposit.verify|verify} messages.
+                     * @function encode
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgDeposit} message MsgDeposit message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    MsgDeposit.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.coins != null && message.coins.length)
+                            for (var i = 0; i < message.coins.length; ++i)
+                                $root.common.Coin.encode(message.coins[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        if (message.memo != null && Object.hasOwnProperty.call(message, "memo"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.memo);
+                        if (message.signer != null && Object.hasOwnProperty.call(message, "signer"))
+                            writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.signer);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified MsgDeposit message, length delimited. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgDeposit.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgDeposit} message MsgDeposit message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    MsgDeposit.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a MsgDeposit message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {hermes.hermes.v1beta1.types.MsgDeposit} MsgDeposit
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    MsgDeposit.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.hermes.hermes.v1beta1.types.MsgDeposit();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                if (!(message.coins && message.coins.length))
+                                    message.coins = [];
+                                message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
+                                break;
+                            case 2:
+                                message.memo = reader.string();
+                                break;
+                            case 3:
+                                message.signer = reader.bytes();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a MsgDeposit message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {hermes.hermes.v1beta1.types.MsgDeposit} MsgDeposit
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    MsgDeposit.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a MsgDeposit message.
+                     * @function verify
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    MsgDeposit.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.coins != null && message.hasOwnProperty("coins")) {
+                            if (!Array.isArray(message.coins))
+                                return "coins: array expected";
+                            for (var i = 0; i < message.coins.length; ++i) {
+                                var error = $root.common.Coin.verify(message.coins[i]);
+                                if (error)
+                                    return "coins." + error;
+                            }
+                        }
+                        if (message.memo != null && message.hasOwnProperty("memo"))
+                            if (!$util.isString(message.memo))
+                                return "memo: string expected";
+                        if (message.signer != null && message.hasOwnProperty("signer"))
+                            if (!(message.signer && typeof message.signer.length === "number" || $util.isString(message.signer)))
+                                return "signer: buffer expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a MsgDeposit message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {hermes.hermes.v1beta1.types.MsgDeposit} MsgDeposit
+                     */
+                    MsgDeposit.fromObject = function fromObject(object) {
+                        if (object instanceof $root.hermes.hermes.v1beta1.types.MsgDeposit)
+                            return object;
+                        var message = new $root.hermes.hermes.v1beta1.types.MsgDeposit();
+                        if (object.coins) {
+                            if (!Array.isArray(object.coins))
+                                throw TypeError(".hermes.hermes.v1beta1.types.MsgDeposit.coins: array expected");
+                            message.coins = [];
+                            for (var i = 0; i < object.coins.length; ++i) {
+                                if (typeof object.coins[i] !== "object")
+                                    throw TypeError(".hermes.hermes.v1beta1.types.MsgDeposit.coins: object expected");
+                                message.coins[i] = $root.common.Coin.fromObject(object.coins[i]);
+                            }
+                        }
+                        if (object.memo != null)
+                            message.memo = String(object.memo);
+                        if (object.signer != null)
+                            if (typeof object.signer === "string")
+                                $util.base64.decode(object.signer, message.signer = $util.newBuffer($util.base64.length(object.signer)), 0);
+                            else if (object.signer.length)
+                                message.signer = object.signer;
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a MsgDeposit message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.MsgDeposit} message MsgDeposit
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    MsgDeposit.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.coins = [];
+                        if (options.defaults) {
+                            object.memo = "";
+                            if (options.bytes === String)
+                                object.signer = "";
+                            else {
+                                object.signer = [];
+                                if (options.bytes !== Array)
+                                    object.signer = $util.newBuffer(object.signer);
+                            }
+                        }
+                        if (message.coins && message.coins.length) {
+                            object.coins = [];
+                            for (var j = 0; j < message.coins.length; ++j)
+                                object.coins[j] = $root.common.Coin.toObject(message.coins[j], options);
+                        }
+                        if (message.memo != null && message.hasOwnProperty("memo"))
+                            object.memo = message.memo;
+                        if (message.signer != null && message.hasOwnProperty("signer"))
+                            object.signer = options.bytes === String ? $util.base64.encode(message.signer, 0, message.signer.length) : options.bytes === Array ? Array.prototype.slice.call(message.signer) : message.signer;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this MsgDeposit to JSON.
+                     * @function toJSON
+                     * @memberof hermes.hermes.v1beta1.types.MsgDeposit
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    MsgDeposit.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return MsgDeposit;
+                })();
+
+                types.MsgSend = (function() {
+
+                    /**
+                     * Properties of a MsgSend.
+                     * @memberof hermes.hermes.v1beta1.types
+                     * @interface IMsgSend
+                     * @property {Uint8Array|null} [fromAddress] MsgSend fromAddress
+                     * @property {Uint8Array|null} [toAddress] MsgSend toAddress
+                     * @property {Array.<cosmos.base.v1beta1.ICoin>|null} [amount] MsgSend amount
+                     */
+
+                    /**
+                     * Constructs a new MsgSend.
+                     * @memberof hermes.hermes.v1beta1.types
+                     * @classdesc Represents a MsgSend.
+                     * @implements IMsgSend
+                     * @constructor
+                     * @param {hermes.hermes.v1beta1.types.IMsgSend=} [properties] Properties to set
+                     */
+                    function MsgSend(properties) {
+                        this.amount = [];
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * MsgSend fromAddress.
+                     * @member {Uint8Array} fromAddress
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @instance
+                     */
+                    MsgSend.prototype.fromAddress = $util.newBuffer([]);
+
+                    /**
+                     * MsgSend toAddress.
+                     * @member {Uint8Array} toAddress
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @instance
+                     */
+                    MsgSend.prototype.toAddress = $util.newBuffer([]);
+
+                    /**
+                     * MsgSend amount.
+                     * @member {Array.<cosmos.base.v1beta1.ICoin>} amount
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @instance
+                     */
+                    MsgSend.prototype.amount = $util.emptyArray;
+
+                    /**
+                     * Creates a new MsgSend instance using the specified properties.
+                     * @function create
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSend=} [properties] Properties to set
+                     * @returns {hermes.hermes.v1beta1.types.MsgSend} MsgSend instance
+                     */
+                    MsgSend.create = function create(properties) {
+                        return new MsgSend(properties);
+                    };
+
+                    /**
+                     * Encodes the specified MsgSend message. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSend.verify|verify} messages.
+                     * @function encode
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSend} message MsgSend message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    MsgSend.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.fromAddress != null && Object.hasOwnProperty.call(message, "fromAddress"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.fromAddress);
+                        if (message.toAddress != null && Object.hasOwnProperty.call(message, "toAddress"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.toAddress);
+                        if (message.amount != null && message.amount.length)
+                            for (var i = 0; i < message.amount.length; ++i)
+                                $root.cosmos.base.v1beta1.Coin.encode(message.amount[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified MsgSend message, length delimited. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSend.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSend} message MsgSend message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    MsgSend.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a MsgSend message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {hermes.hermes.v1beta1.types.MsgSend} MsgSend
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    MsgSend.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.hermes.hermes.v1beta1.types.MsgSend();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                            case 1:
+                                message.fromAddress = reader.bytes();
+                                break;
+                            case 2:
+                                message.toAddress = reader.bytes();
+                                break;
+                            case 3:
+                                if (!(message.amount && message.amount.length))
+                                    message.amount = [];
+                                message.amount.push($root.cosmos.base.v1beta1.Coin.decode(reader, reader.uint32()));
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a MsgSend message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {hermes.hermes.v1beta1.types.MsgSend} MsgSend
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    MsgSend.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a MsgSend message.
+                     * @function verify
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    MsgSend.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.fromAddress != null && message.hasOwnProperty("fromAddress"))
+                            if (!(message.fromAddress && typeof message.fromAddress.length === "number" || $util.isString(message.fromAddress)))
+                                return "fromAddress: buffer expected";
+                        if (message.toAddress != null && message.hasOwnProperty("toAddress"))
+                            if (!(message.toAddress && typeof message.toAddress.length === "number" || $util.isString(message.toAddress)))
+                                return "toAddress: buffer expected";
+                        if (message.amount != null && message.hasOwnProperty("amount")) {
+                            if (!Array.isArray(message.amount))
+                                return "amount: array expected";
+                            for (var i = 0; i < message.amount.length; ++i) {
+                                var error = $root.cosmos.base.v1beta1.Coin.verify(message.amount[i]);
+                                if (error)
+                                    return "amount." + error;
+                            }
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a MsgSend message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {hermes.hermes.v1beta1.types.MsgSend} MsgSend
+                     */
+                    MsgSend.fromObject = function fromObject(object) {
+                        if (object instanceof $root.hermes.hermes.v1beta1.types.MsgSend)
+                            return object;
+                        var message = new $root.hermes.hermes.v1beta1.types.MsgSend();
+                        if (object.fromAddress != null)
+                            if (typeof object.fromAddress === "string")
+                                $util.base64.decode(object.fromAddress, message.fromAddress = $util.newBuffer($util.base64.length(object.fromAddress)), 0);
+                            else if (object.fromAddress.length)
+                                message.fromAddress = object.fromAddress;
+                        if (object.toAddress != null)
+                            if (typeof object.toAddress === "string")
+                                $util.base64.decode(object.toAddress, message.toAddress = $util.newBuffer($util.base64.length(object.toAddress)), 0);
+                            else if (object.toAddress.length)
+                                message.toAddress = object.toAddress;
+                        if (object.amount) {
+                            if (!Array.isArray(object.amount))
+                                throw TypeError(".hermes.hermes.v1beta1.types.MsgSend.amount: array expected");
+                            message.amount = [];
+                            for (var i = 0; i < object.amount.length; ++i) {
+                                if (typeof object.amount[i] !== "object")
+                                    throw TypeError(".hermes.hermes.v1beta1.types.MsgSend.amount: object expected");
+                                message.amount[i] = $root.cosmos.base.v1beta1.Coin.fromObject(object.amount[i]);
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a MsgSend message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.MsgSend} message MsgSend
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    MsgSend.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.arrays || options.defaults)
+                            object.amount = [];
+                        if (options.defaults) {
+                            if (options.bytes === String)
+                                object.fromAddress = "";
+                            else {
+                                object.fromAddress = [];
+                                if (options.bytes !== Array)
+                                    object.fromAddress = $util.newBuffer(object.fromAddress);
+                            }
+                            if (options.bytes === String)
+                                object.toAddress = "";
+                            else {
+                                object.toAddress = [];
+                                if (options.bytes !== Array)
+                                    object.toAddress = $util.newBuffer(object.toAddress);
+                            }
+                        }
+                        if (message.fromAddress != null && message.hasOwnProperty("fromAddress"))
+                            object.fromAddress = options.bytes === String ? $util.base64.encode(message.fromAddress, 0, message.fromAddress.length) : options.bytes === Array ? Array.prototype.slice.call(message.fromAddress) : message.fromAddress;
+                        if (message.toAddress != null && message.hasOwnProperty("toAddress"))
+                            object.toAddress = options.bytes === String ? $util.base64.encode(message.toAddress, 0, message.toAddress.length) : options.bytes === Array ? Array.prototype.slice.call(message.toAddress) : message.toAddress;
+                        if (message.amount && message.amount.length) {
+                            object.amount = [];
+                            for (var j = 0; j < message.amount.length; ++j)
+                                object.amount[j] = $root.cosmos.base.v1beta1.Coin.toObject(message.amount[j], options);
+                        }
+                        return object;
+                    };
+
+                    /**
+                     * Converts this MsgSend to JSON.
+                     * @function toJSON
+                     * @memberof hermes.hermes.v1beta1.types.MsgSend
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    MsgSend.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return MsgSend;
+                })();
+
+                return types;
+            })();
+
+            return v1beta1;
+        })();
+
+        return hermes;
+    })();
+
+    return hermes;
 })();
 
 $root.cosmos = (function() {
@@ -2688,14 +4028,12 @@ $root.cosmos = (function() {
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
-                                message.denom = reader.string();
-                                break;
-                            }
-                        case 2: {
-                                message.amount = reader.string();
-                                break;
-                            }
+                        case 1:
+                            message.denom = reader.string();
+                            break;
+                        case 2:
+                            message.amount = reader.string();
+                            break;
                         default:
                             reader.skipType(tag & 7);
                             break;
@@ -2792,21 +4130,6 @@ $root.cosmos = (function() {
                  */
                 Coin.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                /**
-                 * Gets the default type url for Coin
-                 * @function getTypeUrl
-                 * @memberof cosmos.base.v1beta1.Coin
-                 * @static
-                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-                 * @returns {string} The default type url
-                 */
-                Coin.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-                    if (typeUrlPrefix === undefined) {
-                        typeUrlPrefix = "type.googleapis.com";
-                    }
-                    return typeUrlPrefix + "/cosmos.base.v1beta1.Coin";
                 };
 
                 return Coin;
@@ -2915,14 +4238,12 @@ $root.cosmos = (function() {
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
-                                message.denom = reader.string();
-                                break;
-                            }
-                        case 2: {
-                                message.amount = reader.string();
-                                break;
-                            }
+                        case 1:
+                            message.denom = reader.string();
+                            break;
+                        case 2:
+                            message.amount = reader.string();
+                            break;
                         default:
                             reader.skipType(tag & 7);
                             break;
@@ -3021,21 +4342,6 @@ $root.cosmos = (function() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                /**
-                 * Gets the default type url for DecCoin
-                 * @function getTypeUrl
-                 * @memberof cosmos.base.v1beta1.DecCoin
-                 * @static
-                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-                 * @returns {string} The default type url
-                 */
-                DecCoin.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-                    if (typeUrlPrefix === undefined) {
-                        typeUrlPrefix = "type.googleapis.com";
-                    }
-                    return typeUrlPrefix + "/cosmos.base.v1beta1.DecCoin";
-                };
-
                 return DecCoin;
             })();
 
@@ -3131,10 +4437,9 @@ $root.cosmos = (function() {
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
-                                message.int = reader.string();
-                                break;
-                            }
+                        case 1:
+                            message.int = reader.string();
+                            break;
                         default:
                             reader.skipType(tag & 7);
                             break;
@@ -3222,21 +4527,6 @@ $root.cosmos = (function() {
                  */
                 IntProto.prototype.toJSON = function toJSON() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-                };
-
-                /**
-                 * Gets the default type url for IntProto
-                 * @function getTypeUrl
-                 * @memberof cosmos.base.v1beta1.IntProto
-                 * @static
-                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-                 * @returns {string} The default type url
-                 */
-                IntProto.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-                    if (typeUrlPrefix === undefined) {
-                        typeUrlPrefix = "type.googleapis.com";
-                    }
-                    return typeUrlPrefix + "/cosmos.base.v1beta1.IntProto";
                 };
 
                 return IntProto;
@@ -3334,10 +4624,9 @@ $root.cosmos = (function() {
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1: {
-                                message.dec = reader.string();
-                                break;
-                            }
+                        case 1:
+                            message.dec = reader.string();
+                            break;
                         default:
                             reader.skipType(tag & 7);
                             break;
@@ -3427,21 +4716,6 @@ $root.cosmos = (function() {
                     return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
                 };
 
-                /**
-                 * Gets the default type url for DecProto
-                 * @function getTypeUrl
-                 * @memberof cosmos.base.v1beta1.DecProto
-                 * @static
-                 * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-                 * @returns {string} The default type url
-                 */
-                DecProto.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-                    if (typeUrlPrefix === undefined) {
-                        typeUrlPrefix = "type.googleapis.com";
-                    }
-                    return typeUrlPrefix + "/cosmos.base.v1beta1.DecProto";
-                };
-
                 return DecProto;
             })();
 
@@ -3452,1325 +4726,6 @@ $root.cosmos = (function() {
     })();
 
     return cosmos;
-})();
-
-$root.types = (function() {
-
-    /**
-     * Namespace types.
-     * @exports types
-     * @namespace
-     */
-    var types = {};
-
-    types.MsgDeposit = (function() {
-
-        /**
-         * Properties of a MsgDeposit.
-         * @memberof types
-         * @interface IMsgDeposit
-         * @property {Array.<common.ICoin>|null} [coins] MsgDeposit coins
-         * @property {string|null} [memo] MsgDeposit memo
-         * @property {Uint8Array|null} [signer] MsgDeposit signer
-         */
-
-        /**
-         * Constructs a new MsgDeposit.
-         * @memberof types
-         * @classdesc Represents a MsgDeposit.
-         * @implements IMsgDeposit
-         * @constructor
-         * @param {types.IMsgDeposit=} [properties] Properties to set
-         */
-        function MsgDeposit(properties) {
-            this.coins = [];
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * MsgDeposit coins.
-         * @member {Array.<common.ICoin>} coins
-         * @memberof types.MsgDeposit
-         * @instance
-         */
-        MsgDeposit.prototype.coins = $util.emptyArray;
-
-        /**
-         * MsgDeposit memo.
-         * @member {string} memo
-         * @memberof types.MsgDeposit
-         * @instance
-         */
-        MsgDeposit.prototype.memo = "";
-
-        /**
-         * MsgDeposit signer.
-         * @member {Uint8Array} signer
-         * @memberof types.MsgDeposit
-         * @instance
-         */
-        MsgDeposit.prototype.signer = $util.newBuffer([]);
-
-        /**
-         * Creates a new MsgDeposit instance using the specified properties.
-         * @function create
-         * @memberof types.MsgDeposit
-         * @static
-         * @param {types.IMsgDeposit=} [properties] Properties to set
-         * @returns {types.MsgDeposit} MsgDeposit instance
-         */
-        MsgDeposit.create = function create(properties) {
-            return new MsgDeposit(properties);
-        };
-
-        /**
-         * Encodes the specified MsgDeposit message. Does not implicitly {@link types.MsgDeposit.verify|verify} messages.
-         * @function encode
-         * @memberof types.MsgDeposit
-         * @static
-         * @param {types.IMsgDeposit} message MsgDeposit message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MsgDeposit.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.coins != null && message.coins.length)
-                for (var i = 0; i < message.coins.length; ++i)
-                    $root.common.Coin.encode(message.coins[i], writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.memo != null && Object.hasOwnProperty.call(message, "memo"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.memo);
-            if (message.signer != null && Object.hasOwnProperty.call(message, "signer"))
-                writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.signer);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified MsgDeposit message, length delimited. Does not implicitly {@link types.MsgDeposit.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof types.MsgDeposit
-         * @static
-         * @param {types.IMsgDeposit} message MsgDeposit message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MsgDeposit.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a MsgDeposit message from the specified reader or buffer.
-         * @function decode
-         * @memberof types.MsgDeposit
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {types.MsgDeposit} MsgDeposit
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MsgDeposit.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.types.MsgDeposit();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        if (!(message.coins && message.coins.length))
-                            message.coins = [];
-                        message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
-                        break;
-                    }
-                case 2: {
-                        message.memo = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.signer = reader.bytes();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a MsgDeposit message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof types.MsgDeposit
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {types.MsgDeposit} MsgDeposit
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MsgDeposit.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a MsgDeposit message.
-         * @function verify
-         * @memberof types.MsgDeposit
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        MsgDeposit.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.coins != null && message.hasOwnProperty("coins")) {
-                if (!Array.isArray(message.coins))
-                    return "coins: array expected";
-                for (var i = 0; i < message.coins.length; ++i) {
-                    var error = $root.common.Coin.verify(message.coins[i]);
-                    if (error)
-                        return "coins." + error;
-                }
-            }
-            if (message.memo != null && message.hasOwnProperty("memo"))
-                if (!$util.isString(message.memo))
-                    return "memo: string expected";
-            if (message.signer != null && message.hasOwnProperty("signer"))
-                if (!(message.signer && typeof message.signer.length === "number" || $util.isString(message.signer)))
-                    return "signer: buffer expected";
-            return null;
-        };
-
-        /**
-         * Creates a MsgDeposit message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof types.MsgDeposit
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {types.MsgDeposit} MsgDeposit
-         */
-        MsgDeposit.fromObject = function fromObject(object) {
-            if (object instanceof $root.types.MsgDeposit)
-                return object;
-            var message = new $root.types.MsgDeposit();
-            if (object.coins) {
-                if (!Array.isArray(object.coins))
-                    throw TypeError(".types.MsgDeposit.coins: array expected");
-                message.coins = [];
-                for (var i = 0; i < object.coins.length; ++i) {
-                    if (typeof object.coins[i] !== "object")
-                        throw TypeError(".types.MsgDeposit.coins: object expected");
-                    message.coins[i] = $root.common.Coin.fromObject(object.coins[i]);
-                }
-            }
-            if (object.memo != null)
-                message.memo = String(object.memo);
-            if (object.signer != null)
-                if (typeof object.signer === "string")
-                    $util.base64.decode(object.signer, message.signer = $util.newBuffer($util.base64.length(object.signer)), 0);
-                else if (object.signer.length >= 0)
-                    message.signer = object.signer;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a MsgDeposit message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof types.MsgDeposit
-         * @static
-         * @param {types.MsgDeposit} message MsgDeposit
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        MsgDeposit.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.arrays || options.defaults)
-                object.coins = [];
-            if (options.defaults) {
-                object.memo = "";
-                if (options.bytes === String)
-                    object.signer = "";
-                else {
-                    object.signer = [];
-                    if (options.bytes !== Array)
-                        object.signer = $util.newBuffer(object.signer);
-                }
-            }
-            if (message.coins && message.coins.length) {
-                object.coins = [];
-                for (var j = 0; j < message.coins.length; ++j)
-                    object.coins[j] = $root.common.Coin.toObject(message.coins[j], options);
-            }
-            if (message.memo != null && message.hasOwnProperty("memo"))
-                object.memo = message.memo;
-            if (message.signer != null && message.hasOwnProperty("signer"))
-                object.signer = options.bytes === String ? $util.base64.encode(message.signer, 0, message.signer.length) : options.bytes === Array ? Array.prototype.slice.call(message.signer) : message.signer;
-            return object;
-        };
-
-        /**
-         * Converts this MsgDeposit to JSON.
-         * @function toJSON
-         * @memberof types.MsgDeposit
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        MsgDeposit.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for MsgDeposit
-         * @function getTypeUrl
-         * @memberof types.MsgDeposit
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        MsgDeposit.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/types.MsgDeposit";
-        };
-
-        return MsgDeposit;
-    })();
-
-    types.MsgSend = (function() {
-
-        /**
-         * Properties of a MsgSend.
-         * @memberof types
-         * @interface IMsgSend
-         * @property {Uint8Array|null} [fromAddress] MsgSend fromAddress
-         * @property {Uint8Array|null} [toAddress] MsgSend toAddress
-         * @property {Array.<cosmos.base.v1beta1.ICoin>|null} [amount] MsgSend amount
-         */
-
-        /**
-         * Constructs a new MsgSend.
-         * @memberof types
-         * @classdesc Represents a MsgSend.
-         * @implements IMsgSend
-         * @constructor
-         * @param {types.IMsgSend=} [properties] Properties to set
-         */
-        function MsgSend(properties) {
-            this.amount = [];
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * MsgSend fromAddress.
-         * @member {Uint8Array} fromAddress
-         * @memberof types.MsgSend
-         * @instance
-         */
-        MsgSend.prototype.fromAddress = $util.newBuffer([]);
-
-        /**
-         * MsgSend toAddress.
-         * @member {Uint8Array} toAddress
-         * @memberof types.MsgSend
-         * @instance
-         */
-        MsgSend.prototype.toAddress = $util.newBuffer([]);
-
-        /**
-         * MsgSend amount.
-         * @member {Array.<cosmos.base.v1beta1.ICoin>} amount
-         * @memberof types.MsgSend
-         * @instance
-         */
-        MsgSend.prototype.amount = $util.emptyArray;
-
-        /**
-         * Creates a new MsgSend instance using the specified properties.
-         * @function create
-         * @memberof types.MsgSend
-         * @static
-         * @param {types.IMsgSend=} [properties] Properties to set
-         * @returns {types.MsgSend} MsgSend instance
-         */
-        MsgSend.create = function create(properties) {
-            return new MsgSend(properties);
-        };
-
-        /**
-         * Encodes the specified MsgSend message. Does not implicitly {@link types.MsgSend.verify|verify} messages.
-         * @function encode
-         * @memberof types.MsgSend
-         * @static
-         * @param {types.IMsgSend} message MsgSend message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MsgSend.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.fromAddress != null && Object.hasOwnProperty.call(message, "fromAddress"))
-                writer.uint32(/* id 1, wireType 2 =*/10).bytes(message.fromAddress);
-            if (message.toAddress != null && Object.hasOwnProperty.call(message, "toAddress"))
-                writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.toAddress);
-            if (message.amount != null && message.amount.length)
-                for (var i = 0; i < message.amount.length; ++i)
-                    $root.cosmos.base.v1beta1.Coin.encode(message.amount[i], writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
-            return writer;
-        };
-
-        /**
-         * Encodes the specified MsgSend message, length delimited. Does not implicitly {@link types.MsgSend.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof types.MsgSend
-         * @static
-         * @param {types.IMsgSend} message MsgSend message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MsgSend.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a MsgSend message from the specified reader or buffer.
-         * @function decode
-         * @memberof types.MsgSend
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {types.MsgSend} MsgSend
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MsgSend.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.types.MsgSend();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        message.fromAddress = reader.bytes();
-                        break;
-                    }
-                case 2: {
-                        message.toAddress = reader.bytes();
-                        break;
-                    }
-                case 3: {
-                        if (!(message.amount && message.amount.length))
-                            message.amount = [];
-                        message.amount.push($root.cosmos.base.v1beta1.Coin.decode(reader, reader.uint32()));
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a MsgSend message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof types.MsgSend
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {types.MsgSend} MsgSend
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MsgSend.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a MsgSend message.
-         * @function verify
-         * @memberof types.MsgSend
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        MsgSend.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.fromAddress != null && message.hasOwnProperty("fromAddress"))
-                if (!(message.fromAddress && typeof message.fromAddress.length === "number" || $util.isString(message.fromAddress)))
-                    return "fromAddress: buffer expected";
-            if (message.toAddress != null && message.hasOwnProperty("toAddress"))
-                if (!(message.toAddress && typeof message.toAddress.length === "number" || $util.isString(message.toAddress)))
-                    return "toAddress: buffer expected";
-            if (message.amount != null && message.hasOwnProperty("amount")) {
-                if (!Array.isArray(message.amount))
-                    return "amount: array expected";
-                for (var i = 0; i < message.amount.length; ++i) {
-                    var error = $root.cosmos.base.v1beta1.Coin.verify(message.amount[i]);
-                    if (error)
-                        return "amount." + error;
-                }
-            }
-            return null;
-        };
-
-        /**
-         * Creates a MsgSend message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof types.MsgSend
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {types.MsgSend} MsgSend
-         */
-        MsgSend.fromObject = function fromObject(object) {
-            if (object instanceof $root.types.MsgSend)
-                return object;
-            var message = new $root.types.MsgSend();
-            if (object.fromAddress != null)
-                if (typeof object.fromAddress === "string")
-                    $util.base64.decode(object.fromAddress, message.fromAddress = $util.newBuffer($util.base64.length(object.fromAddress)), 0);
-                else if (object.fromAddress.length >= 0)
-                    message.fromAddress = object.fromAddress;
-            if (object.toAddress != null)
-                if (typeof object.toAddress === "string")
-                    $util.base64.decode(object.toAddress, message.toAddress = $util.newBuffer($util.base64.length(object.toAddress)), 0);
-                else if (object.toAddress.length >= 0)
-                    message.toAddress = object.toAddress;
-            if (object.amount) {
-                if (!Array.isArray(object.amount))
-                    throw TypeError(".types.MsgSend.amount: array expected");
-                message.amount = [];
-                for (var i = 0; i < object.amount.length; ++i) {
-                    if (typeof object.amount[i] !== "object")
-                        throw TypeError(".types.MsgSend.amount: object expected");
-                    message.amount[i] = $root.cosmos.base.v1beta1.Coin.fromObject(object.amount[i]);
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a MsgSend message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof types.MsgSend
-         * @static
-         * @param {types.MsgSend} message MsgSend
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        MsgSend.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.arrays || options.defaults)
-                object.amount = [];
-            if (options.defaults) {
-                if (options.bytes === String)
-                    object.fromAddress = "";
-                else {
-                    object.fromAddress = [];
-                    if (options.bytes !== Array)
-                        object.fromAddress = $util.newBuffer(object.fromAddress);
-                }
-                if (options.bytes === String)
-                    object.toAddress = "";
-                else {
-                    object.toAddress = [];
-                    if (options.bytes !== Array)
-                        object.toAddress = $util.newBuffer(object.toAddress);
-                }
-            }
-            if (message.fromAddress != null && message.hasOwnProperty("fromAddress"))
-                object.fromAddress = options.bytes === String ? $util.base64.encode(message.fromAddress, 0, message.fromAddress.length) : options.bytes === Array ? Array.prototype.slice.call(message.fromAddress) : message.fromAddress;
-            if (message.toAddress != null && message.hasOwnProperty("toAddress"))
-                object.toAddress = options.bytes === String ? $util.base64.encode(message.toAddress, 0, message.toAddress.length) : options.bytes === Array ? Array.prototype.slice.call(message.toAddress) : message.toAddress;
-            if (message.amount && message.amount.length) {
-                object.amount = [];
-                for (var j = 0; j < message.amount.length; ++j)
-                    object.amount[j] = $root.cosmos.base.v1beta1.Coin.toObject(message.amount[j], options);
-            }
-            return object;
-        };
-
-        /**
-         * Converts this MsgSend to JSON.
-         * @function toJSON
-         * @memberof types.MsgSend
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        MsgSend.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for MsgSend
-         * @function getTypeUrl
-         * @memberof types.MsgSend
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        MsgSend.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/types.MsgSend";
-        };
-
-        return MsgSend;
-    })();
-
-    types.MsgSetVersion = (function() {
-
-        /**
-         * Properties of a MsgSetVersion.
-         * @memberof types
-         * @interface IMsgSetVersion
-         * @property {string|null} [version] MsgSetVersion version
-         * @property {Uint8Array|null} [signer] MsgSetVersion signer
-         */
-
-        /**
-         * Constructs a new MsgSetVersion.
-         * @memberof types
-         * @classdesc Represents a MsgSetVersion.
-         * @implements IMsgSetVersion
-         * @constructor
-         * @param {types.IMsgSetVersion=} [properties] Properties to set
-         */
-        function MsgSetVersion(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * MsgSetVersion version.
-         * @member {string} version
-         * @memberof types.MsgSetVersion
-         * @instance
-         */
-        MsgSetVersion.prototype.version = "";
-
-        /**
-         * MsgSetVersion signer.
-         * @member {Uint8Array} signer
-         * @memberof types.MsgSetVersion
-         * @instance
-         */
-        MsgSetVersion.prototype.signer = $util.newBuffer([]);
-
-        /**
-         * Creates a new MsgSetVersion instance using the specified properties.
-         * @function create
-         * @memberof types.MsgSetVersion
-         * @static
-         * @param {types.IMsgSetVersion=} [properties] Properties to set
-         * @returns {types.MsgSetVersion} MsgSetVersion instance
-         */
-        MsgSetVersion.create = function create(properties) {
-            return new MsgSetVersion(properties);
-        };
-
-        /**
-         * Encodes the specified MsgSetVersion message. Does not implicitly {@link types.MsgSetVersion.verify|verify} messages.
-         * @function encode
-         * @memberof types.MsgSetVersion
-         * @static
-         * @param {types.IMsgSetVersion} message MsgSetVersion message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MsgSetVersion.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.version != null && Object.hasOwnProperty.call(message, "version"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.version);
-            if (message.signer != null && Object.hasOwnProperty.call(message, "signer"))
-                writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.signer);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified MsgSetVersion message, length delimited. Does not implicitly {@link types.MsgSetVersion.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof types.MsgSetVersion
-         * @static
-         * @param {types.IMsgSetVersion} message MsgSetVersion message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MsgSetVersion.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a MsgSetVersion message from the specified reader or buffer.
-         * @function decode
-         * @memberof types.MsgSetVersion
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {types.MsgSetVersion} MsgSetVersion
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MsgSetVersion.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.types.MsgSetVersion();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        message.version = reader.string();
-                        break;
-                    }
-                case 2: {
-                        message.signer = reader.bytes();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a MsgSetVersion message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof types.MsgSetVersion
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {types.MsgSetVersion} MsgSetVersion
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MsgSetVersion.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a MsgSetVersion message.
-         * @function verify
-         * @memberof types.MsgSetVersion
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        MsgSetVersion.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.version != null && message.hasOwnProperty("version"))
-                if (!$util.isString(message.version))
-                    return "version: string expected";
-            if (message.signer != null && message.hasOwnProperty("signer"))
-                if (!(message.signer && typeof message.signer.length === "number" || $util.isString(message.signer)))
-                    return "signer: buffer expected";
-            return null;
-        };
-
-        /**
-         * Creates a MsgSetVersion message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof types.MsgSetVersion
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {types.MsgSetVersion} MsgSetVersion
-         */
-        MsgSetVersion.fromObject = function fromObject(object) {
-            if (object instanceof $root.types.MsgSetVersion)
-                return object;
-            var message = new $root.types.MsgSetVersion();
-            if (object.version != null)
-                message.version = String(object.version);
-            if (object.signer != null)
-                if (typeof object.signer === "string")
-                    $util.base64.decode(object.signer, message.signer = $util.newBuffer($util.base64.length(object.signer)), 0);
-                else if (object.signer.length >= 0)
-                    message.signer = object.signer;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a MsgSetVersion message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof types.MsgSetVersion
-         * @static
-         * @param {types.MsgSetVersion} message MsgSetVersion
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        MsgSetVersion.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.defaults) {
-                object.version = "";
-                if (options.bytes === String)
-                    object.signer = "";
-                else {
-                    object.signer = [];
-                    if (options.bytes !== Array)
-                        object.signer = $util.newBuffer(object.signer);
-                }
-            }
-            if (message.version != null && message.hasOwnProperty("version"))
-                object.version = message.version;
-            if (message.signer != null && message.hasOwnProperty("signer"))
-                object.signer = options.bytes === String ? $util.base64.encode(message.signer, 0, message.signer.length) : options.bytes === Array ? Array.prototype.slice.call(message.signer) : message.signer;
-            return object;
-        };
-
-        /**
-         * Converts this MsgSetVersion to JSON.
-         * @function toJSON
-         * @memberof types.MsgSetVersion
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        MsgSetVersion.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for MsgSetVersion
-         * @function getTypeUrl
-         * @memberof types.MsgSetVersion
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        MsgSetVersion.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/types.MsgSetVersion";
-        };
-
-        return MsgSetVersion;
-    })();
-
-    types.MsgSetIPAddress = (function() {
-
-        /**
-         * Properties of a MsgSetIPAddress.
-         * @memberof types
-         * @interface IMsgSetIPAddress
-         * @property {string|null} [ipAddress] MsgSetIPAddress ipAddress
-         * @property {Uint8Array|null} [signer] MsgSetIPAddress signer
-         */
-
-        /**
-         * Constructs a new MsgSetIPAddress.
-         * @memberof types
-         * @classdesc Represents a MsgSetIPAddress.
-         * @implements IMsgSetIPAddress
-         * @constructor
-         * @param {types.IMsgSetIPAddress=} [properties] Properties to set
-         */
-        function MsgSetIPAddress(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * MsgSetIPAddress ipAddress.
-         * @member {string} ipAddress
-         * @memberof types.MsgSetIPAddress
-         * @instance
-         */
-        MsgSetIPAddress.prototype.ipAddress = "";
-
-        /**
-         * MsgSetIPAddress signer.
-         * @member {Uint8Array} signer
-         * @memberof types.MsgSetIPAddress
-         * @instance
-         */
-        MsgSetIPAddress.prototype.signer = $util.newBuffer([]);
-
-        /**
-         * Creates a new MsgSetIPAddress instance using the specified properties.
-         * @function create
-         * @memberof types.MsgSetIPAddress
-         * @static
-         * @param {types.IMsgSetIPAddress=} [properties] Properties to set
-         * @returns {types.MsgSetIPAddress} MsgSetIPAddress instance
-         */
-        MsgSetIPAddress.create = function create(properties) {
-            return new MsgSetIPAddress(properties);
-        };
-
-        /**
-         * Encodes the specified MsgSetIPAddress message. Does not implicitly {@link types.MsgSetIPAddress.verify|verify} messages.
-         * @function encode
-         * @memberof types.MsgSetIPAddress
-         * @static
-         * @param {types.IMsgSetIPAddress} message MsgSetIPAddress message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MsgSetIPAddress.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.ipAddress != null && Object.hasOwnProperty.call(message, "ipAddress"))
-                writer.uint32(/* id 1, wireType 2 =*/10).string(message.ipAddress);
-            if (message.signer != null && Object.hasOwnProperty.call(message, "signer"))
-                writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.signer);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified MsgSetIPAddress message, length delimited. Does not implicitly {@link types.MsgSetIPAddress.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof types.MsgSetIPAddress
-         * @static
-         * @param {types.IMsgSetIPAddress} message MsgSetIPAddress message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MsgSetIPAddress.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a MsgSetIPAddress message from the specified reader or buffer.
-         * @function decode
-         * @memberof types.MsgSetIPAddress
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {types.MsgSetIPAddress} MsgSetIPAddress
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MsgSetIPAddress.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.types.MsgSetIPAddress();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        message.ipAddress = reader.string();
-                        break;
-                    }
-                case 2: {
-                        message.signer = reader.bytes();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a MsgSetIPAddress message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof types.MsgSetIPAddress
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {types.MsgSetIPAddress} MsgSetIPAddress
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MsgSetIPAddress.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a MsgSetIPAddress message.
-         * @function verify
-         * @memberof types.MsgSetIPAddress
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        MsgSetIPAddress.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.ipAddress != null && message.hasOwnProperty("ipAddress"))
-                if (!$util.isString(message.ipAddress))
-                    return "ipAddress: string expected";
-            if (message.signer != null && message.hasOwnProperty("signer"))
-                if (!(message.signer && typeof message.signer.length === "number" || $util.isString(message.signer)))
-                    return "signer: buffer expected";
-            return null;
-        };
-
-        /**
-         * Creates a MsgSetIPAddress message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof types.MsgSetIPAddress
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {types.MsgSetIPAddress} MsgSetIPAddress
-         */
-        MsgSetIPAddress.fromObject = function fromObject(object) {
-            if (object instanceof $root.types.MsgSetIPAddress)
-                return object;
-            var message = new $root.types.MsgSetIPAddress();
-            if (object.ipAddress != null)
-                message.ipAddress = String(object.ipAddress);
-            if (object.signer != null)
-                if (typeof object.signer === "string")
-                    $util.base64.decode(object.signer, message.signer = $util.newBuffer($util.base64.length(object.signer)), 0);
-                else if (object.signer.length >= 0)
-                    message.signer = object.signer;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a MsgSetIPAddress message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof types.MsgSetIPAddress
-         * @static
-         * @param {types.MsgSetIPAddress} message MsgSetIPAddress
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        MsgSetIPAddress.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.defaults) {
-                object.ipAddress = "";
-                if (options.bytes === String)
-                    object.signer = "";
-                else {
-                    object.signer = [];
-                    if (options.bytes !== Array)
-                        object.signer = $util.newBuffer(object.signer);
-                }
-            }
-            if (message.ipAddress != null && message.hasOwnProperty("ipAddress"))
-                object.ipAddress = message.ipAddress;
-            if (message.signer != null && message.hasOwnProperty("signer"))
-                object.signer = options.bytes === String ? $util.base64.encode(message.signer, 0, message.signer.length) : options.bytes === Array ? Array.prototype.slice.call(message.signer) : message.signer;
-            return object;
-        };
-
-        /**
-         * Converts this MsgSetIPAddress to JSON.
-         * @function toJSON
-         * @memberof types.MsgSetIPAddress
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        MsgSetIPAddress.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for MsgSetIPAddress
-         * @function getTypeUrl
-         * @memberof types.MsgSetIPAddress
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        MsgSetIPAddress.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/types.MsgSetIPAddress";
-        };
-
-        return MsgSetIPAddress;
-    })();
-
-    types.MsgSetNodeKeys = (function() {
-
-        /**
-         * Properties of a MsgSetNodeKeys.
-         * @memberof types
-         * @interface IMsgSetNodeKeys
-         * @property {common.IPubKeySet|null} [pubKeySetSet] MsgSetNodeKeys pubKeySetSet
-         * @property {string|null} [validatorConsPubKey] MsgSetNodeKeys validatorConsPubKey
-         * @property {Uint8Array|null} [signer] MsgSetNodeKeys signer
-         */
-
-        /**
-         * Constructs a new MsgSetNodeKeys.
-         * @memberof types
-         * @classdesc Represents a MsgSetNodeKeys.
-         * @implements IMsgSetNodeKeys
-         * @constructor
-         * @param {types.IMsgSetNodeKeys=} [properties] Properties to set
-         */
-        function MsgSetNodeKeys(properties) {
-            if (properties)
-                for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                    if (properties[keys[i]] != null)
-                        this[keys[i]] = properties[keys[i]];
-        }
-
-        /**
-         * MsgSetNodeKeys pubKeySetSet.
-         * @member {common.IPubKeySet|null|undefined} pubKeySetSet
-         * @memberof types.MsgSetNodeKeys
-         * @instance
-         */
-        MsgSetNodeKeys.prototype.pubKeySetSet = null;
-
-        /**
-         * MsgSetNodeKeys validatorConsPubKey.
-         * @member {string} validatorConsPubKey
-         * @memberof types.MsgSetNodeKeys
-         * @instance
-         */
-        MsgSetNodeKeys.prototype.validatorConsPubKey = "";
-
-        /**
-         * MsgSetNodeKeys signer.
-         * @member {Uint8Array} signer
-         * @memberof types.MsgSetNodeKeys
-         * @instance
-         */
-        MsgSetNodeKeys.prototype.signer = $util.newBuffer([]);
-
-        /**
-         * Creates a new MsgSetNodeKeys instance using the specified properties.
-         * @function create
-         * @memberof types.MsgSetNodeKeys
-         * @static
-         * @param {types.IMsgSetNodeKeys=} [properties] Properties to set
-         * @returns {types.MsgSetNodeKeys} MsgSetNodeKeys instance
-         */
-        MsgSetNodeKeys.create = function create(properties) {
-            return new MsgSetNodeKeys(properties);
-        };
-
-        /**
-         * Encodes the specified MsgSetNodeKeys message. Does not implicitly {@link types.MsgSetNodeKeys.verify|verify} messages.
-         * @function encode
-         * @memberof types.MsgSetNodeKeys
-         * @static
-         * @param {types.IMsgSetNodeKeys} message MsgSetNodeKeys message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MsgSetNodeKeys.encode = function encode(message, writer) {
-            if (!writer)
-                writer = $Writer.create();
-            if (message.pubKeySetSet != null && Object.hasOwnProperty.call(message, "pubKeySetSet"))
-                $root.common.PubKeySet.encode(message.pubKeySetSet, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
-            if (message.validatorConsPubKey != null && Object.hasOwnProperty.call(message, "validatorConsPubKey"))
-                writer.uint32(/* id 2, wireType 2 =*/18).string(message.validatorConsPubKey);
-            if (message.signer != null && Object.hasOwnProperty.call(message, "signer"))
-                writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.signer);
-            return writer;
-        };
-
-        /**
-         * Encodes the specified MsgSetNodeKeys message, length delimited. Does not implicitly {@link types.MsgSetNodeKeys.verify|verify} messages.
-         * @function encodeDelimited
-         * @memberof types.MsgSetNodeKeys
-         * @static
-         * @param {types.IMsgSetNodeKeys} message MsgSetNodeKeys message or plain object to encode
-         * @param {$protobuf.Writer} [writer] Writer to encode to
-         * @returns {$protobuf.Writer} Writer
-         */
-        MsgSetNodeKeys.encodeDelimited = function encodeDelimited(message, writer) {
-            return this.encode(message, writer).ldelim();
-        };
-
-        /**
-         * Decodes a MsgSetNodeKeys message from the specified reader or buffer.
-         * @function decode
-         * @memberof types.MsgSetNodeKeys
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @param {number} [length] Message length if known beforehand
-         * @returns {types.MsgSetNodeKeys} MsgSetNodeKeys
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MsgSetNodeKeys.decode = function decode(reader, length) {
-            if (!(reader instanceof $Reader))
-                reader = $Reader.create(reader);
-            var end = length === undefined ? reader.len : reader.pos + length, message = new $root.types.MsgSetNodeKeys();
-            while (reader.pos < end) {
-                var tag = reader.uint32();
-                switch (tag >>> 3) {
-                case 1: {
-                        message.pubKeySetSet = $root.common.PubKeySet.decode(reader, reader.uint32());
-                        break;
-                    }
-                case 2: {
-                        message.validatorConsPubKey = reader.string();
-                        break;
-                    }
-                case 3: {
-                        message.signer = reader.bytes();
-                        break;
-                    }
-                default:
-                    reader.skipType(tag & 7);
-                    break;
-                }
-            }
-            return message;
-        };
-
-        /**
-         * Decodes a MsgSetNodeKeys message from the specified reader or buffer, length delimited.
-         * @function decodeDelimited
-         * @memberof types.MsgSetNodeKeys
-         * @static
-         * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-         * @returns {types.MsgSetNodeKeys} MsgSetNodeKeys
-         * @throws {Error} If the payload is not a reader or valid buffer
-         * @throws {$protobuf.util.ProtocolError} If required fields are missing
-         */
-        MsgSetNodeKeys.decodeDelimited = function decodeDelimited(reader) {
-            if (!(reader instanceof $Reader))
-                reader = new $Reader(reader);
-            return this.decode(reader, reader.uint32());
-        };
-
-        /**
-         * Verifies a MsgSetNodeKeys message.
-         * @function verify
-         * @memberof types.MsgSetNodeKeys
-         * @static
-         * @param {Object.<string,*>} message Plain object to verify
-         * @returns {string|null} `null` if valid, otherwise the reason why it is not
-         */
-        MsgSetNodeKeys.verify = function verify(message) {
-            if (typeof message !== "object" || message === null)
-                return "object expected";
-            if (message.pubKeySetSet != null && message.hasOwnProperty("pubKeySetSet")) {
-                var error = $root.common.PubKeySet.verify(message.pubKeySetSet);
-                if (error)
-                    return "pubKeySetSet." + error;
-            }
-            if (message.validatorConsPubKey != null && message.hasOwnProperty("validatorConsPubKey"))
-                if (!$util.isString(message.validatorConsPubKey))
-                    return "validatorConsPubKey: string expected";
-            if (message.signer != null && message.hasOwnProperty("signer"))
-                if (!(message.signer && typeof message.signer.length === "number" || $util.isString(message.signer)))
-                    return "signer: buffer expected";
-            return null;
-        };
-
-        /**
-         * Creates a MsgSetNodeKeys message from a plain object. Also converts values to their respective internal types.
-         * @function fromObject
-         * @memberof types.MsgSetNodeKeys
-         * @static
-         * @param {Object.<string,*>} object Plain object
-         * @returns {types.MsgSetNodeKeys} MsgSetNodeKeys
-         */
-        MsgSetNodeKeys.fromObject = function fromObject(object) {
-            if (object instanceof $root.types.MsgSetNodeKeys)
-                return object;
-            var message = new $root.types.MsgSetNodeKeys();
-            if (object.pubKeySetSet != null) {
-                if (typeof object.pubKeySetSet !== "object")
-                    throw TypeError(".types.MsgSetNodeKeys.pubKeySetSet: object expected");
-                message.pubKeySetSet = $root.common.PubKeySet.fromObject(object.pubKeySetSet);
-            }
-            if (object.validatorConsPubKey != null)
-                message.validatorConsPubKey = String(object.validatorConsPubKey);
-            if (object.signer != null)
-                if (typeof object.signer === "string")
-                    $util.base64.decode(object.signer, message.signer = $util.newBuffer($util.base64.length(object.signer)), 0);
-                else if (object.signer.length >= 0)
-                    message.signer = object.signer;
-            return message;
-        };
-
-        /**
-         * Creates a plain object from a MsgSetNodeKeys message. Also converts values to other types if specified.
-         * @function toObject
-         * @memberof types.MsgSetNodeKeys
-         * @static
-         * @param {types.MsgSetNodeKeys} message MsgSetNodeKeys
-         * @param {$protobuf.IConversionOptions} [options] Conversion options
-         * @returns {Object.<string,*>} Plain object
-         */
-        MsgSetNodeKeys.toObject = function toObject(message, options) {
-            if (!options)
-                options = {};
-            var object = {};
-            if (options.defaults) {
-                object.pubKeySetSet = null;
-                object.validatorConsPubKey = "";
-                if (options.bytes === String)
-                    object.signer = "";
-                else {
-                    object.signer = [];
-                    if (options.bytes !== Array)
-                        object.signer = $util.newBuffer(object.signer);
-                }
-            }
-            if (message.pubKeySetSet != null && message.hasOwnProperty("pubKeySetSet"))
-                object.pubKeySetSet = $root.common.PubKeySet.toObject(message.pubKeySetSet, options);
-            if (message.validatorConsPubKey != null && message.hasOwnProperty("validatorConsPubKey"))
-                object.validatorConsPubKey = message.validatorConsPubKey;
-            if (message.signer != null && message.hasOwnProperty("signer"))
-                object.signer = options.bytes === String ? $util.base64.encode(message.signer, 0, message.signer.length) : options.bytes === Array ? Array.prototype.slice.call(message.signer) : message.signer;
-            return object;
-        };
-
-        /**
-         * Converts this MsgSetNodeKeys to JSON.
-         * @function toJSON
-         * @memberof types.MsgSetNodeKeys
-         * @instance
-         * @returns {Object.<string,*>} JSON object
-         */
-        MsgSetNodeKeys.prototype.toJSON = function toJSON() {
-            return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-        };
-
-        /**
-         * Gets the default type url for MsgSetNodeKeys
-         * @function getTypeUrl
-         * @memberof types.MsgSetNodeKeys
-         * @static
-         * @param {string} [typeUrlPrefix] your custom typeUrlPrefix(default "type.googleapis.com")
-         * @returns {string} The default type url
-         */
-        MsgSetNodeKeys.getTypeUrl = function getTypeUrl(typeUrlPrefix) {
-            if (typeUrlPrefix === undefined) {
-                typeUrlPrefix = "type.googleapis.com";
-            }
-            return typeUrlPrefix + "/types.MsgSetNodeKeys";
-        };
-
-        return MsgSetNodeKeys;
-    })();
-
-    return types;
 })();
 
 module.exports = $root;
