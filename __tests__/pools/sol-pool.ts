@@ -19,22 +19,26 @@ async function addSolanaPool() {
   const solClient = new SolanaClient({
     phrase,
     network: Network.Testnet,
-    // endpoint: "https://sol-dev.h4s.dojima.network",
-    endpoint: 'http://127.0.0.1:8899'
+    endpoint: "http://127.0.0.1:8899",
   });
   const solAddress = await solClient.getAddress();
   console.log("SOL address :: ", solAddress);
   const solBalance = await solClient.getBalance(solAddress);
   console.log("SOL Balance :: ", solBalance);
+  // const requestAirdrop = await solClient.requestSolTokens(
+  //   "http://127.0.0.1:8899",
+  //   solAddress
+  // );
+  // console.log("Airdrop hash :: ", requestAirdrop);
 
   /** Hermes client */
   const hermesClient = new HermesSdkClient({
     phrase,
     network: Network.Testnet,
-    // apiUrl: "https://api-dev.h4s.dojima.network",
-    // rpcUrl: "https://rpc-dev.h4s.dojima.network",
-    apiUrl: 'http://localhost:1317',
-    rpcUrl: 'http://localhost:26657',
+    // apiUrl: "https://api-test-h4s.dojima.network",
+    // rpcUrl: "https://rpc-test-h4s.dojima.network",
+    apiUrl: "http://localhost:1317",
+    rpcUrl: "http://localhost:26657",
   });
   const hermesAddress = hermesClient.getAddress();
   console.log("H4S address :: ", hermesAddress);
@@ -44,8 +48,8 @@ async function addSolanaPool() {
 
   if (solBalance > solAddPoolAmount && h4sBalance > hermesAddPoolAmount) {
     const solInboundAddress = await solClient.getSolanaInboundAddress(
-      // "https://api-dev.h4s.dojima.network/"
-      "http://localhost:1317"
+      // "https://api-test-h4s.dojima.network/"
+      "http://localhost:1317/"
     );
     const solLiquidityPoolHash = await solClient.addLiquidityPool(
       solAddPoolAmount,

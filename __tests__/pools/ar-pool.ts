@@ -19,11 +19,6 @@ async function addArweavePool() {
   const arClient = new ArweaveClient({
     phrase,
     network: Network.Testnet,
-    // config: {
-    //     host: "ar-dev.h4s.dojima.network",
-    //     protocol: "https",
-    //     timeout: 100000,
-    // }
     config: {
       host: "localhost",
       port: "1984",
@@ -40,8 +35,8 @@ async function addArweavePool() {
   const hermesClient = new HermesSdkClient({
     phrase,
     network: Network.Testnet,
-    // apiUrl: "https://api-dev.h4s.dojima.network",
-    // rpcUrl: "https://rpc-dev.h4s.dojima.network",
+    // apiUrl: "https://api-test-h4s.dojima.network",
+    // rpcUrl: "https://rpc-test-h4s.dojima.network",
     apiUrl: "http://localhost:1317",
     rpcUrl: "http://localhost:26657",
   });
@@ -53,7 +48,7 @@ async function addArweavePool() {
 
   if (arBalance > arAddPoolAmount && h4sBalance > hermesAddPoolAmount) {
     const arInboundAddress = await arClient.getArweaveInboundAddress(
-      //   "https://api-dev.h4s.dojima.network/"
+      //   "https://api-test-h4s.dojima.network/"
       "http://localhost:1317"
     );
     const arLiquidityPoolHash = await arClient.addLiquidityPool(

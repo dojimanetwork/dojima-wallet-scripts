@@ -7,7 +7,7 @@ export type Asset = {
     synth: boolean
 }
 
-export type SwapAssetList = 'AR.AR' | 'BTC.BTC' | 'BNB.BNB' | 'D11K.DOJ' | 'DOT.DOT' | 'ETH.ETH' | 'SOL.SOL'
+export type SwapAssetList = 'AR.AR' | 'BTC.BTC' | 'BNB.BNB' | 'DOJ.DOJ' | 'DOT.DOT' | 'ETH.ETH' | 'SOL.SOL'
 
 export type InboundAddressResult = {
     chain: string,

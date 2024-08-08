@@ -5,6 +5,9 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
+    "stake": "ts-node __tests__/nodes/stake/stake.ts",
+    "unstake": "ts-node __tests__/nodes/unstake/unstake.ts",
+    "fio-bal": "ts-node __tests__/fio/balance.ts",
     "ar-pool": "ts-node __tests__/pools/ar-pool.ts",
     "doj-pool": "ts-node __tests__/pools/doj-pool.ts",
     "eth-pool": "ts-node __tests__/pools/eth-pool.ts",
@@ -38,6 +41,7 @@
     "@d11k-ts/utils": "^0.1.1",
     "@dojimanetwork/dojima-contracts": "^0.1.2",
     "@ethereumjs/block": "^3.6.2",
+    "@fioprotocol/fiosdk": "^1.8.0",
     "@openzeppelin/wizard": "^0.4.1",
     "@polkadot/api": "^9.9.1",
     "@polkadot/extension-dapp": "^0.42.7",

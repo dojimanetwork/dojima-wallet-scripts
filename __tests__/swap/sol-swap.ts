@@ -2,7 +2,7 @@ import { Network } from "../../src/core/client";
 import { SolanaClient } from "../../src/core/solana";
 
 const solSwapAmount = 10;
-const dojAddress = "";
+const dojAddress = "0xE3706442481Dc7D8Ca4A1a3e0D48C8a6fe5E75FB";
 // const ethAddress = "";
 // const arAddress = "";
 
@@ -14,7 +14,6 @@ async function solanaSwap() {
   const solClient = new SolanaClient({
     phrase,
     network: Network.Testnet,
-    // endpoint: "https://sol-dev.h4s.dojima.network",
     endpoint: 'http://127.0.0.1:8899'
   });
   const solAddress = await solClient.getAddress();
@@ -24,12 +23,12 @@ async function solanaSwap() {
 
   if (solBalance > solSwapAmount) {
     const solInboundAddress = await solClient.getSolanaInboundAddress(
-      // "https://api-dev.h4s.dojima.network/"
+      // "https://api-test-h4s.dojima.network/"
       "http://localhost:1317"
     );
     const dojswapHash = await solClient.swap(
       solSwapAmount,
-      "D11K.DOJ",
+      "DOJ.DOJ",
       solInboundAddress,
       dojAddress
     );

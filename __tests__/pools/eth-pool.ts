@@ -9,7 +9,7 @@ import {
 } from "../../src/core/utils";
 
 const ethAddPoolAmount = 10;
-const hermesAddPoolAmount = 10;
+const hermesAddPoolAmount = 1000;
 
 async function addEthereumPool() {
   const phrase =
@@ -19,7 +19,6 @@ async function addEthereumPool() {
   const ethClient = new EthereumChain({
     phrase,
     network: Network.Testnet,
-    // rpcUrl: "https://eth-dev.h4s.dojima.network/",
     rpcUrl: 'http://localhost:9545'
   });
   const ethAddress = ethClient.getAddress();
@@ -31,8 +30,8 @@ async function addEthereumPool() {
   const hermesClient = new HermesSdkClient({
     phrase,
     network: Network.Testnet,
-    // apiUrl: "https://api-dev.h4s.dojima.network",
-    // rpcUrl: "https://rpc-dev.h4s.dojima.network",
+    // apiUrl: "https://api-test-h4s.dojima.network",
+    // rpcUrl: "https://rpc-test-h4s.dojima.network",
     apiUrl: 'http://localhost:1317',
     rpcUrl: 'http://localhost:26657',
   });
@@ -44,7 +43,7 @@ async function addEthereumPool() {
 
   if (ethBalance > ethAddPoolAmount && h4sBalance > hermesAddPoolAmount) {
     const ethInboundAddress = await ethClient.getEthereumInboundAddress(
-      // "https://api-dev.h4s.dojima.network/"
+      // "https://api-test-h4s.dojima.network/"
       "http://localhost:1317"
     );
     const ethLiquidityPoolHash = await ethClient.addLiquidityPool(

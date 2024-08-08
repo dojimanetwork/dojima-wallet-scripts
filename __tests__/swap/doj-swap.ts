@@ -1,8 +1,8 @@
 import { Network } from "../../src/core/client";
 import DojimaChain from "../../src/core/dojima/client";
 
-const dojSwapAmount = 10;
-const ethAddress = "";
+const dojSwapAmount = 5;
+const ethAddress = "0xE3706442481Dc7D8Ca4A1a3e0D48C8a6fe5E75FB";
 // const arAddress = "";
 // const solAddress = "";
 
@@ -14,7 +14,7 @@ async function dojimaSwap() {
   const dojClient = new DojimaChain({
     phrase,
     network: Network.Testnet,
-    // rpcUrl: "https://api-dev.d11k.dojima.network/",
+    // rpcUrl: "https://rpc-test-d11k.dojima.network/",
     rpcUrl: "http://127.0.0.1:8545",
   });
   const dojAddress = dojClient.getAddress();
@@ -24,8 +24,8 @@ async function dojimaSwap() {
 
   if (dojBalance > dojSwapAmount) {
     const dojInboundAddress = await dojClient.getDojimaInboundAddress(
-      // "https://api-dev.h4s.dojima.network/"
-      "http://localhost:1317"
+      // "https://api-test-h4s.dojima.network/"
+      "http://localhost:1317/"
     );
     const ethswapHash = await dojClient.swap(
       dojSwapAmount,

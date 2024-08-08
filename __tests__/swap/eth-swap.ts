@@ -2,7 +2,7 @@ import { Network } from "../../src/core/client";
 import EthereumChain from "../../src/core/eth_dojima/client";
 
 const ethSwapAmount = 10;
-const dojAddress = "";
+const dojAddress = "0xE3706442481Dc7D8Ca4A1a3e0D48C8a6fe5E75FB";
 // const arAddress = "";
 // const solAddress = "";
 
@@ -14,7 +14,6 @@ async function ethereumSwap() {
   const ethClient = new EthereumChain({
     phrase,
     network: Network.Testnet,
-    // rpcUrl: "https://eth-dev.h4s.dojima.network/",
     rpcUrl: 'http://localhost:9545'
   });
   const ethAddress = ethClient.getAddress();
@@ -24,12 +23,12 @@ async function ethereumSwap() {
 
   if (ethBalance > ethSwapAmount) {
     const ethInboundAddress = await ethClient.getEthereumInboundAddress(
-      // "https://api-dev.h4s.dojima.network/"
+      // "https://api-test-h4s.dojima.network/"
       "http://localhost:1317"
     );
     const dojswapHash = await ethClient.swap(
       ethSwapAmount,
-      "D11K.DOJ",
+      "DOJ.DOJ",
       ethInboundAddress,
       dojAddress
     );

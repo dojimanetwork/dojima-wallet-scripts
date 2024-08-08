@@ -9,7 +9,7 @@ var $Reader = $protobuf.Reader, $Writer = $protobuf.Writer, $util = $protobuf.ut
 // Exported root namespace
 var $root = $protobuf.roots["default"] || ($protobuf.roots["default"] = {});
 
-$root.common = (function() {
+$root.common = (function () {
 
     /**
      * Namespace common.
@@ -18,7 +18,7 @@ $root.common = (function() {
      */
     var common = {};
 
-    common.Asset = (function() {
+    common.Asset = (function () {
 
         /**
          * Properties of an Asset.
@@ -143,21 +143,21 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.chain = reader.string();
-                    break;
-                case 2:
-                    message.symbol = reader.string();
-                    break;
-                case 3:
-                    message.ticker = reader.string();
-                    break;
-                case 4:
-                    message.synth = reader.bool();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.chain = reader.string();
+                        break;
+                    case 2:
+                        message.symbol = reader.string();
+                        break;
+                    case 3:
+                        message.ticker = reader.string();
+                        break;
+                    case 4:
+                        message.synth = reader.bool();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -272,7 +272,7 @@ $root.common = (function() {
         return Asset;
     })();
 
-    common.Coin = (function() {
+    common.Coin = (function () {
 
         /**
          * Properties of a Coin.
@@ -320,7 +320,7 @@ $root.common = (function() {
          * @memberof common.Coin
          * @instance
          */
-        Coin.prototype.decimals = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+        Coin.prototype.decimals = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
 
         /**
          * Creates a new Coin instance using the specified properties.
@@ -386,18 +386,18 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.asset = $root.common.Asset.decode(reader, reader.uint32());
-                    break;
-                case 2:
-                    message.amount = reader.string();
-                    break;
-                case 3:
-                    message.decimals = reader.int64();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.asset = $root.common.Asset.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.amount = reader.string();
+                        break;
+                    case 3:
+                        message.decimals = reader.int64();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -523,7 +523,7 @@ $root.common = (function() {
         return Coin;
     })();
 
-    common.PubKeySet = (function() {
+    common.PubKeySet = (function () {
 
         /**
          * Properties of a PubKeySet.
@@ -626,15 +626,15 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.secp256k1 = reader.string();
-                    break;
-                case 2:
-                    message.ed25519 = reader.string();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.secp256k1 = reader.string();
+                        break;
+                    case 2:
+                        message.ed25519 = reader.string();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -733,7 +733,7 @@ $root.common = (function() {
         return PubKeySet;
     })();
 
-    common.Tx = (function() {
+    common.Tx = (function () {
 
         /**
          * Properties of a Tx.
@@ -917,40 +917,40 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.id = reader.string();
-                    break;
-                case 2:
-                    message.chain = reader.string();
-                    break;
-                case 3:
-                    message.fromAddress = reader.string();
-                    break;
-                case 4:
-                    message.toAddress = reader.string();
-                    break;
-                case 5:
-                    if (!(message.coins && message.coins.length))
-                        message.coins = [];
-                    message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
-                    break;
-                case 6:
-                    if (!(message.gas && message.gas.length))
-                        message.gas = [];
-                    message.gas.push($root.common.Coin.decode(reader, reader.uint32()));
-                    break;
-                case 7:
-                    message.memo = reader.string();
-                    break;
-                case 8:
-                    message.payload = reader.bytes();
-                    break;
-                case 9:
-                    message.isXcMsg = reader.bool();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.id = reader.string();
+                        break;
+                    case 2:
+                        message.chain = reader.string();
+                        break;
+                    case 3:
+                        message.fromAddress = reader.string();
+                        break;
+                    case 4:
+                        message.toAddress = reader.string();
+                        break;
+                    case 5:
+                        if (!(message.coins && message.coins.length))
+                            message.coins = [];
+                        message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
+                        break;
+                    case 6:
+                        if (!(message.gas && message.gas.length))
+                            message.gas = [];
+                        message.gas.push($root.common.Coin.decode(reader, reader.uint32()));
+                        break;
+                    case 7:
+                        message.memo = reader.string();
+                        break;
+                    case 8:
+                        message.payload = reader.bytes();
+                        break;
+                    case 9:
+                        message.isXcMsg = reader.bool();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -1150,7 +1150,7 @@ $root.common = (function() {
         return Tx;
     })();
 
-    common.Fee = (function() {
+    common.Fee = (function () {
 
         /**
          * Properties of a Fee.
@@ -1255,17 +1255,17 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    if (!(message.coins && message.coins.length))
-                        message.coins = [];
-                    message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
-                    break;
-                case 2:
-                    message.poolDeduct = reader.string();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        if (!(message.coins && message.coins.length))
+                            message.coins = [];
+                        message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
+                        break;
+                    case 2:
+                        message.poolDeduct = reader.string();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -1381,7 +1381,7 @@ $root.common = (function() {
         return Fee;
     })();
 
-    common.KVPair = (function() {
+    common.KVPair = (function () {
 
         /**
          * Properties of a KVPair.
@@ -1484,15 +1484,15 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.key = reader.bytes();
-                    break;
-                case 2:
-                    message.value = reader.bytes();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.key = reader.bytes();
+                        break;
+                    case 2:
+                        message.value = reader.bytes();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -1609,7 +1609,7 @@ $root.common = (function() {
         return KVPair;
     })();
 
-    common.DcAddress = (function() {
+    common.DcAddress = (function () {
 
         /**
          * Properties of a DcAddress.
@@ -1701,12 +1701,12 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.address = reader.bytes();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.address = reader.bytes();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -1805,7 +1805,7 @@ $root.common = (function() {
         return DcAddress;
     })();
 
-    common.DcHash = (function() {
+    common.DcHash = (function () {
 
         /**
          * Properties of a DcHash.
@@ -1899,14 +1899,14 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    if (!(message.hash && message.hash.length))
-                        message.hash = [];
-                    message.hash.push(reader.bytes());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        if (!(message.hash && message.hash.length))
+                            message.hash = [];
+                        message.hash.push(reader.bytes());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -2011,7 +2011,7 @@ $root.common = (function() {
         return DcHash;
     })();
 
-    common.H128 = (function() {
+    common.H128 = (function () {
 
         /**
          * Properties of a H128.
@@ -2042,7 +2042,7 @@ $root.common = (function() {
          * @memberof common.H128
          * @instance
          */
-        H128.prototype.Hi = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+        H128.prototype.Hi = $util.Long ? $util.Long.fromBits(0, 0, true) : 0;
 
         /**
          * H128 Lo.
@@ -2050,7 +2050,7 @@ $root.common = (function() {
          * @memberof common.H128
          * @instance
          */
-        H128.prototype.Lo = $util.Long ? $util.Long.fromBits(0,0,true) : 0;
+        H128.prototype.Lo = $util.Long ? $util.Long.fromBits(0, 0, true) : 0;
 
         /**
          * Creates a new H128 instance using the specified properties.
@@ -2114,15 +2114,15 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.Hi = reader.uint64();
-                    break;
-                case 2:
-                    message.Lo = reader.uint64();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.Hi = reader.uint64();
+                        break;
+                    case 2:
+                        message.Lo = reader.uint64();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -2249,7 +2249,7 @@ $root.common = (function() {
         return H128;
     })();
 
-    common.H160 = (function() {
+    common.H160 = (function () {
 
         /**
          * Properties of a H160.
@@ -2352,15 +2352,15 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.Hi = $root.common.H128.decode(reader, reader.uint32());
-                    break;
-                case 2:
-                    message.Lo = reader.uint32();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.Hi = $root.common.H128.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.Lo = reader.uint32();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -2464,7 +2464,7 @@ $root.common = (function() {
         return H160;
     })();
 
-    common.H256 = (function() {
+    common.H256 = (function () {
 
         /**
          * Properties of a H256.
@@ -2567,15 +2567,15 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.Hi = $root.common.H128.decode(reader, reader.uint32());
-                    break;
-                case 2:
-                    message.Lo = $root.common.H128.decode(reader, reader.uint32());
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.Hi = $root.common.H128.decode(reader, reader.uint32());
+                        break;
+                    case 2:
+                        message.Lo = $root.common.H128.decode(reader, reader.uint32());
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -2684,7 +2684,7 @@ $root.common = (function() {
         return H256;
     })();
 
-    common.Validator = (function() {
+    common.Validator = (function () {
 
         /**
          * Properties of a Validator.
@@ -2723,7 +2723,7 @@ $root.common = (function() {
          * @memberof common.Validator
          * @instance
          */
-        Validator.prototype.power = $util.Long ? $util.Long.fromBits(0,0,false) : 0;
+        Validator.prototype.power = $util.Long ? $util.Long.fromBits(0, 0, false) : 0;
 
         /**
          * Creates a new Validator instance using the specified properties.
@@ -2787,15 +2787,15 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.address = reader.bytes();
-                    break;
-                case 3:
-                    message.power = reader.int64();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.address = reader.bytes();
+                        break;
+                    case 3:
+                        message.power = reader.int64();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -2917,7 +2917,7 @@ $root.common = (function() {
         return Validator;
     })();
 
-    common.ValidatorsWrapper = (function() {
+    common.ValidatorsWrapper = (function () {
 
         /**
          * Properties of a ValidatorsWrapper.
@@ -3011,14 +3011,14 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    if (!(message.validators && message.validators.length))
-                        message.validators = [];
-                    message.validators.push($root.common.Validator.decode(reader, reader.uint32()));
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        if (!(message.validators && message.validators.length))
+                            message.validators = [];
+                        message.validators.push($root.common.Validator.decode(reader, reader.uint32()));
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -3125,7 +3125,7 @@ $root.common = (function() {
         return ValidatorsWrapper;
     })();
 
-    common.ProtoUint = (function() {
+    common.ProtoUint = (function () {
 
         /**
          * Properties of a ProtoUint.
@@ -3217,12 +3217,12 @@ $root.common = (function() {
             while (reader.pos < end) {
                 var tag = reader.uint32();
                 switch (tag >>> 3) {
-                case 1:
-                    message.value = reader.string();
-                    break;
-                default:
-                    reader.skipType(tag & 7);
-                    break;
+                    case 1:
+                        message.value = reader.string();
+                        break;
+                    default:
+                        reader.skipType(tag & 7);
+                        break;
                 }
             }
             return message;
@@ -3315,7 +3315,7 @@ $root.common = (function() {
     return common;
 })();
 
-$root.hermes = (function() {
+$root.hermes = (function () {
 
     /**
      * Namespace hermes.
@@ -3324,7 +3324,7 @@ $root.hermes = (function() {
      */
     var hermes = {};
 
-    hermes.hermes = (function() {
+    hermes.hermes = (function () {
 
         /**
          * Namespace hermes.
@@ -3333,7 +3333,7 @@ $root.hermes = (function() {
          */
         var hermes = {};
 
-        hermes.v1beta1 = (function() {
+        hermes.v1beta1 = (function () {
 
             /**
              * Namespace v1beta1.
@@ -3342,7 +3342,7 @@ $root.hermes = (function() {
              */
             var v1beta1 = {};
 
-            v1beta1.types = (function() {
+            v1beta1.types = (function () {
 
                 /**
                  * Namespace types.
@@ -3351,7 +3351,7 @@ $root.hermes = (function() {
                  */
                 var types = {};
 
-                types.MsgDeposit = (function() {
+                types.MsgDeposit = (function () {
 
                     /**
                      * Properties of a MsgDeposit.
@@ -3467,20 +3467,20 @@ $root.hermes = (function() {
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
-                            case 1:
-                                if (!(message.coins && message.coins.length))
-                                    message.coins = [];
-                                message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
-                                break;
-                            case 2:
-                                message.memo = reader.string();
-                                break;
-                            case 3:
-                                message.signer = reader.bytes();
-                                break;
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
+                                case 1:
+                                    if (!(message.coins && message.coins.length))
+                                        message.coins = [];
+                                    message.coins.push($root.common.Coin.decode(reader, reader.uint32()));
+                                    break;
+                                case 2:
+                                    message.memo = reader.string();
+                                    break;
+                                case 3:
+                                    message.signer = reader.bytes();
+                                    break;
+                                default:
+                                    reader.skipType(tag & 7);
+                                    break;
                             }
                         }
                         return message;
@@ -3614,7 +3614,7 @@ $root.hermes = (function() {
                     return MsgDeposit;
                 })();
 
-                types.MsgSend = (function() {
+                types.MsgSend = (function () {
 
                     /**
                      * Properties of a MsgSend.
@@ -3730,20 +3730,20 @@ $root.hermes = (function() {
                         while (reader.pos < end) {
                             var tag = reader.uint32();
                             switch (tag >>> 3) {
-                            case 1:
-                                message.fromAddress = reader.bytes();
-                                break;
-                            case 2:
-                                message.toAddress = reader.bytes();
-                                break;
-                            case 3:
-                                if (!(message.amount && message.amount.length))
-                                    message.amount = [];
-                                message.amount.push($root.cosmos.base.v1beta1.Coin.decode(reader, reader.uint32()));
-                                break;
-                            default:
-                                reader.skipType(tag & 7);
-                                break;
+                                case 1:
+                                    message.fromAddress = reader.bytes();
+                                    break;
+                                case 2:
+                                    message.toAddress = reader.bytes();
+                                    break;
+                                case 3:
+                                    if (!(message.amount && message.amount.length))
+                                        message.amount = [];
+                                    message.amount.push($root.cosmos.base.v1beta1.Coin.decode(reader, reader.uint32()));
+                                    break;
+                                default:
+                                    reader.skipType(tag & 7);
+                                    break;
                             }
                         }
                         return message;
@@ -3886,6 +3886,717 @@ $root.hermes = (function() {
                     return MsgSend;
                 })();
 
+                types.MsgSetIPAddress = (function () {
+
+                    /**
+                     * Properties of a MsgSetIPAddress.
+                     * @memberof hermes.hermes.v1beta1.types
+                     * @interface IMsgSetIPAddress
+                     * @property {string|null} [ipAddress] MsgSetIPAddress ipAddress
+                     * @property {Uint8Array|null} [signer] MsgSetIPAddress signer
+                     */
+
+                    /**
+                     * Constructs a new MsgSetIPAddress.
+                     * @memberof hermes.hermes.v1beta1.types
+                     * @classdesc Represents a MsgSetIPAddress.
+                     * @implements IMsgSetIPAddress
+                     * @constructor
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetIPAddress=} [properties] Properties to set
+                     */
+                    function MsgSetIPAddress(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * MsgSetIPAddress ipAddress.
+                     * @member {string} ipAddress
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @instance
+                     */
+                    MsgSetIPAddress.prototype.ipAddress = "";
+
+                    /**
+                     * MsgSetIPAddress signer.
+                     * @member {Uint8Array} signer
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @instance
+                     */
+                    MsgSetIPAddress.prototype.signer = $util.newBuffer([]);
+
+                    /**
+                     * Creates a new MsgSetIPAddress instance using the specified properties.
+                     * @function create
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetIPAddress=} [properties] Properties to set
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetIPAddress} MsgSetIPAddress instance
+                     */
+                    MsgSetIPAddress.create = function create(properties) {
+                        return new MsgSetIPAddress(properties);
+                    };
+
+                    /**
+                     * Encodes the specified MsgSetIPAddress message. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetIPAddress.verify|verify} messages.
+                     * @function encode
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetIPAddress} message MsgSetIPAddress message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    MsgSetIPAddress.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.ipAddress != null && Object.hasOwnProperty.call(message, "ipAddress"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.ipAddress);
+                        if (message.signer != null && Object.hasOwnProperty.call(message, "signer"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.signer);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified MsgSetIPAddress message, length delimited. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetIPAddress.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetIPAddress} message MsgSetIPAddress message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    MsgSetIPAddress.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a MsgSetIPAddress message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetIPAddress} MsgSetIPAddress
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    MsgSetIPAddress.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.hermes.hermes.v1beta1.types.MsgSetIPAddress();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                                case 1:
+                                    message.ipAddress = reader.string();
+                                    break;
+                                case 2:
+                                    message.signer = reader.bytes();
+                                    break;
+                                default:
+                                    reader.skipType(tag & 7);
+                                    break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a MsgSetIPAddress message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetIPAddress} MsgSetIPAddress
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    MsgSetIPAddress.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a MsgSetIPAddress message.
+                     * @function verify
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    MsgSetIPAddress.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.ipAddress != null && message.hasOwnProperty("ipAddress"))
+                            if (!$util.isString(message.ipAddress))
+                                return "ipAddress: string expected";
+                        if (message.signer != null && message.hasOwnProperty("signer"))
+                            if (!(message.signer && typeof message.signer.length === "number" || $util.isString(message.signer)))
+                                return "signer: buffer expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a MsgSetIPAddress message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetIPAddress} MsgSetIPAddress
+                     */
+                    MsgSetIPAddress.fromObject = function fromObject(object) {
+                        if (object instanceof $root.hermes.hermes.v1beta1.types.MsgSetIPAddress)
+                            return object;
+                        var message = new $root.hermes.hermes.v1beta1.types.MsgSetIPAddress();
+                        if (object.ipAddress != null)
+                            message.ipAddress = String(object.ipAddress);
+                        if (object.signer != null)
+                            if (typeof object.signer === "string")
+                                $util.base64.decode(object.signer, message.signer = $util.newBuffer($util.base64.length(object.signer)), 0);
+                            else if (object.signer.length)
+                                message.signer = object.signer;
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a MsgSetIPAddress message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.MsgSetIPAddress} message MsgSetIPAddress
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    MsgSetIPAddress.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.ipAddress = "";
+                            if (options.bytes === String)
+                                object.signer = "";
+                            else {
+                                object.signer = [];
+                                if (options.bytes !== Array)
+                                    object.signer = $util.newBuffer(object.signer);
+                            }
+                        }
+                        if (message.ipAddress != null && message.hasOwnProperty("ipAddress"))
+                            object.ipAddress = message.ipAddress;
+                        if (message.signer != null && message.hasOwnProperty("signer"))
+                            object.signer = options.bytes === String ? $util.base64.encode(message.signer, 0, message.signer.length) : options.bytes === Array ? Array.prototype.slice.call(message.signer) : message.signer;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this MsgSetIPAddress to JSON.
+                     * @function toJSON
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetIPAddress
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    MsgSetIPAddress.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return MsgSetIPAddress;
+                })();
+
+                types.MsgSetNodeKeys = (function () {
+
+                    /**
+                     * Properties of a MsgSetNodeKeys.
+                     * @memberof hermes.hermes.v1beta1.types
+                     * @interface IMsgSetNodeKeys
+                     * @property {common.IPubKeySet|null} [pubKeySetSet] MsgSetNodeKeys pubKeySetSet
+                     * @property {string|null} [validatorConsPubKey] MsgSetNodeKeys validatorConsPubKey
+                     * @property {Uint8Array|null} [signer] MsgSetNodeKeys signer
+                     * @property {common.IDcAddress|null} [dcValidatorAddress] MsgSetNodeKeys dcValidatorAddress
+                     */
+
+                    /**
+                     * Constructs a new MsgSetNodeKeys.
+                     * @memberof hermes.hermes.v1beta1.types
+                     * @classdesc Represents a MsgSetNodeKeys.
+                     * @implements IMsgSetNodeKeys
+                     * @constructor
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetNodeKeys=} [properties] Properties to set
+                     */
+                    function MsgSetNodeKeys(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * MsgSetNodeKeys pubKeySetSet.
+                     * @member {common.IPubKeySet|null|undefined} pubKeySetSet
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @instance
+                     */
+                    MsgSetNodeKeys.prototype.pubKeySetSet = null;
+
+                    /**
+                     * MsgSetNodeKeys validatorConsPubKey.
+                     * @member {string} validatorConsPubKey
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @instance
+                     */
+                    MsgSetNodeKeys.prototype.validatorConsPubKey = "";
+
+                    /**
+                     * MsgSetNodeKeys signer.
+                     * @member {Uint8Array} signer
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @instance
+                     */
+                    MsgSetNodeKeys.prototype.signer = $util.newBuffer([]);
+
+                    /**
+                     * MsgSetNodeKeys dcValidatorAddress.
+                     * @member {common.IDcAddress|null|undefined} dcValidatorAddress
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @instance
+                     */
+                    MsgSetNodeKeys.prototype.dcValidatorAddress = null;
+
+                    /**
+                     * Creates a new MsgSetNodeKeys instance using the specified properties.
+                     * @function create
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetNodeKeys=} [properties] Properties to set
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetNodeKeys} MsgSetNodeKeys instance
+                     */
+                    MsgSetNodeKeys.create = function create(properties) {
+                        return new MsgSetNodeKeys(properties);
+                    };
+
+                    /**
+                     * Encodes the specified MsgSetNodeKeys message. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetNodeKeys.verify|verify} messages.
+                     * @function encode
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetNodeKeys} message MsgSetNodeKeys message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    MsgSetNodeKeys.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.pubKeySetSet != null && Object.hasOwnProperty.call(message, "pubKeySetSet"))
+                            $root.common.PubKeySet.encode(message.pubKeySetSet, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
+                        if (message.validatorConsPubKey != null && Object.hasOwnProperty.call(message, "validatorConsPubKey"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).string(message.validatorConsPubKey);
+                        if (message.signer != null && Object.hasOwnProperty.call(message, "signer"))
+                            writer.uint32(/* id 3, wireType 2 =*/26).bytes(message.signer);
+                        if (message.dcValidatorAddress != null && Object.hasOwnProperty.call(message, "dcValidatorAddress"))
+                            $root.common.DcAddress.encode(message.dcValidatorAddress, writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified MsgSetNodeKeys message, length delimited. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetNodeKeys.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetNodeKeys} message MsgSetNodeKeys message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    MsgSetNodeKeys.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a MsgSetNodeKeys message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetNodeKeys} MsgSetNodeKeys
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    MsgSetNodeKeys.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.hermes.hermes.v1beta1.types.MsgSetNodeKeys();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                                case 1:
+                                    message.pubKeySetSet = $root.common.PubKeySet.decode(reader, reader.uint32());
+                                    break;
+                                case 2:
+                                    message.validatorConsPubKey = reader.string();
+                                    break;
+                                case 3:
+                                    message.signer = reader.bytes();
+                                    break;
+                                case 4:
+                                    message.dcValidatorAddress = $root.common.DcAddress.decode(reader, reader.uint32());
+                                    break;
+                                default:
+                                    reader.skipType(tag & 7);
+                                    break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a MsgSetNodeKeys message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetNodeKeys} MsgSetNodeKeys
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    MsgSetNodeKeys.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a MsgSetNodeKeys message.
+                     * @function verify
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    MsgSetNodeKeys.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.pubKeySetSet != null && message.hasOwnProperty("pubKeySetSet")) {
+                            var error = $root.common.PubKeySet.verify(message.pubKeySetSet);
+                            if (error)
+                                return "pubKeySetSet." + error;
+                        }
+                        if (message.validatorConsPubKey != null && message.hasOwnProperty("validatorConsPubKey"))
+                            if (!$util.isString(message.validatorConsPubKey))
+                                return "validatorConsPubKey: string expected";
+                        if (message.signer != null && message.hasOwnProperty("signer"))
+                            if (!(message.signer && typeof message.signer.length === "number" || $util.isString(message.signer)))
+                                return "signer: buffer expected";
+                        if (message.dcValidatorAddress != null && message.hasOwnProperty("dcValidatorAddress")) {
+                            var error = $root.common.DcAddress.verify(message.dcValidatorAddress);
+                            if (error)
+                                return "dcValidatorAddress." + error;
+                        }
+                        return null;
+                    };
+
+                    /**
+                     * Creates a MsgSetNodeKeys message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetNodeKeys} MsgSetNodeKeys
+                     */
+                    MsgSetNodeKeys.fromObject = function fromObject(object) {
+                        if (object instanceof $root.hermes.hermes.v1beta1.types.MsgSetNodeKeys)
+                            return object;
+                        var message = new $root.hermes.hermes.v1beta1.types.MsgSetNodeKeys();
+                        if (object.pubKeySetSet != null) {
+                            if (typeof object.pubKeySetSet !== "object")
+                                throw TypeError(".hermes.hermes.v1beta1.types.MsgSetNodeKeys.pubKeySetSet: object expected");
+                            message.pubKeySetSet = $root.common.PubKeySet.fromObject(object.pubKeySetSet);
+                        }
+                        if (object.validatorConsPubKey != null)
+                            message.validatorConsPubKey = String(object.validatorConsPubKey);
+                        if (object.signer != null)
+                            if (typeof object.signer === "string")
+                                $util.base64.decode(object.signer, message.signer = $util.newBuffer($util.base64.length(object.signer)), 0);
+                            else if (object.signer.length)
+                                message.signer = object.signer;
+                        if (object.dcValidatorAddress != null) {
+                            if (typeof object.dcValidatorAddress !== "object")
+                                throw TypeError(".hermes.hermes.v1beta1.types.MsgSetNodeKeys.dcValidatorAddress: object expected");
+                            message.dcValidatorAddress = $root.common.DcAddress.fromObject(object.dcValidatorAddress);
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a MsgSetNodeKeys message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.MsgSetNodeKeys} message MsgSetNodeKeys
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    MsgSetNodeKeys.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.pubKeySetSet = null;
+                            object.validatorConsPubKey = "";
+                            if (options.bytes === String)
+                                object.signer = "";
+                            else {
+                                object.signer = [];
+                                if (options.bytes !== Array)
+                                    object.signer = $util.newBuffer(object.signer);
+                            }
+                            object.dcValidatorAddress = null;
+                        }
+                        if (message.pubKeySetSet != null && message.hasOwnProperty("pubKeySetSet"))
+                            object.pubKeySetSet = $root.common.PubKeySet.toObject(message.pubKeySetSet, options);
+                        if (message.validatorConsPubKey != null && message.hasOwnProperty("validatorConsPubKey"))
+                            object.validatorConsPubKey = message.validatorConsPubKey;
+                        if (message.signer != null && message.hasOwnProperty("signer"))
+                            object.signer = options.bytes === String ? $util.base64.encode(message.signer, 0, message.signer.length) : options.bytes === Array ? Array.prototype.slice.call(message.signer) : message.signer;
+                        if (message.dcValidatorAddress != null && message.hasOwnProperty("dcValidatorAddress"))
+                            object.dcValidatorAddress = $root.common.DcAddress.toObject(message.dcValidatorAddress, options);
+                        return object;
+                    };
+
+                    /**
+                     * Converts this MsgSetNodeKeys to JSON.
+                     * @function toJSON
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetNodeKeys
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    MsgSetNodeKeys.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return MsgSetNodeKeys;
+                })();
+
+                types.MsgSetVersion = (function () {
+
+                    /**
+                     * Properties of a MsgSetVersion.
+                     * @memberof hermes.hermes.v1beta1.types
+                     * @interface IMsgSetVersion
+                     * @property {string|null} [version] MsgSetVersion version
+                     * @property {Uint8Array|null} [signer] MsgSetVersion signer
+                     */
+
+                    /**
+                     * Constructs a new MsgSetVersion.
+                     * @memberof hermes.hermes.v1beta1.types
+                     * @classdesc Represents a MsgSetVersion.
+                     * @implements IMsgSetVersion
+                     * @constructor
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetVersion=} [properties] Properties to set
+                     */
+                    function MsgSetVersion(properties) {
+                        if (properties)
+                            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
+                                if (properties[keys[i]] != null)
+                                    this[keys[i]] = properties[keys[i]];
+                    }
+
+                    /**
+                     * MsgSetVersion version.
+                     * @member {string} version
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @instance
+                     */
+                    MsgSetVersion.prototype.version = "";
+
+                    /**
+                     * MsgSetVersion signer.
+                     * @member {Uint8Array} signer
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @instance
+                     */
+                    MsgSetVersion.prototype.signer = $util.newBuffer([]);
+
+                    /**
+                     * Creates a new MsgSetVersion instance using the specified properties.
+                     * @function create
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetVersion=} [properties] Properties to set
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetVersion} MsgSetVersion instance
+                     */
+                    MsgSetVersion.create = function create(properties) {
+                        return new MsgSetVersion(properties);
+                    };
+
+                    /**
+                     * Encodes the specified MsgSetVersion message. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetVersion.verify|verify} messages.
+                     * @function encode
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetVersion} message MsgSetVersion message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    MsgSetVersion.encode = function encode(message, writer) {
+                        if (!writer)
+                            writer = $Writer.create();
+                        if (message.version != null && Object.hasOwnProperty.call(message, "version"))
+                            writer.uint32(/* id 1, wireType 2 =*/10).string(message.version);
+                        if (message.signer != null && Object.hasOwnProperty.call(message, "signer"))
+                            writer.uint32(/* id 2, wireType 2 =*/18).bytes(message.signer);
+                        return writer;
+                    };
+
+                    /**
+                     * Encodes the specified MsgSetVersion message, length delimited. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetVersion.verify|verify} messages.
+                     * @function encodeDelimited
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.IMsgSetVersion} message MsgSetVersion message or plain object to encode
+                     * @param {$protobuf.Writer} [writer] Writer to encode to
+                     * @returns {$protobuf.Writer} Writer
+                     */
+                    MsgSetVersion.encodeDelimited = function encodeDelimited(message, writer) {
+                        return this.encode(message, writer).ldelim();
+                    };
+
+                    /**
+                     * Decodes a MsgSetVersion message from the specified reader or buffer.
+                     * @function decode
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @param {number} [length] Message length if known beforehand
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetVersion} MsgSetVersion
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    MsgSetVersion.decode = function decode(reader, length) {
+                        if (!(reader instanceof $Reader))
+                            reader = $Reader.create(reader);
+                        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.hermes.hermes.v1beta1.types.MsgSetVersion();
+                        while (reader.pos < end) {
+                            var tag = reader.uint32();
+                            switch (tag >>> 3) {
+                                case 1:
+                                    message.version = reader.string();
+                                    break;
+                                case 2:
+                                    message.signer = reader.bytes();
+                                    break;
+                                default:
+                                    reader.skipType(tag & 7);
+                                    break;
+                            }
+                        }
+                        return message;
+                    };
+
+                    /**
+                     * Decodes a MsgSetVersion message from the specified reader or buffer, length delimited.
+                     * @function decodeDelimited
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @static
+                     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetVersion} MsgSetVersion
+                     * @throws {Error} If the payload is not a reader or valid buffer
+                     * @throws {$protobuf.util.ProtocolError} If required fields are missing
+                     */
+                    MsgSetVersion.decodeDelimited = function decodeDelimited(reader) {
+                        if (!(reader instanceof $Reader))
+                            reader = new $Reader(reader);
+                        return this.decode(reader, reader.uint32());
+                    };
+
+                    /**
+                     * Verifies a MsgSetVersion message.
+                     * @function verify
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @static
+                     * @param {Object.<string,*>} message Plain object to verify
+                     * @returns {string|null} `null` if valid, otherwise the reason why it is not
+                     */
+                    MsgSetVersion.verify = function verify(message) {
+                        if (typeof message !== "object" || message === null)
+                            return "object expected";
+                        if (message.version != null && message.hasOwnProperty("version"))
+                            if (!$util.isString(message.version))
+                                return "version: string expected";
+                        if (message.signer != null && message.hasOwnProperty("signer"))
+                            if (!(message.signer && typeof message.signer.length === "number" || $util.isString(message.signer)))
+                                return "signer: buffer expected";
+                        return null;
+                    };
+
+                    /**
+                     * Creates a MsgSetVersion message from a plain object. Also converts values to their respective internal types.
+                     * @function fromObject
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @static
+                     * @param {Object.<string,*>} object Plain object
+                     * @returns {hermes.hermes.v1beta1.types.MsgSetVersion} MsgSetVersion
+                     */
+                    MsgSetVersion.fromObject = function fromObject(object) {
+                        if (object instanceof $root.hermes.hermes.v1beta1.types.MsgSetVersion)
+                            return object;
+                        var message = new $root.hermes.hermes.v1beta1.types.MsgSetVersion();
+                        if (object.version != null)
+                            message.version = String(object.version);
+                        if (object.signer != null)
+                            if (typeof object.signer === "string")
+                                $util.base64.decode(object.signer, message.signer = $util.newBuffer($util.base64.length(object.signer)), 0);
+                            else if (object.signer.length)
+                                message.signer = object.signer;
+                        return message;
+                    };
+
+                    /**
+                     * Creates a plain object from a MsgSetVersion message. Also converts values to other types if specified.
+                     * @function toObject
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @static
+                     * @param {hermes.hermes.v1beta1.types.MsgSetVersion} message MsgSetVersion
+                     * @param {$protobuf.IConversionOptions} [options] Conversion options
+                     * @returns {Object.<string,*>} Plain object
+                     */
+                    MsgSetVersion.toObject = function toObject(message, options) {
+                        if (!options)
+                            options = {};
+                        var object = {};
+                        if (options.defaults) {
+                            object.version = "";
+                            if (options.bytes === String)
+                                object.signer = "";
+                            else {
+                                object.signer = [];
+                                if (options.bytes !== Array)
+                                    object.signer = $util.newBuffer(object.signer);
+                            }
+                        }
+                        if (message.version != null && message.hasOwnProperty("version"))
+                            object.version = message.version;
+                        if (message.signer != null && message.hasOwnProperty("signer"))
+                            object.signer = options.bytes === String ? $util.base64.encode(message.signer, 0, message.signer.length) : options.bytes === Array ? Array.prototype.slice.call(message.signer) : message.signer;
+                        return object;
+                    };
+
+                    /**
+                     * Converts this MsgSetVersion to JSON.
+                     * @function toJSON
+                     * @memberof hermes.hermes.v1beta1.types.MsgSetVersion
+                     * @instance
+                     * @returns {Object.<string,*>} JSON object
+                     */
+                    MsgSetVersion.prototype.toJSON = function toJSON() {
+                        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
+                    };
+
+                    return MsgSetVersion;
+                })();
+
                 return types;
             })();
 
@@ -3898,7 +4609,7 @@ $root.hermes = (function() {
     return hermes;
 })();
 
-$root.cosmos = (function() {
+$root.cosmos = (function () {
 
     /**
      * Namespace cosmos.
@@ -3907,7 +4618,7 @@ $root.cosmos = (function() {
      */
     var cosmos = {};
 
-    cosmos.base = (function() {
+    cosmos.base = (function () {
 
         /**
          * Namespace base.
@@ -3916,7 +4627,7 @@ $root.cosmos = (function() {
          */
         var base = {};
 
-        base.v1beta1 = (function() {
+        base.v1beta1 = (function () {
 
             /**
              * Namespace v1beta1.
@@ -3925,7 +4636,7 @@ $root.cosmos = (function() {
              */
             var v1beta1 = {};
 
-            v1beta1.Coin = (function() {
+            v1beta1.Coin = (function () {
 
                 /**
                  * Properties of a Coin.
@@ -4028,15 +4739,15 @@ $root.cosmos = (function() {
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1:
-                            message.denom = reader.string();
-                            break;
-                        case 2:
-                            message.amount = reader.string();
-                            break;
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            case 1:
+                                message.denom = reader.string();
+                                break;
+                            case 2:
+                                message.amount = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
@@ -4135,7 +4846,7 @@ $root.cosmos = (function() {
                 return Coin;
             })();
 
-            v1beta1.DecCoin = (function() {
+            v1beta1.DecCoin = (function () {
 
                 /**
                  * Properties of a DecCoin.
@@ -4238,15 +4949,15 @@ $root.cosmos = (function() {
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1:
-                            message.denom = reader.string();
-                            break;
-                        case 2:
-                            message.amount = reader.string();
-                            break;
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            case 1:
+                                message.denom = reader.string();
+                                break;
+                            case 2:
+                                message.amount = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
@@ -4345,7 +5056,7 @@ $root.cosmos = (function() {
                 return DecCoin;
             })();
 
-            v1beta1.IntProto = (function() {
+            v1beta1.IntProto = (function () {
 
                 /**
                  * Properties of an IntProto.
@@ -4437,12 +5148,12 @@ $root.cosmos = (function() {
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1:
-                            message.int = reader.string();
-                            break;
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            case 1:
+                                message.int = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;
@@ -4532,7 +5243,7 @@ $root.cosmos = (function() {
                 return IntProto;
             })();
 
-            v1beta1.DecProto = (function() {
+            v1beta1.DecProto = (function () {
 
                 /**
                  * Properties of a DecProto.
@@ -4624,12 +5335,12 @@ $root.cosmos = (function() {
                     while (reader.pos < end) {
                         var tag = reader.uint32();
                         switch (tag >>> 3) {
-                        case 1:
-                            message.dec = reader.string();
-                            break;
-                        default:
-                            reader.skipType(tag & 7);
-                            break;
+                            case 1:
+                                message.dec = reader.string();
+                                break;
+                            default:
+                                reader.skipType(tag & 7);
+                                break;
                         }
                     }
                     return message;

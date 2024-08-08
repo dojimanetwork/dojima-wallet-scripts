@@ -125,7 +125,7 @@ class SolanaClient implements SolanaChainClient {
                 "confirmed"
             );
             const pubKey = new web3.PublicKey(address);
-            const amt = baseToLamports(2, SOL_DECIMAL);
+            const amt = baseToLamports(1000, SOL_DECIMAL);
             const requestHash = await faucetConnection.requestAirdrop(pubKey, amt);
             return requestHash;
         }

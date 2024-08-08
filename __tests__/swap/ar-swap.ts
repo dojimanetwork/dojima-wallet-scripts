@@ -2,7 +2,7 @@ import { ArweaveClient } from "../../src/core/arweave";
 import { Network } from "../../src/core/client";
 
 const arSwapAmount = 10;
-const dojAddress = "";
+const dojAddress = "0xE3706442481Dc7D8Ca4A1a3e0D48C8a6fe5E75FB";
 // const ethAddress = "";
 // const solAddress = "";
 
@@ -14,11 +14,6 @@ async function arweaveSwap() {
   const arClient = new ArweaveClient({
     phrase,
     network: Network.Testnet,
-    // config: {
-    //     host: "ar-dev.h4s.dojima.network",
-    //     protocol: "https",
-    //     timeout: 100000,
-    // }
     config: {
       host: "localhost",
       port: "1984",
@@ -33,12 +28,12 @@ async function arweaveSwap() {
 
   if (arBalance > arSwapAmount) {
     const arInboundAddress = await arClient.getArweaveInboundAddress(
-      // "https://api-dev.h4s.dojima.network/"
+      // "https://api-test-h4s.dojima.network/"
       "http://localhost:1317"
     );
     const dojswapHash = await arClient.swap(
       arSwapAmount,
-      "D11K.DOJ",
+      "DOJ.DOJ",
       arInboundAddress,
       dojAddress
     );

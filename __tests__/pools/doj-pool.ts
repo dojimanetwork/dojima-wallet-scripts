@@ -13,14 +13,16 @@ const hermesAddPoolAmount = 10;
 
 async function addDojimaPool() {
   const phrase =
-    // "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
-    "message nut rain immune rifle fall legend floor cradle spin season sting couch age swap seminar melt cable life battle island impose cradle brass";
-
+    "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
+    
   /** Dojima client */
   const dojClient = new DojimaChain({
     phrase,
+    // network: Network.Stagenet,
+    // rpcUrl: "https://rpc-d11k.dojima.network/",
+    // network: Network.Testnet,
+    // rpcUrl: "https://rpc-test-d11k.dojima.network/",
     network: Network.Testnet,
-    // rpcUrl: "https://api-dev.d11k.dojima.network/",
     rpcUrl: "http://127.0.0.1:8545",
   });
   const dojAddress = dojClient.getAddress();
@@ -31,9 +33,13 @@ async function addDojimaPool() {
   /** Hermes client */
   const hermesClient = new HermesSdkClient({
     phrase,
+    // network: Network.Stagenet,
+    // apiUrl: "https://api-h4s.dojima.network",
+    // rpcUrl: "https://rpc-h4s.dojima.network",
+    // network: Network.Testnet,
+    // apiUrl: "https://api-test-h4s.dojima.network",
+    // rpcUrl: "https://rpc-test-h4s.dojima.network",
     network: Network.Testnet,
-    // apiUrl: "https://api-dev.h4s.dojima.network",
-    // rpcUrl: "https://rpc-dev.h4s.dojima.network",
     apiUrl: 'http://localhost:1317',
     rpcUrl: 'http://localhost:26657',
   });
@@ -45,8 +51,9 @@ async function addDojimaPool() {
 
   if (dojBalance > dojAddPoolAmount && h4sBalance > hermesAddPoolAmount) {
     const dojInboundAddress = await dojClient.getDojimaInboundAddress(
-      // "https://api-dev.h4s.dojima.network/"
-      "http://localhost:1317/"
+      "https://api-test-h4s.dojima.network/"
+      // "https://api-h4s.dojima.network/"
+      // "http://localhost:1317/"
     );
     const dojLiquidityPoolHash = await dojClient.addLiquidityPool(
       dojInboundAddress,
@@ -58,7 +65,7 @@ async function addDojimaPool() {
     let h4sAmount = assetToBase(assetAmount(hermesAddPoolAmount, DOJ_DECIMAL));
     const h4sLiquidityPoolHash = await hermesClient.deposit({
       amount: h4sAmount,
-      memo: `ADD:D11K.DOJ:${dojAddress}`,
+      memo: `ADD:DOJ.DOJ:${dojAddress}`,
     });
     console.log("H4S Liquidity pool tx hash :: ", h4sLiquidityPoolHash);
   } else {
