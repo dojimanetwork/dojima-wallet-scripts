@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
+    "evm": "ts-node __tests__/evm/client.ts",
     "stake": "ts-node __tests__/nodes/stake/stake.ts",
     "unstake": "ts-node __tests__/nodes/unstake/unstake.ts",
     "fio-bal": "ts-node __tests__/fio/balance.ts",

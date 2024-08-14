@@ -51,9 +51,9 @@ async function addDojimaPool() {
 
   if (dojBalance > dojAddPoolAmount && h4sBalance > hermesAddPoolAmount) {
     const dojInboundAddress = await dojClient.getDojimaInboundAddress(
-      "https://api-test-h4s.dojima.network/"
+      // "https://api-test-h4s.dojima.network/"
       // "https://api-h4s.dojima.network/"
-      // "http://localhost:1317/"
+      "http://localhost:1317/"
     );
     const dojLiquidityPoolHash = await dojClient.addLiquidityPool(
       dojInboundAddress,
