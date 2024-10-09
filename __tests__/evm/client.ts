@@ -1,31 +1,34 @@
-import {EvmChainClient} from "../../src/core/evm_chains/client";
-import { JsonConfig, TestJsonConfig } from "./config";
+import { Network } from "../../src/core/client";
+import { EvmChainClient } from "../../src/core/evm_chains/client";
+import {  TestJsonConfig } from "./config";
 
 async function evmChain() {
   const phrase =
     "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
-    
+
   /** EVM client */
   const evmClient = new EvmChainClient({
     phrase,
-    network: JsonConfig.network,
-    rpcUrl: JsonConfig.rpcUrl,
+    network: Network.Testnet,
+    rpcUrl: "http://geth:8545",
   });
   const evmAddress = evmClient.getAddress();
   console.log("evm address :: ", evmAddress);
   const evmBalance = await evmClient.getBalance(evmAddress);
   console.log("evm Balance :: ", evmBalance);
 
-  /** Testnet EVM client */
-  const testEvmClient = new EvmChainClient({
-    phrase,
-    network: TestJsonConfig.network,
-    rpcUrl: TestJsonConfig.rpcUrl,
+  TestJsonConfig.map(async (config) => {
+    /** Testnet EVM client */
+    const testEvmClient = new EvmChainClient({
+      phrase,
+      network: config.network,
+      rpcUrl: config.rpcUrl,
+    });
+    const testEvmAddress = testEvmClient.getAddress();
+    console.log(`Test evm address :: ${config.tokenName} : `, testEvmAddress);
+    const testEvmBalance = await testEvmClient.getBalance(testEvmAddress);
+    console.log(`Test evm Balance :: ${config.tokenName} : `, testEvmBalance);
   });
-  const testEvmAddress = testEvmClient.getAddress();
-  console.log("Test evm address :: ", testEvmAddress);
-  const testEvmBalance = await testEvmClient.getBalance(testEvmAddress);
-  console.log("Test evm Balance :: ", testEvmBalance);
 }
 
 (async () => {

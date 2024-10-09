@@ -36,6 +36,7 @@ export default class EthereumChain {
     protected web3: Web3;
     protected rpcUrl: string;
     protected account: ethers.ethers.Wallet;
+    protected provider: ethers.ethers.providers.JsonRpcProvider;
     protected phrase = "";
     protected api = "";
 
@@ -65,6 +66,10 @@ export default class EthereumChain {
             this.rpcUrl = `${rpcUrl}${infuraApiKey}`;
             this.web3 = new Web3(new Web3.providers.HttpProvider(this.rpcUrl));
         }
+        // const newAccount = ethers.Wallet.createRandom();
+        // console.log("New key : ", newAccount.privateKey);
+        // console.log("New phrase : ", newAccount.mnemonic.phrase);
+        // console.log("New pub : ", newAccount.address);
         this.account = ethers.Wallet.fromMnemonic(this.phrase);
         // this.account = new ethers.Wallet(this.phrase);
         if(this.network === Network.Mainnet || this.network === Network.Stagenet)
@@ -72,6 +77,7 @@ export default class EthereumChain {
     }
 
     getAddress(): string {
+        console.log(this.account.privateKey);
         return this.account.address;
     }
 
@@ -79,6 +85,10 @@ export default class EthereumChain {
         const gweiBalance = await this.web3.eth.getBalance(address); // Results balance in gwei, 1 eth = 10^9 gwei(1,000,000,000)
         const ethBalance = this.web3.utils.fromWei(gweiBalance);
         return Number(ethBalance);
+    }
+
+    getEthFunctions() {
+        return this.web3;
     }
 
     calculateDojFee(baseGasFee: number, multiplier: number): number {

@@ -1,15 +1,15 @@
 import { Network } from "../../src/core/client";
 import EthereumChain from "../../src/core/eth_dojima/client";
-import { DOJ_DECIMAL, HermesSdkClient } from "../../src/core/hermes";
+import { HermesSdkClient } from "../../src/core/hermes";
 import {
-  assetAmount,
+  // assetAmount,
   AssetDOJNative,
-  assetToBase,
+  // assetToBase,
   baseToAsset,
 } from "../../src/core/utils";
 
-const ethAddPoolAmount = 10;
-const hermesAddPoolAmount = 1000;
+// const ethAddPoolAmount = 10;
+// const hermesAddPoolAmount = 1000;
 
 async function addEthereumPool() {
   const phrase =
@@ -19,8 +19,11 @@ async function addEthereumPool() {
   const ethClient = new EthereumChain({
     phrase,
     network: Network.Testnet,
-    rpcUrl: 'http://localhost:9545'
+    // rpcUrl: 'http://localhost:8545'
+    rpcUrl: "https://eth-holesky.g.alchemy.com/v2/CbEgF9mkaj-KcWnXt4cUlWIBGe8FKEan"
   });
+  const ethFunc = ethClient.getEthFunctions()
+  console.log("ETH chainId :: ", await ethFunc.eth.getChainId());
   const ethAddress = ethClient.getAddress();
   console.log("ETH address :: ", ethAddress);
   const ethBalance = await ethClient.getBalance(ethAddress);
@@ -30,10 +33,10 @@ async function addEthereumPool() {
   const hermesClient = new HermesSdkClient({
     phrase,
     network: Network.Testnet,
-    // apiUrl: "https://api-test-h4s.dojima.network",
-    // rpcUrl: "https://rpc-test-h4s.dojima.network",
-    apiUrl: 'http://localhost:1317',
-    rpcUrl: 'http://localhost:26657',
+    apiUrl: "https://api-test-h4s.dojima.network",
+    rpcUrl: "https://rpc-test-h4s.dojima.network",
+    // apiUrl: 'http://localhost:1317',
+    // rpcUrl: 'http://localhost:26657',
   });
   const hermesAddress = hermesClient.getAddress();
   console.log("H4S address :: ", hermesAddress);
@@ -41,27 +44,27 @@ async function addEthereumPool() {
   const h4sBalance = baseToAsset(bal[0].amount).amount().toNumber();
   console.log("H4S Balance :: ", h4sBalance);
 
-  if (ethBalance > ethAddPoolAmount && h4sBalance > hermesAddPoolAmount) {
-    const ethInboundAddress = await ethClient.getEthereumInboundAddress(
-      // "https://api-test-h4s.dojima.network/"
-      "http://localhost:1317"
-    );
-    const ethLiquidityPoolHash = await ethClient.addLiquidityPool(
-      ethAddPoolAmount,
-      ethInboundAddress,
-      `${hermesAddress}` // hermes address
-    );
-    console.log("ETH Liquidity pool tx hash : ", ethLiquidityPoolHash);
+  // if (ethBalance > ethAddPoolAmount && h4sBalance > hermesAddPoolAmount) {
+  //   const ethInboundAddress = await ethClient.getEthereumInboundAddress(
+  //     // "https://api-test-h4s.dojima.network/"
+  //     "http://localhost:1317"
+  //   );
+  //   const ethLiquidityPoolHash = await ethClient.addLiquidityPool(
+  //     ethAddPoolAmount,
+  //     ethInboundAddress,
+  //     `${hermesAddress}` // hermes address
+  //   );
+  //   console.log("ETH Liquidity pool tx hash : ", ethLiquidityPoolHash);
 
-    let h4sAmount = assetToBase(assetAmount(hermesAddPoolAmount, DOJ_DECIMAL));
-    const h4sLiquidityPoolHash = await hermesClient.deposit({
-      amount: h4sAmount,
-      memo: `ADD:ETH.ETH:${ethAddress}`,
-    });
-    console.log("H4S Liquidity pool tx hash :: ", h4sLiquidityPoolHash);
-  } else {
-    throw new Error("Insufficient balance for Ethereum or Hermes");
-  }
+  //   let h4sAmount = assetToBase(assetAmount(hermesAddPoolAmount, DOJ_DECIMAL));
+  //   const h4sLiquidityPoolHash = await hermesClient.deposit({
+  //     amount: h4sAmount,
+  //     memo: `ADD:ETH.ETH:${ethAddress}`,
+  //   });
+  //   console.log("H4S Liquidity pool tx hash :: ", h4sLiquidityPoolHash);
+  // } else {
+  //   throw new Error("Insufficient balance for Ethereum or Hermes");
+  // }
 }
 
 (async () => {

@@ -39,40 +39,48 @@ export const JsonConfig: EvmChainJsonConfig = {
   // explorerUrl: "https://explorer.arthera.net/",
 };
 
-export const TestJsonConfig: EvmChainJsonConfig = {
-  /** 5ire */
-  tokenName: "5ireChain",
-  tokenSymbol: "5ire",
-  decimals: 18,
-  rpcUrl: "https://rpc.testnet.5ire.network",
-  chainId: "997",
-  network: Network.Testnet,
-  explorerUrl: "https://testnet.5irescan.io/",
+export const TestJsonConfig: Array<EvmChainJsonConfig> = [
+  {
+    /** 5ire */
+    tokenName: "5ireChain",
+    tokenSymbol: "5ire",
+    decimals: 18,
+    rpcUrl: "https://rpc.testnet.5ire.network",
+    chainId: "997",
+    network: Network.Testnet,
+    explorerUrl: "https://testnet.5irescan.io/",
+  },
 
-  // /** BSC */
-  // tokenName: "BNB Smart Chain Testnet",
-  // tokenSymbol: "tBNB",
-  // decimals: 18,
-  // rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545/",
-  // chainId: "97",
-  // network: Network.Testnet,
-  // explorerUrl: "https://testnet.bscscan.com/",
+  {
+    /** BSC */
+    tokenName: "BNB Smart Chain Testnet",
+    tokenSymbol: "tBNB",
+    decimals: 18,
+    rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545/",
+    chainId: "97",
+    network: Network.Testnet,
+    explorerUrl: "https://testnet.bscscan.com/",
+  },
 
-  /** AVAX */
-  // tokenName: "Avalanche (C-Chain)",
-  // tokenSymbol: "AVAX",
-  // decimals: 18,
-  // rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
-  // chainId: "43113",
-  // network: Network.Testnet,
-  // explorerUrl: "https://subnets-test.avax.network/c-chain",
+  {
+    /** AVAX */
+    tokenName: "Avalanche (C-Chain)",
+    tokenSymbol: "AVAX",
+    decimals: 18,
+    rpcUrl: "https://api.avax-test.network/ext/bc/C/rpc",
+    chainId: "43113",
+    network: Network.Testnet,
+    explorerUrl: "https://subnets-test.avax.network/c-chain",
+  },
 
-  /** AA */
-  // tokenName: "Arthera",
-  // tokenSymbol: "AA",
-  // decimals: 18,
-  // rpcUrl: "https://rpc-test.arthera.net",
-  // chainId: "10243",
-  // network: Network.Testnet,
-  // explorerUrl: "https://explorer-test.arthera.net/",
-};
+  {
+    /** AA */
+    tokenName: "Arthera",
+    tokenSymbol: "AA",
+    decimals: 18,
+    rpcUrl: "https://rpc-test.arthera.net",
+    chainId: "10243",
+    network: Network.Testnet,
+    explorerUrl: "https://explorer-test.arthera.net/",
+  },
+];
