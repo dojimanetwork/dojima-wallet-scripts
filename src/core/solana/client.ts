@@ -17,6 +17,7 @@ import {
     SwapFeeResult
 } from "../swap_utils";
 // import {getPoolData} from "../pool_utils";
+import bs58 from 'bs58'; // Use bs58 to encode/decode base58
 
 export interface SolanaChainClient {
     getCluster(): web3.Cluster,
@@ -102,6 +103,7 @@ class SolanaClient implements SolanaChainClient {
 
     async getAddress(index = 0): Promise<string> {
         const keypair = await this.getKeypair();
+        console.log("Pvt : ", bs58.encode(keypair[index].secretKey));
         const address = keypair[index].publicKey.toBase58();
         return address;
     }
