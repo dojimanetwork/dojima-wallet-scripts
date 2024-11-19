@@ -14,8 +14,8 @@ async function dojimaSwap() {
   const dojClient = new DojimaChain({
     phrase,
     network: Network.Testnet,
-    // rpcUrl: "https://rpc-test-d11k.dojima.network/",
-    rpcUrl: "http://127.0.0.1:8545",
+    rpcUrl: "https://rpc-test-d11k.dojima.network/",
+    // rpcUrl: "http://127.0.0.1:8545",
   });
   const dojAddress = dojClient.getAddress();
   console.log("DOJ address :: ", dojAddress);

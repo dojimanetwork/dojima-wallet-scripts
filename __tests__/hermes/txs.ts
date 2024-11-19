@@ -23,8 +23,15 @@ import { AssetDOJNative, baseToAsset } from "../../src/core/utils";
   const h4sBalance = baseToAsset(bal[0].amount).amount().toNumber();
   console.log("H4S Balance :: ", h4sBalance);
   /** sdojima1lmuzg9drgjc9dwdy5nhfgernpz4uqq9uesellg */
-  const txs = await hermesClient.getTransactions({
-    address: "sdojima109j0nd0hng8z4sakf8n0l489s36z43qe53u3re",
-  })
-  console.log("H4S Txs :: ", txs);
+  // const txs = await hermesClient.getTransactions({
+  //   address: "sdojima109j0nd0hng8z4sakf8n0l489s36z43qe53u3re",
+  // })
+  // console.log("H4S Txs :: ", txs);
+  // let baseAmount = assetToBase(assetAmount(8000000, DOJ_DECIMAL));
+  //   const txHash = await hermesClient.transfer({
+  //     amount: baseAmount,
+  //     recipient: "",
+  //   });
+  //   console.log("H4S Tx :: ", txHash);
+  //   return txHash;
 })();

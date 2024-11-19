@@ -50,7 +50,27 @@ export const TestJsonConfig: Array<EvmChainJsonConfig> = [
     network: Network.Testnet,
     explorerUrl: "https://testnet.5irescan.io/",
   },
-
+  {
+    /** DOJ */
+    tokenName: "DOJIMA",
+    tokenSymbol: "DOJ",
+    decimals: 18,
+    rpcUrl: "https://rpc-d11k.dojima.network/",
+    chainId: "184",
+    network: Network.Testnet,
+    explorerUrl: "",
+  },
+  // {
+  //   /** DOJ */
+  //   tokenName: "Arbitrum",
+  //   tokenSymbol: "DOJ",
+  //   decimals: 18,
+  //   // rpcUrl: "http://localhost:8545",
+  //   rpcUrl: "http://4.213.199.119:8547/",
+  //   chainId: "654899",
+  //   network: Network.Testnet,
+  //   explorerUrl: "",
+  // },
   {
     /** BSC */
     tokenName: "BNB Smart Chain Testnet",

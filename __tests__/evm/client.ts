@@ -30,7 +30,7 @@ async function evmChain() {
   //   console.log(`Test evm Balance :: ${config.tokenName} : `, testEvmBalance);
   // });
 
-  const avaxChain = TestJsonConfig.find((config) => config.tokenSymbol === "AVAX");
+  const avaxChain = TestJsonConfig.find((config) => config.tokenSymbol === "DOJ");
   const testEvmClient = new EvmChainClient({
     phrase,
     network: avaxChain.network,
@@ -40,11 +40,11 @@ async function evmChain() {
   console.log(`Test evm address :: ${avaxChain.tokenName} : `, testEvmAddress);
   const testEvmBalance = await testEvmClient.getBalance(testEvmAddress);
   console.log(`Test evm Balance :: ${avaxChain.tokenName} : `, testEvmBalance);
-  const transferHash = await testEvmClient.transfer({
-    amount: 0.01,
-    recipient: "0xf7b120aa78a8c136fb675248be14244e385d0c1e"
-  });
-  console.log("Tx hash : ", transferHash);
+  // const transferHash = await testEvmClient.transfer({
+  //   amount: 0.01,
+  //   recipient: "0xf7b120aa78a8c136fb675248be14244e385d0c1e"
+  // });
+  // console.log("Tx hash : ", transferHash);
 }
 
 (async () => {

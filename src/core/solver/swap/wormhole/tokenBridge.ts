@@ -17,14 +17,13 @@ import { getSigner, waitLog } from "./signer";
 (async function () {
   // Init Wormhole object, passing config for which network
   // to use (e.g. Mainnet/Testnet) and what Platforms to support
-//   const wh = await wormhole("Testnet", [evm, solana]);
-    const wh = await wormhole("Testnet", [evm, evm]);
-
+  //   const wh = await wormhole("Testnet", [evm, solana]);
+  const wh = await wormhole("Testnet", [evm, evm]);
 
   // Grab chain Contexts -- these hold a reference to a cached rpc client
   const sendChain = wh.getChain("Avalanche");
-//   const rcvChain = wh.getChain("Solana");
-const rcvChain = wh.getChain("Bsc");
+  //   const rcvChain = wh.getChain("Solana");
+  const rcvChain = wh.getChain("Bsc");
 
   // Shortcut to allow transferring native gas token
   const token = Wormhole.tokenId(sendChain.chain, "native");
