@@ -49,6 +49,10 @@ export default class DojimaChain {
     // Setup account using either phrase or privateKey
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
     if (phrase) {
+      if (!validatePhrase(phrase)) {
+        throw new Error("Invalid phrase");
+      }
+
       const accountData = ethers.Wallet.fromMnemonic(phrase);
       this.account = new ethers.Wallet(accountData.privateKey).connect(provider);
     } else {

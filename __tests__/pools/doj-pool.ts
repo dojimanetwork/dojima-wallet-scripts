@@ -1,6 +1,6 @@
 import { Network } from "../../src/core/client";
 import DojimaChain from "../../src/core/dojima/client";
-import { DOJ_DECIMAL ,HermesSdkClient } from "../../src/core/hermes";
+import { DOJ_DECIMAL, HermesSdkClient } from "../../src/core/hermes";
 import {
   assetAmount,
   AssetDOJNative,
@@ -14,7 +14,7 @@ const hermesAddPoolAmount = 10;
 async function addDojimaPool() {
   const phrase =
     "letter ethics correct bus asset pipe tourist vapor envelope kangaroo warm dawn";
-    
+
   /** Dojima client */
   const dojClient = new DojimaChain({
     phrase,
