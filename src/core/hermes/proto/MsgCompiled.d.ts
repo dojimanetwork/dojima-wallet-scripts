@@ -1580,7 +1580,7 @@ export namespace hermes {
            * Constructs a new MsgDeposit.
            * @param [properties] Properties to set
            */
-          constructor(properties?: hermes.hermes.v1beta1.types.IMsgDeposit);
+          constructor(properties?: hermes.v1beta1.types.IMsgDeposit);
 
           /** MsgDeposit coins. */
           public coins: common.ICoin[];
@@ -1597,28 +1597,28 @@ export namespace hermes {
            * @returns MsgDeposit instance
            */
           public static create(
-            properties?: hermes.hermes.v1beta1.types.IMsgDeposit
-          ): hermes.hermes.v1beta1.types.MsgDeposit;
+            properties?: hermes.v1beta1.types.IMsgDeposit
+          ): hermes.v1beta1.types.MsgDeposit;
 
           /**
-           * Encodes the specified MsgDeposit message. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgDeposit.verify|verify} messages.
+           * Encodes the specified MsgDeposit message. Does not implicitly {@link hermes.v1beta1.types.MsgDeposit.verify|verify} messages.
            * @param message MsgDeposit message or plain object to encode
            * @param [writer] Writer to encode to
            * @returns Writer
            */
           public static encode(
-            message: hermes.hermes.v1beta1.types.IMsgDeposit,
+            message: hermes.v1beta1.types.IMsgDeposit,
             writer?: $protobuf.Writer
           ): $protobuf.Writer;
 
           /**
-           * Encodes the specified MsgDeposit message, length delimited. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgDeposit.verify|verify} messages.
+           * Encodes the specified MsgDeposit message, length delimited. Does not implicitly {@link hermes.v1beta1.types.MsgDeposit.verify|verify} messages.
            * @param message MsgDeposit message or plain object to encode
            * @param [writer] Writer to encode to
            * @returns Writer
            */
           public static encodeDelimited(
-            message: hermes.hermes.v1beta1.types.IMsgDeposit,
+            message: hermes.v1beta1.types.IMsgDeposit,
             writer?: $protobuf.Writer
           ): $protobuf.Writer;
 
@@ -1633,7 +1633,7 @@ export namespace hermes {
           public static decode(
             reader: $protobuf.Reader | Uint8Array,
             length?: number
-          ): hermes.hermes.v1beta1.types.MsgDeposit;
+          ): hermes.v1beta1.types.MsgDeposit;
 
           /**
            * Decodes a MsgDeposit message from the specified reader or buffer, length delimited.
@@ -1644,7 +1644,7 @@ export namespace hermes {
            */
           public static decodeDelimited(
             reader: $protobuf.Reader | Uint8Array
-          ): hermes.hermes.v1beta1.types.MsgDeposit;
+          ): hermes.v1beta1.types.MsgDeposit;
 
           /**
            * Verifies a MsgDeposit message.
@@ -1660,7 +1660,7 @@ export namespace hermes {
            */
           public static fromObject(object: {
             [k: string]: any;
-          }): hermes.hermes.v1beta1.types.MsgDeposit;
+          }): hermes.v1beta1.types.MsgDeposit;
 
           /**
            * Creates a plain object from a MsgDeposit message. Also converts values to other types if specified.
@@ -1669,7 +1669,7 @@ export namespace hermes {
            * @returns Plain object
            */
           public static toObject(
-            message: hermes.hermes.v1beta1.types.MsgDeposit,
+            message: hermes.v1beta1.types.MsgDeposit,
             options?: $protobuf.IConversionOptions
           ): { [k: string]: any };
 
@@ -1698,7 +1698,7 @@ export namespace hermes {
            * Constructs a new MsgSend.
            * @param [properties] Properties to set
            */
-          constructor(properties?: hermes.hermes.v1beta1.types.IMsgSend);
+          constructor(properties?: hermes.v1beta1.types.IMsgSend);
 
           /** MsgSend fromAddress. */
           public fromAddress: Uint8Array;
@@ -1715,28 +1715,28 @@ export namespace hermes {
            * @returns MsgSend instance
            */
           public static create(
-            properties?: hermes.hermes.v1beta1.types.IMsgSend
-          ): hermes.hermes.v1beta1.types.MsgSend;
+            properties?: hermes.v1beta1.types.IMsgSend
+          ): hermes.v1beta1.types.MsgSend;
 
           /**
-           * Encodes the specified MsgSend message. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSend.verify|verify} messages.
+           * Encodes the specified MsgSend message. Does not implicitly {@link hermes.v1beta1.types.MsgSend.verify|verify} messages.
            * @param message MsgSend message or plain object to encode
            * @param [writer] Writer to encode to
            * @returns Writer
            */
           public static encode(
-            message: hermes.hermes.v1beta1.types.IMsgSend,
+            message: hermes.v1beta1.types.IMsgSend,
             writer?: $protobuf.Writer
           ): $protobuf.Writer;
 
           /**
-           * Encodes the specified MsgSend message, length delimited. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSend.verify|verify} messages.
+           * Encodes the specified MsgSend message, length delimited. Does not implicitly {@link hermes.v1beta1.types.MsgSend.verify|verify} messages.
            * @param message MsgSend message or plain object to encode
            * @param [writer] Writer to encode to
            * @returns Writer
            */
           public static encodeDelimited(
-            message: hermes.hermes.v1beta1.types.IMsgSend,
+            message: hermes.v1beta1.types.IMsgSend,
             writer?: $protobuf.Writer
           ): $protobuf.Writer;
 
@@ -1751,7 +1751,7 @@ export namespace hermes {
           public static decode(
             reader: $protobuf.Reader | Uint8Array,
             length?: number
-          ): hermes.hermes.v1beta1.types.MsgSend;
+          ): hermes.v1beta1.types.MsgSend;
 
           /**
            * Decodes a MsgSend message from the specified reader or buffer, length delimited.
@@ -1762,7 +1762,7 @@ export namespace hermes {
            */
           public static decodeDelimited(
             reader: $protobuf.Reader | Uint8Array
-          ): hermes.hermes.v1beta1.types.MsgSend;
+          ): hermes.v1beta1.types.MsgSend;
 
           /**
            * Verifies a MsgSend message.
@@ -1778,7 +1778,7 @@ export namespace hermes {
            */
           public static fromObject(object: {
             [k: string]: any;
-          }): hermes.hermes.v1beta1.types.MsgSend;
+          }): hermes.v1beta1.types.MsgSend;
 
           /**
            * Creates a plain object from a MsgSend message. Also converts values to other types if specified.
@@ -1787,7 +1787,7 @@ export namespace hermes {
            * @returns Plain object
            */
           public static toObject(
-            message: hermes.hermes.v1beta1.types.MsgSend,
+            message: hermes.v1beta1.types.MsgSend,
             options?: $protobuf.IConversionOptions
           ): { [k: string]: any };
 
@@ -1814,7 +1814,7 @@ export namespace hermes {
            * @param [properties] Properties to set
            */
           constructor(
-            properties?: hermes.hermes.v1beta1.types.IMsgSetIPAddress
+            properties?: hermes.v1beta1.types.IMsgSetIPAddress
           );
 
           /** MsgSetIPAddress ipAddress. */
@@ -1829,28 +1829,28 @@ export namespace hermes {
            * @returns MsgSetIPAddress instance
            */
           public static create(
-            properties?: hermes.hermes.v1beta1.types.IMsgSetIPAddress
-          ): hermes.hermes.v1beta1.types.MsgSetIPAddress;
+            properties?: hermes.v1beta1.types.IMsgSetIPAddress
+          ): hermes.v1beta1.types.MsgSetIPAddress;
 
           /**
-           * Encodes the specified MsgSetIPAddress message. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetIPAddress.verify|verify} messages.
+           * Encodes the specified MsgSetIPAddress message. Does not implicitly {@link hermes.v1beta1.types.MsgSetIPAddress.verify|verify} messages.
            * @param message MsgSetIPAddress message or plain object to encode
            * @param [writer] Writer to encode to
            * @returns Writer
            */
           public static encode(
-            message: hermes.hermes.v1beta1.types.IMsgSetIPAddress,
+            message: hermes.v1beta1.types.IMsgSetIPAddress,
             writer?: $protobuf.Writer
           ): $protobuf.Writer;
 
           /**
-           * Encodes the specified MsgSetIPAddress message, length delimited. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetIPAddress.verify|verify} messages.
+           * Encodes the specified MsgSetIPAddress message, length delimited. Does not implicitly {@link hermes.v1beta1.types.MsgSetIPAddress.verify|verify} messages.
            * @param message MsgSetIPAddress message or plain object to encode
            * @param [writer] Writer to encode to
            * @returns Writer
            */
           public static encodeDelimited(
-            message: hermes.hermes.v1beta1.types.IMsgSetIPAddress,
+            message: hermes.v1beta1.types.IMsgSetIPAddress,
             writer?: $protobuf.Writer
           ): $protobuf.Writer;
 
@@ -1865,7 +1865,7 @@ export namespace hermes {
           public static decode(
             reader: $protobuf.Reader | Uint8Array,
             length?: number
-          ): hermes.hermes.v1beta1.types.MsgSetIPAddress;
+          ): hermes.v1beta1.types.MsgSetIPAddress;
 
           /**
            * Decodes a MsgSetIPAddress message from the specified reader or buffer, length delimited.
@@ -1876,7 +1876,7 @@ export namespace hermes {
            */
           public static decodeDelimited(
             reader: $protobuf.Reader | Uint8Array
-          ): hermes.hermes.v1beta1.types.MsgSetIPAddress;
+          ): hermes.v1beta1.types.MsgSetIPAddress;
 
           /**
            * Verifies a MsgSetIPAddress message.
@@ -1892,7 +1892,7 @@ export namespace hermes {
            */
           public static fromObject(object: {
             [k: string]: any;
-          }): hermes.hermes.v1beta1.types.MsgSetIPAddress;
+          }): hermes.v1beta1.types.MsgSetIPAddress;
 
           /**
            * Creates a plain object from a MsgSetIPAddress message. Also converts values to other types if specified.
@@ -1901,7 +1901,7 @@ export namespace hermes {
            * @returns Plain object
            */
           public static toObject(
-            message: hermes.hermes.v1beta1.types.MsgSetIPAddress,
+            message: hermes.v1beta1.types.MsgSetIPAddress,
             options?: $protobuf.IConversionOptions
           ): { [k: string]: any };
 
@@ -1933,7 +1933,7 @@ export namespace hermes {
            * Constructs a new MsgSetNodeKeys.
            * @param [properties] Properties to set
            */
-          constructor(properties?: hermes.hermes.v1beta1.types.IMsgSetNodeKeys);
+          constructor(properties?: hermes.v1beta1.types.IMsgSetNodeKeys);
 
           /** MsgSetNodeKeys pubKeySetSet. */
           public pubKeySetSet?: common.IPubKeySet | null;
@@ -1953,28 +1953,28 @@ export namespace hermes {
            * @returns MsgSetNodeKeys instance
            */
           public static create(
-            properties?: hermes.hermes.v1beta1.types.IMsgSetNodeKeys
-          ): hermes.hermes.v1beta1.types.MsgSetNodeKeys;
+            properties?: hermes.v1beta1.types.IMsgSetNodeKeys
+          ): hermes.v1beta1.types.MsgSetNodeKeys;
 
           /**
-           * Encodes the specified MsgSetNodeKeys message. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetNodeKeys.verify|verify} messages.
+           * Encodes the specified MsgSetNodeKeys message. Does not implicitly {@link hermes.v1beta1.types.MsgSetNodeKeys.verify|verify} messages.
            * @param message MsgSetNodeKeys message or plain object to encode
            * @param [writer] Writer to encode to
            * @returns Writer
            */
           public static encode(
-            message: hermes.hermes.v1beta1.types.IMsgSetNodeKeys,
+            message: hermes.v1beta1.types.IMsgSetNodeKeys,
             writer?: $protobuf.Writer
           ): $protobuf.Writer;
 
           /**
-           * Encodes the specified MsgSetNodeKeys message, length delimited. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetNodeKeys.verify|verify} messages.
+           * Encodes the specified MsgSetNodeKeys message, length delimited. Does not implicitly {@link hermes.v1beta1.types.MsgSetNodeKeys.verify|verify} messages.
            * @param message MsgSetNodeKeys message or plain object to encode
            * @param [writer] Writer to encode to
            * @returns Writer
            */
           public static encodeDelimited(
-            message: hermes.hermes.v1beta1.types.IMsgSetNodeKeys,
+            message: hermes.v1beta1.types.IMsgSetNodeKeys,
             writer?: $protobuf.Writer
           ): $protobuf.Writer;
 
@@ -1989,7 +1989,7 @@ export namespace hermes {
           public static decode(
             reader: $protobuf.Reader | Uint8Array,
             length?: number
-          ): hermes.hermes.v1beta1.types.MsgSetNodeKeys;
+          ): hermes.v1beta1.types.MsgSetNodeKeys;
 
           /**
            * Decodes a MsgSetNodeKeys message from the specified reader or buffer, length delimited.
@@ -2000,7 +2000,7 @@ export namespace hermes {
            */
           public static decodeDelimited(
             reader: $protobuf.Reader | Uint8Array
-          ): hermes.hermes.v1beta1.types.MsgSetNodeKeys;
+          ): hermes.v1beta1.types.MsgSetNodeKeys;
 
           /**
            * Verifies a MsgSetNodeKeys message.
@@ -2016,7 +2016,7 @@ export namespace hermes {
            */
           public static fromObject(object: {
             [k: string]: any;
-          }): hermes.hermes.v1beta1.types.MsgSetNodeKeys;
+          }): hermes.v1beta1.types.MsgSetNodeKeys;
 
           /**
            * Creates a plain object from a MsgSetNodeKeys message. Also converts values to other types if specified.
@@ -2025,7 +2025,7 @@ export namespace hermes {
            * @returns Plain object
            */
           public static toObject(
-            message: hermes.hermes.v1beta1.types.MsgSetNodeKeys,
+            message: hermes.v1beta1.types.MsgSetNodeKeys,
             options?: $protobuf.IConversionOptions
           ): { [k: string]: any };
 
@@ -2051,7 +2051,7 @@ export namespace hermes {
            * Constructs a new MsgSetVersion.
            * @param [properties] Properties to set
            */
-          constructor(properties?: hermes.hermes.v1beta1.types.IMsgSetVersion);
+          constructor(properties?: hermes.v1beta1.types.IMsgSetVersion);
 
           /** MsgSetVersion version. */
           public version: string;
@@ -2065,28 +2065,28 @@ export namespace hermes {
            * @returns MsgSetVersion instance
            */
           public static create(
-            properties?: hermes.hermes.v1beta1.types.IMsgSetVersion
-          ): hermes.hermes.v1beta1.types.MsgSetVersion;
+            properties?: hermes.v1beta1.types.IMsgSetVersion
+          ): hermes.v1beta1.types.MsgSetVersion;
 
           /**
-           * Encodes the specified MsgSetVersion message. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetVersion.verify|verify} messages.
+           * Encodes the specified MsgSetVersion message. Does not implicitly {@link hermes.v1beta1.types.MsgSetVersion.verify|verify} messages.
            * @param message MsgSetVersion message or plain object to encode
            * @param [writer] Writer to encode to
            * @returns Writer
            */
           public static encode(
-            message: hermes.hermes.v1beta1.types.IMsgSetVersion,
+            message: hermes.v1beta1.types.IMsgSetVersion,
             writer?: $protobuf.Writer
           ): $protobuf.Writer;
 
           /**
-           * Encodes the specified MsgSetVersion message, length delimited. Does not implicitly {@link hermes.hermes.v1beta1.types.MsgSetVersion.verify|verify} messages.
+           * Encodes the specified MsgSetVersion message, length delimited. Does not implicitly {@link hermes.v1beta1.types.MsgSetVersion.verify|verify} messages.
            * @param message MsgSetVersion message or plain object to encode
            * @param [writer] Writer to encode to
            * @returns Writer
            */
           public static encodeDelimited(
-            message: hermes.hermes.v1beta1.types.IMsgSetVersion,
+            message: hermes.v1beta1.types.IMsgSetVersion,
             writer?: $protobuf.Writer
           ): $protobuf.Writer;
 
@@ -2101,7 +2101,7 @@ export namespace hermes {
           public static decode(
             reader: $protobuf.Reader | Uint8Array,
             length?: number
-          ): hermes.hermes.v1beta1.types.MsgSetVersion;
+          ): hermes.v1beta1.types.MsgSetVersion;
 
           /**
            * Decodes a MsgSetVersion message from the specified reader or buffer, length delimited.
@@ -2112,7 +2112,7 @@ export namespace hermes {
            */
           public static decodeDelimited(
             reader: $protobuf.Reader | Uint8Array
-          ): hermes.hermes.v1beta1.types.MsgSetVersion;
+          ): hermes.v1beta1.types.MsgSetVersion;
 
           /**
            * Verifies a MsgSetVersion message.
@@ -2128,7 +2128,7 @@ export namespace hermes {
            */
           public static fromObject(object: {
             [k: string]: any;
-          }): hermes.hermes.v1beta1.types.MsgSetVersion;
+          }): hermes.v1beta1.types.MsgSetVersion;
 
           /**
            * Creates a plain object from a MsgSetVersion message. Also converts values to other types if specified.
@@ -2137,7 +2137,7 @@ export namespace hermes {
            * @returns Plain object
            */
           public static toObject(
-            message: hermes.hermes.v1beta1.types.MsgSetVersion,
+            message: hermes.v1beta1.types.MsgSetVersion,
             options?: $protobuf.IConversionOptions
           ): { [k: string]: any };
 
