@@ -86,6 +86,7 @@ export type RootDerivationPaths = Record<Network, string>
 export type ChainClientParams = {
     network?: Network
     phrase?: string
+    privateKey?: string
     feeBounds?: FeeBounds
     rootDerivationPaths?: RootDerivationPaths
 }

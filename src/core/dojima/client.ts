@@ -22,19 +22,22 @@ export default class DojimaChain {
 
   constructor({
     phrase,
+    privateKey,
     network = Network.Mainnet,
     rpcUrl = defaultDojInfuraRpcUrl,
   }: ChainClientParams & DojRpcParams) {
-    if (phrase) {
-      if (!validatePhrase(phrase)) {
-        throw new Error("Invalid phrase");
-      }
-      this.phrase = phrase;
+    // Validate that either phrase or privateKey is provided, but not both
+    if ((!phrase && !privateKey) || (phrase && privateKey)) {
+      throw new Error(
+        "Either phrase or privateKey must be provided, but not both"
+      );
     }
+
     this.network = network;
     if (this.network !== Network.Mainnet && rpcUrl === defaultDojInfuraRpcUrl) {
       throw Error(`'rpcUrl' param can't be empty for 'testnet' or 'stagenet'`);
     }
+
     if (this.network === Network.Mainnet) {
       this.rpcUrl = rpcUrl;
       this.web3 = new Web3(new Web3.providers.HttpProvider(this.rpcUrl));
@@ -42,11 +45,19 @@ export default class DojimaChain {
       this.rpcUrl = rpcUrl;
       this.web3 = new Web3(this.rpcUrl);
     }
+
+    // Setup account using either phrase or privateKey
     const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
-    const accountData = ethers.Wallet.fromMnemonic(this.phrase);
-    this.account = new ethers.Wallet(accountData.privateKey).connect(provider);
-    // this.account = ethers.Wallet.fromMnemonic(this.phrase);
-    // this.account = new ethers.Wallet(this.phrase);
+    if (phrase) {
+      if (!validatePhrase(phrase)) {
+        throw new Error("Invalid phrase");
+      }
+
+      const accountData = ethers.Wallet.fromMnemonic(phrase);
+      this.account = new ethers.Wallet(accountData.privateKey).connect(provider);
+    } else {
+      this.account = new ethers.Wallet(privateKey!).connect(provider);
+    }
   }
 
   getAddress(): string {
@@ -101,9 +112,9 @@ export default class DojimaChain {
         gas: params.fee
           ? params.fee * Math.pow(10, 9)
           : await this.estimateGasFee(
-              params.amount,
-              params.memo ? params.memo : undefined
-            ),
+            params.amount,
+            params.memo ? params.memo : undefined
+          ),
         data: params.memo ? this.web3.utils.toHex(params.memo) : undefined,
       },
       this.account.privateKey
