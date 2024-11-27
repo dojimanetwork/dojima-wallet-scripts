@@ -30,6 +30,7 @@ export abstract class BaseChainClient implements ChainClient {
     protected network: Network
     protected feeBounds: FeeBounds
     protected phrase = ''
+    protected privateKey = ''
     protected rootDerivationPaths: RootDerivationPaths | undefined
 
     /**
@@ -55,6 +56,8 @@ export abstract class BaseChainClient implements ChainClient {
                 throw new Error('Invalid phrase')
             }
             this.phrase = params.phrase
+        } else if (params.privateKey) {
+            this.privateKey = params.privateKey
         }
     }
     /**
