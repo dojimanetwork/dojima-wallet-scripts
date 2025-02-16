@@ -8,7 +8,7 @@ export type Address = string
 
 /**
  * Token
- * @see https://docs.binance.org/api-reference/dex-api/paths.html#token
+ * @see https://docs.bnbchain.org/#token
  */
 export type Token = {
     /**
